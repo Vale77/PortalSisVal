@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pub_medios" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4ffe69ed-61bd-400d-bd86-622907368a6e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codigo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT PUBLICACION_PROFESOR.CODIGO_PUBLICACION,
+         PUBLICACION_PROFESOR.CODIGO_PROFESOR,
+         PUBLICACION_PROFESOR.CAMPO9,
+         PUBLICACION_PROFESOR.CAMPO7,
+         PUBLICACION_PROFESOR.CAMPO8,
+         PUBLICACION_PROFESOR.FORMA_PUBLICACION,
+         PUBLICACION_PROFESOR.AUSPICIO_PUBLICACION,
+	PUBLICACION_PROFESOR.FECHA_ULTMODIFIC
+    FROM PUBLICACION_PROFESOR
+   WHERE ( PUBLICACION_PROFESOR.CAMPO10 = $P{anio} ) AND
+         ( PUBLICACION_PROFESOR.CODIGO_PROFESOR = $P{codigo}) AND
+         ( PUBLICACION_PROFESOR.TIPO_PUBLICACION = -1 )]]>
+	</queryString>
+	<field name="CODIGO_PUBLICACION" class="java.math.BigDecimal"/>
+	<field name="CODIGO_PROFESOR" class="java.math.BigDecimal"/>
+	<field name="CAMPO9" class="java.lang.String"/>
+	<field name="CAMPO7" class="java.lang.String"/>
+	<field name="CAMPO8" class="java.lang.String"/>
+	<field name="FORMA_PUBLICACION" class="java.lang.String"/>
+	<field name="AUSPICIO_PUBLICACION" class="java.lang.String"/>
+	<field name="FECHA_ULTMODIFIC" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="cb7e28b0-f971-49d6-a158-713d21a07b68"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PRESENCIA EN MEDIOS:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="1" width="79" height="12" uuid="73e0db00-2dc2-46f0-983d-614712e02047"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Tipo de Medio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="83" y="1" width="402" height="12" uuid="90a5ffd3-db88-4d44-94e1-177a3263cae0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="1" width="89" height="12" uuid="2e438cd1-5dc5-4fd3-8b79-d0abd1865092"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="574" y="1" width="116" height="12" uuid="ffe09594-6b92-4fa6-ab58-1f4543660f60"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha última Actualización]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4" y="0" width="79" height="11" uuid="23fee1bd-2fe9-4fee-b080-3bb52fe7dc8e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAMPO9}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="83" y="0" width="402" height="11" uuid="04766036-0c3e-4a33-aee4-ff17ae199398"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAMPO7}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="485" y="0" width="89" height="11" uuid="a42de58f-7230-4a59-a731-fb06a05419b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAMPO8}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="574" y="0" width="116" height="11" uuid="afe3ba76-8dde-4dcb-8aa5-2f5f82b077d7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_ULTMODIFIC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="37">
+			<staticText>
+				<reportElement x="183" y="13" width="391" height="20" forecolor="#FF0000" uuid="d20753ae-f42d-4229-986e-4f79237010ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO HA REALIZADO NINGUNA ACTIVIDAD..........]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="6cbebb50-4fad-4f5b-a4f3-5c46b08f4fa0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PRESENCIA EN MEDIOS:]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

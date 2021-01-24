@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{parPuntuacionInfAnual.navigationJSFManagedBean.nombreOpcion}">        
+        <h:form id="fpuntuacionInfAnual">
+            <p:growl id="messagedato"/> 
+                        
+            <p:dataTable id="dataParametro"
+                         value="#{parPuntuacionInfAnual.listParPuntuacion}" 
+                         var="puntuacion" 
+                         scrollable="true" scrollHeight="95%" 
+                         rowIndexVar="rowIndex"
+                         rowKey="#{puntuacion.iappCodigo}" 
+                         resizableColumns="true"                         
+                         selectionMode="single"
+                         selection="#{parPuntuacionInfAnual.selectedParPuntuacion}" 
+                         emptyMessage="No existen datos"
+                         widgetVar="widgetParametro"
+                         styleClass="evalFormStyle"
+                         >
+                <p:ajax event="rowSelect"  update=":fpuntuacionInfAnual:dataParametro" />  
+                <p:ajax event="rowUnselect"  update=":fpuntuacionInfAnual:dataParametro"/> 
+                <f:facet name="header">
+
+                    <div align="right" >
+                        <p:commandButton icon="ui-icon-document"   id="btnENCNuevo" 
+                                         actionListener="#{parPuntuacionInfAnual.nuevoButton_processAction(ae)}" value="Nuevo" 
+                                         update=":mantDialog :fpuntuacionInfAnual:dataParametro" immediate="true" 
+                                         partialSubmit="true" oncomplete="mantWidget.show();"/>
+                    </div>
+                </f:facet>
+                <p:column headerText="Ámbito" style="width: 10%">
+                    <h:outputText value="#{puntuacion.iaapAmbito}" style="text-transform: uppercase; text-align: center"  />                                   
+                </p:column>
+                <p:column headerText="Actividad" style="width: 60%">
+                    <h:outputText value="#{puntuacion.iaapNombre}" style="text-transform: uppercase; text-align: center"  />                                   
+                </p:column>
+                <p:column headerText="Columna" style="width: 15%">
+                    <h:outputText value="#{puntuacion.iaapColumna}" style="text-transform: uppercase; text-align: center"  />                                   
+                </p:column>
+                <p:column headerText="Puntos" style="width: 5%">
+                    <h:outputText value="#{puntuacion.iaapPuntos}" style="text-transform: uppercase; text-align: center"  />                                   
+                </p:column>
+                <p:column headerText="Estado" style="width: 5%">
+                    <h:outputText value="#{puntuacion.iaapEstado eq 'A'?'ACTIVO':'INACTIVO'}" style="text-transform: uppercase; text-align: center"  />                                   
+                </p:column>
+                
+                
+                <p:column headerText="Editar"  style="text-align: center;width: 3%">  
+                    <div align="center">
+                        <p:commandLink value="Editar" title="Editar registro" immediate="true"  styleClass="ui-icon ui-icon-pencil" 
+                                       partialSubmit="true" action="#{parPuntuacionInfAnual.editarButton_processAction(ae)}" style="color:blue;"
+                                       onstart="widgetParametro.unselectAllRows();widgetParametro.selectRow(#{rowIndex});blockUIContentenidoWidget.block()"  
+                                       oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                       update=":mantDialog ">
+                            <f:setPropertyActionListener value="#{puntuacion}" target="#{parPuntuacionInfAnual.selectedParPuntuacion}" />  
+                        </p:commandLink>  
+                    </div>
+                </p:column>
+                <p:column  style="text-align: center; width:2%">
+                    <p:commandLink value="Eliminar" title="Eliminar Encuesta" update=":formLogin:growlLogin :fpuntuacionInfAnual:dataParametro" immediate="true" 
+                                   id="commandLinkElimParametro" styleClass="ui-icon ui-icon-trash" 
+                                   partialSubmit="true" action="#{parPuntuacionInfAnual.eliminarButton_processAction(ae, null)}" style="color:blue;"
+                                   onstart="widgetParametro.unselectAllRows();" 
+                                   rendered="#{parPuntuacionInfAnual.selectedParPuntuacion.iappCodigo eq puntuacion.iappCodigo }">
+                        <f:setPropertyActionListener value="#{puntuacion}" target="#{parPuntuacionInfAnual.selectedParPuntuacion}" />  
+                    </p:commandLink>                    
+                </p:column>   
+            </p:dataTable>           
+        </h:form>
+    </p:panel>     
+</ui:composition>

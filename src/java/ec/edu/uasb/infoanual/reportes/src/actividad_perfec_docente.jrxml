@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="actividad_perfec_docente" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4ffe69ed-61bd-400d-bd86-622907368a6e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="50"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codigo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT OTRA_ACTIVIDAD_ACADEMICA.CODIGO_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.CODIGO_PROFESOR,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.NOMBRE_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.INSTITUCION_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.SEDE_INST_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.OBS_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.USUARIO_CREA,
+         OTRA_ACTIVIDAD_ACADEMICA.USUARIO_ULTMODIFIC,
+         OTRA_ACTIVIDAD_ACADEMICA.FECHA_CREA,
+         OTRA_ACTIVIDAD_ACADEMICA.FECHA_ULTMODIFIC,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO_OTRA_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.FINICIO_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.FFIN_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.NUM1_ACTIVIDAD,
+         (case OTRA_ACTIVIDAD_ACADEMICA.TIPO2_ACTIVIDAD when 'E' then 'EJECUCIÓN' WHEN 'C' THEN 'CONCLUIDO' else 'EJECUCIÓN' END)estado ,
+         OTRA_ACTIVIDAD_ACADEMICA.ESTADO_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.NUM2_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO3_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO4_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO5_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO6_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TIPO7_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.UASB_ACTIVIDAD,
+         OTRA_ACTIVIDAD_ACADEMICA.TITULO_ACTIVIDAD,
+         case uasb_actividad when 'I' then 'Iniciativa UASB' when 'C' then titulo_actividad end as contraparte,
+         OTRA_ACTIVIDAD_ACADEMICA.EMAIL_ACTIVIDAD  ,
+         OTRA_ACTIVIDAD_ACADEMICA.DURACION_ACTIVIDAD
+    FROM OTRA_ACTIVIDAD_ACADEMICA
+   WHERE ( OTRA_ACTIVIDAD_ACADEMICA.CODIGO_PROFESOR =  $P{codigo}) AND
+         ( OTRA_ACTIVIDAD_ACADEMICA.TIPO_OTRA_ACTIVIDAD = 'O' ) AND
+	$P{anio} BETWEEN (case when convert(datetime,FINICIO_ACTIVIDAD,103)<= convert(datetime,'01/01/1993',103) then 1992 else (select anio from CICLO_ACADEMICO where   FINICIO_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and FINICIO_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL)  end) and
+ (case when  FFIN_ACTIVIDAD is null or (select anio from CICLO_ACADEMICO where   FFIN_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and FFIN_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL) is null then 2020 else (select anio from CICLO_ACADEMICO where   FFIN_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and FFIN_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL)end)
+ORDER BY OTRA_ACTIVIDAD_ACADEMICA.FINICIO_ACTIVIDAD ASC]]>
+	</queryString>
+	<field name="CODIGO_ACTIVIDAD" class="java.math.BigDecimal"/>
+	<field name="CODIGO_PROFESOR" class="java.math.BigDecimal"/>
+	<field name="TIPO_ACTIVIDAD" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_ACTIVIDAD" class="java.lang.String"/>
+	<field name="INSTITUCION_ACTIVIDAD" class="java.lang.String"/>
+	<field name="SEDE_INST_ACTIVIDAD" class="java.lang.String"/>
+	<field name="OBS_ACTIVIDAD" class="java.lang.String"/>
+	<field name="USUARIO_CREA" class="java.lang.String"/>
+	<field name="USUARIO_ULTMODIFIC" class="java.lang.String"/>
+	<field name="FECHA_CREA" class="java.sql.Timestamp"/>
+	<field name="FECHA_ULTMODIFIC" class="java.sql.Timestamp"/>
+	<field name="TIPO_OTRA_ACTIVIDAD" class="java.lang.String"/>
+	<field name="FINICIO_ACTIVIDAD" class="java.sql.Timestamp"/>
+	<field name="FFIN_ACTIVIDAD" class="java.sql.Timestamp"/>
+	<field name="NUM1_ACTIVIDAD" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="ESTADO_ACTIVIDAD" class="java.lang.String"/>
+	<field name="NUM2_ACTIVIDAD" class="java.lang.Integer"/>
+	<field name="TIPO3_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO4_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO5_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO6_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO7_ACTIVIDAD" class="java.lang.String"/>
+	<field name="UASB_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TITULO_ACTIVIDAD" class="java.lang.String"/>
+	<field name="contraparte" class="java.lang.String"/>
+	<field name="EMAIL_ACTIVIDAD" class="java.lang.String"/>
+	<field name="DURACION_ACTIVIDAD" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="cb7e28b0-f971-49d6-a158-713d21a07b68"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PERFECCIONAMIENTO DOCENTE]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="503" y="1" width="51" height="25" uuid="73e0db00-2dc2-46f0-983d-614712e02047"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[F. Desde]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="554" y="1" width="51" height="25" uuid="78bde0b0-489d-44a4-b1c6-f8b991b47991"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[F. Hasta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="1" width="95" height="25" uuid="329d9a26-4134-4615-8fc5-256c2568d7c4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Tipo De Actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="1" width="135" height="25" uuid="2d4ff9b4-c2b6-415d-b272-101e1904c56d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Nombre del programa,
+curso o actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="1" width="134" height="25" uuid="ec51c887-d219-45be-8961-adb8678cc49b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Institucion donde
+se realizó]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="426" y="1" width="45" height="25" uuid="7a57a400-b2bf-4b83-8e6f-208ee45e8cfd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Tipo
+Institución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="1" width="32" height="25" uuid="3b014833-2ab5-4741-923b-175caf685fa8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[N° Horas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="231" y="1" width="61" height="25" uuid="4642ee00-9b1a-47f0-a6d7-d13204e57a76"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="605" y="1" width="133" height="25" uuid="05740d58-eac2-4c91-a684-f0f6bad5f222"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="738" y="1" width="53" height="25" uuid="940d4ced-f5a1-4a38-a4c3-6bf5fe57ab7b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha última Actualización]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="503" y="0" width="51" height="11" uuid="23fee1bd-2fe9-4fee-b080-3bb52fe7dc8e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FINICIO_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="96" y="0" width="135" height="11" uuid="a42de58f-7230-4a59-a731-fb06a05419b8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="554" y="0" width="51" height="11" uuid="3996a9c9-c531-4a6a-81ea-630aa368bb5b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FFIN_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="95" height="11" uuid="3b40e909-1327-4cd4-abd2-ed687b100977"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_ACTIVIDAD}.intValue()==-1?"Otra (especifique)":
+$F{TIPO_ACTIVIDAD}.intValue()==1?"Proyectos de posgrado":
+$F{TIPO_ACTIVIDAD}.intValue()==2?"Realización de tesis":
+$F{TIPO_ACTIVIDAD}.intValue()==3?"Curso de perfeccionamiento docente":"Actividad de actualización docente"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="292" y="0" width="134" height="11" uuid="a2650b67-2f6e-46fb-a023-257beae9e00a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INSTITUCION_ACTIVIDAD}.equals(null)?"":$F{INSTITUCION_ACTIVIDAD}.concat($F{EMAIL_ACTIVIDAD}.equals(null)?"":$F{EMAIL_ACTIVIDAD})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="426" y="0" width="45" height="11" uuid="7f472f60-968b-42a6-86f5-2379374c36b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEDE_INST_ACTIVIDAD}.equals("N")?"Nacional":$F{SEDE_INST_ACTIVIDAD}.equals("I")?"Internacional":"Andino"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="32" height="11" uuid="188f078e-ff7e-452e-95c3-e5b65718a5e1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DURACION_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="605" y="0" width="133" height="11" uuid="a0f62ed0-352f-4802-bc11-c01b8c84dab0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBS_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="738" y="0" width="53" height="11" uuid="e67fa9af-1f4f-4704-b633-69efdf973a91"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_ULTMODIFIC}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="231" y="0" width="61" height="11" uuid="856e5984-b4d4-42ec-90db-18c377cc03a9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="37">
+			<staticText>
+				<reportElement x="183" y="13" width="391" height="20" forecolor="#FF0000" uuid="d20753ae-f42d-4229-986e-4f79237010ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO HA REALIZADO NINGUNA ACTIVIDAD..........]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="6cbebb50-4fad-4f5b-a4f3-5c46b08f4fa0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PERFECCIONAMIENTO DOCENTE]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

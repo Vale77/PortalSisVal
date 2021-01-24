@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{cierreEvalDeEstACalSer.navigationJSFManagedBean.nombreOpcion}">
+        <h:form id="fcierreCalSer">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltrocierre" columns="5" style="font-family: Arial; font-size: 7pt">  
+                 <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="ganio">
+                    <p:selectOneMenu value="#{cierreEvalDeEstACalSer.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{cierreEvalDeEstACalSer.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="ganio gtrimestre" listener="#{cierreEvalDeEstACalSer.ciclovalueChangeListener()}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid>
+
+                <h:outputText  value="Trimestre* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtrimestre" >
+                    <p:selectOneMenu value="#{cierreEvalDeEstACalSer.strimestre}" id="itrimestre"
+                                     required="true" requiredMessage="Trimestre: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{cierreEvalDeEstACalSer.listtrimestre}" var="ltrimestre" itemLabel="#{ltrimestre[1]}" itemValue="#{ltrimestre[0]}"/>                               
+                        <p:ajax update="gtrimestre gdetallecierre" listener="#{cierreEvalDeEstACalSer.trimestervalueChangeListener()}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>                        
+            </h:panelGrid>  
+
+            <h:panelGrid id="gdetallecierre" >
+                <p:dataTable id="tcierreCalSer" 
+                             value="#{cierreEvalDeEstACalSer.listCalServiCierre}" 
+                             var="asigcierre"                                   
+                             scrollable="true" scrollHeight="95%" 
+                             style=" font-family: Arial; font-size: 7pt;width: 100%"
+                             rowKey="#{asigcierre[0]}"
+                             resizableColumns="true"                                     
+                             selection="#{cierreEvalDeEstACalSer.selectedasigcierre}"                                      
+                             emptyMessage="No existen datos"  
+                             filteredValue="#{cierreEvalDeEstACalSer.listCalServiFiltro}" >
+                    <f:facet name="header">
+                        <div align="right" >
+                            <p:commandButton  id="btnCAGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                                              update=":formLogin:growlLogin @form"
+                                              actionListener="#{cierreEvalDeEstACalSer.guardarButton_processAction}" process="@form" />    
+                                                 
+                        </div>   
+                    </f:facet>
+                    <p:column filterBy="#{asigcierre[8]}"  headerText="Trimestre"  style="width: 25%">
+                        <h:outputText value="#{asigcierre[8]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+                    <p:column  headerText="Fin Evaluación" style="width: 5%">
+                        <h:outputText value="#{asigcierre[20]}" />                                                                                    
+                    </p:column>
+                    <p:column   style="width: 10%" >    
+                        <f:facet name="header">                                    
+                            <p:outputLabel value="%Avance >="/>
+                            <p:panelGrid columns="2">
+                                <h:inputText value="#{cierreEvalDeEstACalSer.sfiltro}" style="width:95%"/>
+                                <p:commandButton icon="ui-icon-search" title="View" actionListener="#{cierreEvalDeEstACalSer.filtrarValorvalueChangeListener}" update=":fcierreCalSer:tcierreCalSer">                                        
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </f:facet>
+                        <h:outputText value="#{asigcierre[18]}" >
+                            <f:converter converterId="javax.faces.Double" />                                    
+                        </h:outputText>                                                                                       
+                    </p:column>  
+                    <p:column  headerText="Cerrar" selectionMode="multiple" style="width:5%;text-align:center"/>
+                </p:dataTable>               
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

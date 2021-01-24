@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;width: 850px;"  >
+        <h:panelGrid columns="2" id="dataparamencuesta">
+
+            <h:outputText  value="Días Habilitada *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="idhabil">
+                <p:inputMask mask="9?9" value="#{parametrosEncuesta.sdiashabilitado}" required="true" requiredMessage="Parametro/Días Habilitada: se requiere un valor" style=" width: 50px; text-align: center">
+                </p:inputMask>
+                <p:message for="idhabil" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Días Reapertura *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="idreapertura">
+                <p:inputMask mask="9?9" value="#{parametrosEncuesta.sdiasreapertura}" required="true" requiredMessage="Parametro/Días Reapertura: se requiere un valor" style=" width: 50px; text-align: center">
+                </p:inputMask>
+                <p:message for="idreapertura" display="icon"/>
+            </h:panelGrid> 
+            <h:outputText  value="Copia A *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gcopiaa">
+                <h:inputText id="icopiaa"  value="#{parametrosEncuesta.scopiaa}" style=" width: 400px" required="true" requiredMessage="Parametro/Copia A: se requiere un valor">
+                    <p:ajax update="gcopiaa" immediate="true"/>
+                </h:inputText>
+                <p:message for="icopiaa" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Asunto *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gasunto">
+                <h:inputText id="iasunto"  value="#{parametrosEncuesta.sasunto}" style=" width: 400px" required="true" requiredMessage="Parametro/Asunto: se requiere un valor" >
+                    <p:ajax update="gasunto" immediate="true"/>
+                </h:inputText>
+                <p:message for="iasunto" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Asunto Reapertura *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gasuntoraep">
+                <h:inputText id="iasuntoraep"  value="#{parametrosEncuesta.sasuntoreapertura}" style=" width: 300px" required="true" requiredMessage="Parametro/Asunto Reapertura: se requiere un valor">
+                    <p:ajax update="gasuntoraep" immediate="true"/>
+                </h:inputText>
+                <p:message for="iasuntoraep" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Asunto Cierre *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gasuntocierre">
+                <h:inputText id="iasuntocierre"  value="#{parametrosEncuesta.sasuntocierre}" style=" width: 300px" required="true" requiredMessage="Parametro/Asunto Cierre: se requiere un valor">
+                    <p:ajax update="gasuntocierre" immediate="true"/>
+                </h:inputText>
+                <p:message for="iasuntocierre" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Mensaje Cierre *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gmensaje">
+                <p:inputTextarea rows="6" cols="33" id="imensaje" value="#{parametrosEncuesta.smensajecierre}" style=" width: 700px" required="true" requiredMessage="Parametros/Mensaje Cierre: se requiere un valor">
+                    <p:ajax update="gmensaje" immediate="true"/>
+                </p:inputTextarea>
+                <p:message for="imensaje" display="icon"/>
+            </h:panelGrid> 
+            <h:outputText  value="Asunto PagEstampilla *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gasuntopag">
+                <h:inputText id="iasuntopag"  value="#{parametrosEncuesta.sasuntopago}" style=" width: 400px" required="true" requiredMessage="Parametro/Asunto Pago Estampilla: se requiere un valor">
+                    <p:ajax update="gasuntopag" immediate="true"/>
+                </h:inputText>
+                <p:message for="iasuntopag" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Mensaje PagEstampilla *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="gmensajepag">
+                <p:inputTextarea rows="6" cols="33" id="imensajepag" value="#{parametrosEncuesta.smensajepago}" style=" width: 700px" required="true" requiredMessage="Parametros/Mensaje Pago Estampilla: se requiere un valor">
+                    <p:ajax update="gmensajepag" immediate="true"/>
+                </p:inputTextarea>
+                <p:message for="imensajepag" display="icon"/>
+            </h:panelGrid>
+        </h:panelGrid>
+        <p:commandButton  id="btnParaGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                          update=":formLogin:growlLogin @form"
+                          actionListener="#{parametrosEncuesta.guardarButton_processAction}" process="@form" />        
+        <p:commandButton value="Cancelar" oncomplete="mantWidget.hide();" id="btnParaCancelar" 
+                         actionListener="#{parametrosEncuesta.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton>   
+
+    </p:panel>
+</ui:composition>

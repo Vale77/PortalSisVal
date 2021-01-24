@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{datDoc.navigationJSFManagedBean.nombreOpcion}">      
+        <h:form id="fsegInfAnual">
+            <p:growl id="messagedato"/> 
+
+            <h:panelGrid id="gfiltro" columns="7" style="font-family: Arial; font-size: 7pt"> 
+                <h:outputText  value="Apellido* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="gapellido" >
+                    <h:inputText value="#{datDoc.smapellido}" style=" width: 100px; text-transform: uppercase" 
+                                 id="inombre"
+                                 required="true" requiredMessage="Apellido: se requiere un valor"  >
+                        <p:ajax update="gapellido" immediate="true"/>
+                    </h:inputText> 
+                    <p:message for="inombre" display="icon"/> 
+                </h:panelGrid>
+                <h:outputText  value="Nombre* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="gnombre" >
+                    <h:inputText value="#{datDoc.smnombre}" style=" width: 100px; text-transform: uppercase" >
+                        <p:ajax update="gnombre" immediate="true"/>
+                    </h:inputText>                    
+                </h:panelGrid>                
+
+                <p:commandButton   icon="ui-icon-refresh" title="Refrescar registros" 
+                                   immediate="true" update="gdetalle" 
+                                   actionListener="#{datDoc.profesorvalueChangeListener}"/> 
+            </h:panelGrid>  
+
+
+            <h:panelGrid id="gdetalle" >
+                <p:dataTable id="tdatosDoc" 
+                             value="#{datDoc.listDatPro}" 
+                             var="detdat" 
+                             scrollable="true" scrollHeight="95%" 
+                             style=" font-family: Arial; font-size: 7pt;width: 100%"
+                             rowKey="#{detdat[0]}" 
+                             resizableColumns="true"                       
+                             emptyMessage="No existen datos" >
+                    <f:facet name="header">
+                        <h:outputText  value="DATOS DOCENTES" style="font-weight: bold" />                        
+                    </f:facet>
+                    <p:column headerText="Cédula" style="width: 20%; text-align: center">
+                        <h:outputText value="#{detdat[0]}" style="text-transform: uppercase"/>
+                    </p:column>                    
+                    <p:column headerText="Apellido" style="width: 15%; text-align: center">
+                        <h:outputText value="#{detdat[2]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Nombre" style="width: 15%; text-align: center">
+                        <h:outputText value="#{detdat[1]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Email" style="width: 15%; text-align: center">
+                        <h:outputText value="#{detdat[3]}" />                                            
+                    </p:column>
+                    <p:column headerText="Usuario" style="width: 8%;text-align: center">
+                        <h:outputText value="#{detdat[0]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Password" style="width: 9%; text-align: center">
+                        <h:outputText value="#{detdat[4]}" />                                            
+                    </p:column>                    
+                </p:dataTable>    
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

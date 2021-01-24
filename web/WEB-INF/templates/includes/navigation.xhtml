@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:form >  
+        <style>
+            .nivel1 .ui-accordion-content{padding: 0;}
+            .nivel2 .ui-accordion-content{padding: 0;}                        
+            .nivel2 .ui-accordion-header .ui-icon{left: 15px;}
+            .nivel2 .ui-accordion-header {padding-left: 1.2em;background-color: #AAAF9A}
+            .nivel2 .ui-accordion-header.ui-state-active{background-color: #AAA07F}
+            .nivel3 .ui-accordion-content{padding: 0;}                        
+            .nivel3 .ui-accordion-header .ui-icon{left: 30px;}
+            .nivel3 .ui-accordion-header {padding-left: 2.2em;background-color: #85a2AA}
+            .nivel3 .ui-accordion-header.ui-state-active{background-color: #9BABBE}            
+            .celdaClass{padding-left:30px;}
+        </style>
+
+        <p:accordionPanel styleClass="nivel1" >
+            <p:tab title="Administración de Códigos" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or
+                                                                 fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL')}">
+                <p:accordionPanel styleClass="nivel2" >
+                    <p:tab title="Evaluación" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass" >
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Formulario Encuesta" >  
+                                <f:param name="includePath" value="/pages/evaluacion/formulario/CabeceraFormulario"/>
+                            </p:commandLink>       
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Preguntas" >  
+                                <f:param name="includePath" value="/pages/evaluacion/formulario/pregunta"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Parametros Calendarización" >  
+                                <f:param name="includePath" value="/pages/evaluacion/formulario/parametrosEncuesta"/>
+                            </p:commandLink>     
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Parametros Recordatorios" >  
+                                <f:param name="includePath" value="/pages/evaluacion/formulario/convocatoriaRecordatorio"/>
+                            </p:commandLink>                      
+                        </h:panelGrid>   
+                    </p:tab>
+                    <p:tab title="Informe Anual" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass" >                            
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Parametros Calendarización" >  
+                                <f:param name="includePath" value="/pages/infAnual/parametros/parametrosInfAnual"/>
+                            </p:commandLink>     
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Parametros Recordatorios" >  
+                                <f:param name="includePath" value="/pages/infAnual/parametros/convRecordatorioInfAnual"/>
+                            </p:commandLink>                      
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Parametros Puntuacion" >  
+                                <f:param name="includePath" value="/pages/infAnual/parametros/parPuntuacionInfAnual"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Rangos" >  
+                                <f:param name="includePath" value="/pages/infAnual/parametros/rangosInfAnual"/>
+                            </p:commandLink>  
+                        </h:panelGrid>   
+
+                    </p:tab>
+                </p:accordionPanel> 
+            </p:tab>
+            <p:tab title="Opciones" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or
+                                                fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or 
+                                                fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU')or 
+                                                fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}">
+                <p:accordionPanel styleClass="nivel2" >
+                    <p:tab title="Evaluación" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU') or
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                        <p:accordionPanel  styleClass="nivel3" >
+                            <p:tab title="Docente/Asignatura" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                          fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                          fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0"  columnClasses="celdaClass" >
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Docente/Asignatura" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/asignatura/reaperturaAsignatura"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Cierre Evaluación Docente/Asignatura" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/asignatura/cierreAsignatura"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST')}"
+                                                   value="Pago Estampilla Evaluación Docente/Asignatura" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/asignatura/pagEstampillaAsignatura"/>
+                                    </p:commandLink>  
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Programa" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/programa/reaperturaPrograma"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Cierre Evaluación Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/programa/cierrePrograma"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>       
+                            <p:tab title="Coordinador" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                   fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                   fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Evaluación del Coordinador al Docente" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/coordinador/reaperturaEvalDeCordADocente"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Cierre Evaluación del Coordinador al Docente" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/coordinador/cierreEvalDeCordADocente"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>     
+                            <p:tab title="Comité" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                              fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                              fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Comité a Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/comite/reaperturaComPrograma"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Cierre Comité a Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/comite/cierreComPrograma"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>         
+                            <p:tab title="Calidad de Servicios" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Calidad Servicios" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/calidadServicios/reaperturaCalidadServicios"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Cierre Calidad Servicios" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/calidadServicios/cierreCalidadServicios"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>     
+                            <p:tab title="Tutoría" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') }">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calendarización Tutoría" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/evaluacionTutoria/reaperturaEvalEstATutor"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                    <p:tab title="Informe Anual" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0"  columnClasses="celdaClass" >
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}"  
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or                                                        
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Calendarización Informe Anual" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/reaperturaInfAnual"/>
+                            </p:commandLink>                      
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}"
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or                                                        
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Cierre Informe Anual" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/cierreInfAnual"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" 
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Seguimiento Tesis" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/segTesisInfAnual"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" 
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Seguimiento IAAD" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/segInfAnual"/>
+                            </p:commandLink>  
+                             <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" 
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Seguimiento Publicaciones" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/segPubInfAnual"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" 
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Datos Docentes" >  
+                                <f:param name="includePath" value="/pages/infAnual/Procesos/datDocInfAnual"/>
+                            </p:commandLink>  
+                        </h:panelGrid>
+
+                    </p:tab>
+                    <p:tab title="Publicaciones" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0"  columnClasses="celdaClass" >                            
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}"  
+                                           rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or                                                        
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or 
+                                                       fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')}"
+                                           immediate="true" update=":pnlContent" 
+                                           value="Seguimiento Publicaciones" >  
+                                <f:param name="includePath" value="/pages/publicacionesDGA/segPublicacionesGen"/>
+                            </p:commandLink>   
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
+            </p:tab>        
+            <p:tab title="Reportes y Consultas" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL')  or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU')or 
+                                                            fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}">
+                <p:accordionPanel styleClass="nivel2" >
+                    <p:tab title="Evaluación" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or 
+                                                          fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU')}">
+                        <p:accordionPanel  styleClass="nivel3" >
+                            <p:tab title="Docente" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass" >
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación Anual Docente" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/docente/EvalEstADocAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación por Profesor" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/docente/EvalEstADocGen"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Estadístico Evaluaciones" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/docente/EvalEstADocEstadistico"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluaciones Al Docente" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/docente/EvalEstADocConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Asignatura" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                  fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                  fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                                  fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación Anual Asignatura" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/asignatura/EvalEstAAsignaturaAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluaciones Asignatura" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/asignatura/EvalEstAAsignaturaConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Programa" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                                fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación Anual Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/programa/EvalEstAProgAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Estadístico Evaluación Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/programa/EvalEstAProgEstadistico"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluación Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/programa/EvalEstAProgConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Coordinador Al Docente" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                              fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                              fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                                              fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación Coordinador Anual" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/coordinador/EvalCoordADocAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación por Profesor (Coordinador al Docente)" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/coordinador/EvalCoordADocGen"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Estadístico Evaluación Coordinador" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/coordinador/EvalCoordADocEstadistico"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluación Coordinador" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/coordinador/EvalCoordADocConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Comité Al Programa" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                          fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                          fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                                          fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación Comité Anual" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/comite/EvalCordAProgAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Estadístico Evaluación Comité Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/comite/EvalCordAProgEstadistico"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluación Comité Programa" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/comite/EvalCoordAProgConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Calidad de Servicios" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or 
+                                                                            fn:containsIgnoreCase(sessionScope.perfiles,'BIENESTU')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <!--p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calidad de Servicios Anual" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/calidadServicios/EvalEstACalidadServiciosAnual"/>
+                                    </p:commandLink-->                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Calidad de Servicios Estadístico" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/calidadServicios/EvalEstACalidadServiciosEstadistico"/>
+                                    </p:commandLink>     
+                                     <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Calidad de Servicios" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/calidadServicios/EvalEstACalidadServiciosConsol"/>
+                                    </p:commandLink>  
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Encuesta Socio Económica Anual" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/calidadServicios/EvalEstSocioEconoAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Matriz de Insercion Social" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/calidadServicios/EvalEstSocioEconoMInserSocial"/>
+                                    </p:commandLink>  
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Tutoría" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                               fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Evaluación A Tutor Anual" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/tutor/EvalEstATutorAnual"/>
+                                    </p:commandLink>                      
+                                    <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                                   value="Consolidado Evaluación A Tutor" >  
+                                        <f:param name="includePath" value="/pages/evaluacion/reportes/tutor/EvalEstATutorConsol"/>
+                                    </p:commandLink>                      
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                    <p:tab title="Informe Anual" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or                                                              
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Detalle Individual" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') }">  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualDetalle"/>
+                            </p:commandLink>
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Consolidado" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}" >  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualConIndividual"/>
+                            </p:commandLink>
+                             <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Consolidado Puntuacion" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}" >  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualConPuntuacion"/>
+                            </p:commandLink>
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Detalle Consolidado" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL') or                                                              
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}" >  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualConDetalle"/>
+                            </p:commandLink>
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Publicaciones" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL') or 
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualPublicacion"/>
+                            </p:commandLink>     
+                            
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Sílabo" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or 
+                                                      fn:containsIgnoreCase(sessionScope.perfiles,'ADMEVAL') or 
+                                                      fn:containsIgnoreCase(sessionScope.perfiles,'DGAEVAL')or 
+                                                      fn:containsIgnoreCase(sessionScope.perfiles,'REPEVAL')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Estado de sílabos" >  
+                                <f:param name="includePath" value="/pages/evaluacion/reportes/silabo"/>
+                            </p:commandLink>  
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Estadístico" >  
+                                <f:param name="includePath" value="/pages/evaluacion/reportes/estadisticoSilabo"/>
+                            </p:commandLink>                              
+                        </h:panelGrid>
+                    </p:tab>
+                    <!--p:tab title="Vinculación" rendered="#{fn:containsIgnoreCase(sessionScope.perfiles,'USU_SIST') or                                                              
+                                                             fn:containsIgnoreCase(sessionScope.perfiles,'DGAVINCU')}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" columnClasses="celdaClass">
+                            <p:commandLink actionListener="#{navigationMgmtBean.navigationPathChange}" immediate="true" update=":pnlContent" 
+                                           value="Pertenencia Organizaciones" >  
+                                <f:param name="includePath" value="/pages/infAnual/reportes/infAnualPertOrgan"/>
+                            </p:commandLink>                            
+                        </h:panelGrid>
+                    </p:tab-->
+                </p:accordionPanel>
+            </p:tab>            
+        </p:accordionPanel>        
+    </h:form>        
+</ui:composition>
+

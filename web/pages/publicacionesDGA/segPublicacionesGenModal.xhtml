@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;"  >
+        <h:panelGrid columns="1" id="gdatpublicacion">
+            <h:panelGrid columns="1" id="gdatpublicante" border="1">
+                <h:panelGrid columns="1" id="gfecfiltro" >
+                    <p:selectOneRadio id="idetfiltro" value="#{publicacionDGA.smtippublicante}" >                           
+                        <f:selectItem itemLabel="Docente" itemValue="D" />
+                        <f:selectItem itemLabel="Estudiante" itemValue="E" />
+                        <p:ajax event="click" update="gdatpublicacion gdatpublicante gfestudiante gfprofesor" listener="#{publicacionDGA.tipPersonavalueChangeListener()}"/>
+                    </p:selectOneRadio>
+                </h:panelGrid> 
+                <h:panelGrid id="gfprofesor" columns="2" style="font-family: Arial; font-size: 8pt" rendered="#{publicacionDGA.smtippublicante eq 'D'}">             
+                    <h:outputText  value="Profesor* :" style="font-weight: bold" />
+                    <h:panelGrid columns="2" id="gprofesor" >
+                        <p:selectOneMenu value="#{publicacionDGA.codProfesor}" id="putpprofesor"
+                                         filter="true" filterMatchMode="startsWith" 
+                                         required="true" requiredMessage="Docente: se requiere un valor">
+                            <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                           
+                            <f:selectItems  value="#{publicacionDGA.lprofesor}" var="lprofesor" itemLabel="#{lprofesor.nombrePersona}" itemValue="#{lprofesor.cedulaPersona}"/>                                                                
+                            <p:ajax update="gprofesor"/>
+                        </p:selectOneMenu>
+                        <p:message for="putpprofesor" display="icon"/>
+                    </h:panelGrid>
+                </h:panelGrid>  
+                <h:panelGrid id="gfestudiante" columns="2" style="font-family: Arial; font-size: 8pt" rendered="#{publicacionDGA.smtippublicante eq 'E'}">                                                        
+                    <h:outputText  value="Estudiante* :" style="font-weight: bold"/>
+                    <h:panelGrid columns="2" id="gestudiante" >
+                        <p:selectOneMenu value="#{publicacionDGA.codProfesor}" id="iestudiante"
+                                         filter="true" filterMatchMode="startsWith" 
+                                         required="true" requiredMessage="Estudiante: se requiere un valor">
+                            <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                           
+                            <f:selectItems  value="#{publicacionDGA.lestudiante}" var="lestudiante" itemLabel="#{lestudiante.nombrePersona}" itemValue="#{lestudiante.cedulaPersona}"/>                                                                
+                            <p:ajax update="gestudiante gfestudiante"/>
+                        </p:selectOneMenu>
+                        <p:message for="iestudiante" display="icon"/>
+                    </h:panelGrid>
+                </h:panelGrid>  
+            </h:panelGrid>
+            <p:tabView id="infopub" style=" font-family: Arial; font-size: 9pt " activeIndex="#{publicacionDGA.indiceTab}">                
+                <p:tab title="Datos Publicación" id="ptabdatpub">
+                    <h:panelGrid columns="2" id="datospub">
+                        <h:outputText  value="Tipo Publicación* " style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="gtippub">
+                            <p:selectOneMenu value="#{publicacionDGA.smtippublicacion.value}" id="pubtippub"
+                                             required="true" requiredMessage="Publicación/Tipo Publicación: se requiere un valor">
+                                <f:selectItem itemLabel="Escoja uno.." itemValue="" />
+                                <!--f:selectItem itemLabel="Informes Investigacion" itemValue="18" />
+                                <f:selectItem itemLabel="Informes Proyecto Interinstitucional" itemValue="19" /-->                                
+                                <f:selectItem itemLabel="Libros" itemValue="13" />
+                                <f:selectItem itemLabel="Otras Publicaciones" itemValue="17" />
+                                <f:selectItem itemLabel="Ponencias" itemValue="15" />
+                                <f:selectItem itemLabel="Productos Audiovisuales" itemValue="16" />
+                                <!--f:selectItem itemLabel="Reseñas" itemValue="20" /-->
+                                <f:selectItem itemLabel="Revistas" itemValue="14" />
+                                <f:selectItem itemLabel="Serie Magister" itemValue="18" />  
+                                <p:ajax update="gtippub gdetdatbib gdetdatbiblio gtippart datospub labeltipopub labelaniopub" listener="#{publicacionDGA.tipPublicvalueChangeListener}"/>
+                            </p:selectOneMenu> 
+                            <p:message for="pubtippub" display="icon"/>
+                        </h:panelGrid>
+
+                        <h:outputText  value="#{publicacionDGA.labelTipoPub}" style="font-weight: bold" id="labeltipopub"/> 
+                        <h:panelGrid columns="2" id="gtippart">
+                            <p:selectOneMenu value="#{publicacionDGA.smtipparticipacion.value}" id="pubtippart"
+                                             required="true" requiredMessage="Publicación/Tipo: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItems value="#{publicacionDGA.listtippart}" />
+                                <p:ajax update="gtippart gdetdatbiblio datospub" listener="#{publicacionDGA.detalleTipoPubValueChangeListener}"/>
+                            </p:selectOneMenu>
+                            <p:message for="pubtippart" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText value="Detalle*" style="font-weight: bold" id="labelDetalle" rendered="#{publicacionDGA.bDetalleTipPub}"/>
+                        <h:panelGrid columns="2" id="gdetalletipo" rendered="#{publicacionDGA.bDetalleTipPub}">
+                            <h:inputText binding="#{publicacionDGA.itxtdbdetalletipopub}" id="itdetalletipopub" required="false"
+                                         requiredMessage="Publicación/Detalle: se requiere un valor">
+                                <p:ajax update="gdetalletipo" immediate="true" />
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:outputText  value="Rol* " style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="grol">
+                            <p:selectOneMenu value="#{publicacionDGA.smrol.value}" id="pubrol"
+                                             required="true" requiredMessage="Publicación/Rol: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItems value="#{publicacionDGA.listrol}" />
+                                <p:ajax update="grol gdetdatbiblio" immediate="true"/>
+                            </p:selectOneMenu>
+                            <p:message for="pubrol" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText  value="#{publicacionDGA.labelAnioPub}" style="font-weight: bold" id="labelaniopub"/>  
+                        <h:panelGrid columns="2" id="gdbanedicion">
+                            <p:inputMask mask="9999" id="ipanioedi" value="#{publicacionDGA.sanioedicion}" style=" width: 50px; text-align: center" validatorMessage="Datos Bibliográficos/Año: fuera del Rango" requiredMessage="Datos Bibliográficos/Año: Se requiere un valor">
+                                <f:validateLongRange minimum="1993"/>
+                                <p:ajax update="gdbanedicion" immediate="true"/>
+                            </p:inputMask>
+                            <p:message for="ipanioedi" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText  value="Alcance de la Actividad* " style="font-weight: bold" rendered="#{publicacionDGA.bAlcanceAnio}"/>
+                        <h:panelGrid columns="2" id="gpubalcanact" rendered="#{publicacionDGA.bAlcanceAnio}">
+                            <p:selectOneMenu value="#{publicacionDGA.smalcact.value}" id="pubalcanact"
+                                             required="true" requiredMessage="Publicación/Alcance Actividad: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItem  itemLabel="Nacional" itemValue="1" />
+                                <f:selectItem  itemLabel="Internacional" itemValue="2" />                                                                           
+                                <p:ajax update="gpubalcanact" immediate="true" />                  
+                            </p:selectOneMenu> 
+                            <p:message for="pubalcanact" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText  value="Año* " style="font-weight: bold" rendered="#{publicacionDGA.bAnioVisualizacion}"/>
+                        <h:panelGrid columns="2" id="gdbaniopublicacion" rendered="#{publicacionDGA.bAnioVisualizacion}">
+                            <p:inputMask mask="9999" id="ipaniopublicacion" 
+                                         value="#{publicacionDGA.saniovisualizacion}" style=" width: 50px; text-align: center" 
+                                         validatorMessage="Datos Bibliográficos/Año: fuera del Rango" 
+                                         requiredMessage="Datos Bibliográficos/Año: Se requiere un valor">
+
+                                <f:validateLongRange minimum="1993"/>
+                                <p:ajax update="gdbaniopublicacion" immediate="true"/>
+                            </p:inputMask>
+                            <p:message for="ipaniopublicacion" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText  value="País* " style="font-weight: bold" rendered="#{publicacionDGA.bPais}"/> 
+                        <h:panelGrid columns="2" id="gpaipub" rendered="#{publicacionDGA.bPais}">
+                            <p:selectOneMenu value="#{publicacionDGA.smpaispub.value}" id="pubpas"
+                                             filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Publicación/País: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItems  value="#{publicacionDGA.listPaistit}" var="lpaispub" itemLabel="#{lpaispub.paiNombre}" itemValue="#{lpaispub.paiCodigo}"/>
+                                <p:ajax update="gpaipub gciudadpub" listener="#{publicacionDGA.paisPublicvalueChangeListener}"/>                  
+                            </p:selectOneMenu> 
+                            <p:message for="pubpas" display="icon"/>
+                        </h:panelGrid>
+                        <h:outputText  value="Ciudad" style="font-weight: bold" rendered="#{publicacionDGA.bCiudad}"/>
+                        <h:panelGrid columns="2" id="gciudadpub" rendered="#{publicacionDGA.bCiudad}">
+                            <p:selectOneMenu value="#{publicacionDGA.smciudadpub.value}" id="ciudadpub"
+                                             filter="true" filterMatchMode="startsWith">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItems  value="#{publicacionDGA.listCiudadtit}" var="lciudadpub" itemLabel="#{lciudadpub.ciuNombre}" itemValue="#{lciudadpub.prinCiudadPK.ciuCodigo}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:outputText  value="ODI/URI/URL:" style="font-weight: bold" />
+                        <h:panelGrid columns="2" id="gdoiurl">
+                            <h:inputText binding="#{publicacionDGA.itxtdburl}">
+                                <p:ajax update="gdoiurl" immediate="true"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:outputText  value="Ubicación Evidencia:" style="font-weight: bold" />
+                        <h:panelGrid columns="2" id="gevidencia">
+                            <h:inputText binding="#{publicacionDGA.smevidencia}">
+                                <p:ajax update="gevidencia" immediate="true"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:outputText  value="Observación:" style="font-weight: bold" />
+                        <h:panelGrid columns="2" id="gobservacion">
+                            <h:inputText binding="#{publicacionDGA.smobservacion}">
+                                <p:ajax update="gobservacion" immediate="true"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>  
+                </p:tab>
+                <p:tab title="Datos Bibliográficos" id="ptabdatbiblio" >
+                    <h:panelGrid columns="1" id="gdetdatbib">
+                        <h:panelGrid columns="4" id="gdetdatbiblio" rendered="#{publicacionDGA.bingdatbiblio}"> 
+
+                            <h:outputText  value="#{publicacionDGA.labelTitApell}"  style="font-weight: bold"/>
+                            <h:panelGrid columns="2" id="gdbapelautor">
+                                <h:inputText binding="#{publicacionDGA.itxtdbapellautor}" 
+                                             id="idbapelautor" required="true" requiredMessage="Datos Bibliográficos/Apellido: se requiere un valor">
+                                    <p:ajax update="gdbapelautor" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbapelautor" display="icon"/>
+                            </h:panelGrid>
+                            <h:outputText  value="#{publicacionDGA.labelTitNombre}"  style="font-weight: bold" />
+                            <h:panelGrid columns="2" id="gdbnomautor">
+                                <h:inputText binding="#{publicacionDGA.itxtdbnombreautor}"  id="idbnomautor"
+                                             required="true" requiredMessage="Datos Bibliográficos/Nombre: se requiere un valor">
+                                    <p:ajax update="gdbnomautor" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbnomautor" display="icon"/>
+                            </h:panelGrid>
+                            <!--TITULO LIBRO-->
+                            <h:outputText  value="Tipo" style="font-weight: bold"  rendered="#{publicacionDGA.bpares}"/>
+                            <h:panelGrid columns="2" id="gdbtipovarios" rendered="#{publicacionDGA.bpares}">
+                                <p:selectOneMenu value="#{publicacionDGA.smdbtipvarios.value}">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Académico" itemValue="1" />
+                                    <f:selectItem  itemLabel="No Académico" itemValue="2" />
+                                    <p:ajax update="gdbtipovarios" immediate="true"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                            <h:outputText  value="#{publicacionDGA.labelTitulo}" style="font-weight: bold" id="labelTit"/>
+                            <h:panelGrid columns="2" id="gdbtitulo">
+                                <p:inputTextarea id="idbtitulo" rows="5" cols="40" maxlength="200" counter="counttit" counterTemplate="{0} Caracteres Restantes"  
+                                                 autoResize="false" binding="#{publicacionDGA.itxtdbtitulo}"
+                                                 required="true" requiredMessage="Datos Bibliográficos/Titulo: se requiere un valor" >
+                                    <p:ajax update="gdbtitulo" immediate="true" />
+                                </p:inputTextarea>
+                                <h:outputText id="counttit"/>
+                                <p:message for="idbtitulo" display="icon" />
+                            </h:panelGrid>
+                            <!---->
+                            <!--EDITORIAL-->
+                            <h:outputText  value="Editorial*" style="font-weight: bold" rendered="#{publicacionDGA.beditorial}" id="labelEditorial"/>
+                            <h:panelGrid columns="2" id="gdbeditorial" rendered="#{publicacionDGA.beditorial }">
+                                <h:inputText binding="#{publicacionDGA.itxtdbeditorial}" id="idbeditorial"
+                                             style="width: 200px" required="true" requiredMessage="Datos Bibliográficos/Editorial: se requiere un valor" >
+                                    <p:ajax update="gdbeditorial" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbeditorial" display="icon" />
+                            </h:panelGrid>
+                            <!---->
+                            <!--INFORMACION REVISTA-->
+                            <h:outputText value="Nombre Revista*" style="font-weight: bold" rendered="#{publicacionDGA.bnombrerev}"/>
+                            <h:panelGrid columns="2" id="gdbnomrev" rendered="#{publicacionDGA.bnombrerev}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbnomrev}" id="idbnomrev"
+                                             required="true" requiredMessage="Datos Bibliográficos/Nombre Revista: se requiere un valor" style="width: 200px">
+                                    <p:ajax update="gdbnomrev" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbnomrev" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Volumen*" style="font-weight: bold" rendered="#{publicacionDGA.bvolrevista}"/>
+                            <h:panelGrid columns="2" id="gdbvolumen" rendered="#{publicacionDGA.bvolrevista}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbvolumen}" id="idbvolumen"
+                                             required="true" requiredMessage="Datos Bibliográficos/Volumen: se requiere un valor"                                      
+                                             style="width: 100px">
+                                    <p:ajax update="gdbvolumen" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbvolumen" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Número Revista*" style="font-weight: bold" rendered="#{publicacionDGA.bnumrevista}"/>
+                            <h:panelGrid columns="2" id="gdnumrevista" rendered="#{publicacionDGA.bnumrevista}">
+                                <h:inputText value="#{publicacionDGA.smnumrevista}" id="idnumrevista"
+                                             required="true" requiredMessage="Datos Bibliográficos/Numero Revista se requiere un valor"                                      
+                                             style="width: 100px">
+                                    <p:ajax update="gdnumrevista" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idnumrevista" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Periodicidad*" style="font-weight: bold" rendered="#{publicacionDGA.bperiodicidad}"/>
+                            <h:panelGrid columns="2" id="gdperrevista" rendered="#{publicacionDGA.bperiodicidad}">
+                                <p:selectOneMenu value="#{publicacionDGA.smperiodicidad}" id="idperrevista"
+                                                 required="true" requiredMessage="Publicación/Periodicidad: se requiere un valor"
+                                                 style="font-size: 7pt">
+                                    <f:selectItem itemLabel="Escoja uno.." itemValue="" />                            
+                                    <f:selectItem itemLabel="Mensual" itemValue="Mensual" />
+                                    <f:selectItem itemLabel="Bimensual" itemValue="Bimensual" />  
+                                    <f:selectItem itemLabel="Trimestral" itemValue="Trimestral" />  
+                                    <f:selectItem itemLabel="Cuatrimestral" itemValue="Cuatrimestral" />  
+                                    <f:selectItem itemLabel="Semestral" itemValue="Semestral" />
+                                    <f:selectItem itemLabel="Anual" itemValue="Anual" />                          
+
+                                    <p:ajax update="gdperrevista" immediate="true" />
+                                </p:selectOneMenu>                    
+                                <p:message for="idperrevista" display="icon" />
+                            </h:panelGrid>
+                            <!---->
+                            <!--INFORMACION DE CAPITULO DE LIBRO-->
+                            <h:outputText  value="Título del Capítulo*" style="font-weight: bold" rendered="#{publicacionDGA.btitcapitulo}" />
+                            <h:panelGrid columns="2" id="gdbtitcap" rendered="#{publicacionDGA.btitcapitulo}"  >
+                                <h:inputText binding="#{publicacionDGA.itxtdbtitulocapi}" id="idbtitcap" style="width: 200px"
+                                             required="true" requiredMessage="Publicación/Título Capítulo: se requiere un valor">
+                                    <p:ajax update="gdbtitcap" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbtitcap" display="icon"/>
+                            </h:panelGrid>
+                            <h:outputText  value="Rol Anfitrion* " style="font-weight: bold" rendered="#{publicacionDGA.brolanfitrion}"/>
+                            <h:panelGrid columns="2" id="grolanfi" rendered="#{publicacionDGA.brolanfitrion}">
+                                <p:selectOneMenu value="#{publicacionDGA.smrolanfitrion}" id="pubrolanfi"
+                                                 required="true" requiredMessage="Publicación/Rol Anfitrion: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItems value="#{publicacionDGA.listrolanfi}" />
+                                    <p:ajax update="grolanfi" immediate="true"/>
+                                </p:selectOneMenu>
+                                <p:message for="pubrol" display="icon"/>
+                            </h:panelGrid>
+                            <h:outputText  value="#{publicacionDGA.labelRangPag}" style="font-weight: bold" id="labelRanPagina" rendered="#{publicacionDGA.brangpagina}"/>
+                            <h:panelGrid columns="2" id="gdbranpag" rendered="#{publicacionDGA.brangpagina}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbranpag}" id="idbranpag" style="width: 50px"
+                                             required="true" requiredMessage="Publicación/Rango Paginas: se requiere un valor">
+                                    <p:ajax update="gdbranpag" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbranpag" display="icon"/>
+                            </h:panelGrid>
+                            <!---->
+                            <!--ISBN ISSN-->
+                            <h:outputText  value="#{publicacionDGA.etcod}" style="font-weight: bold" rendered="#{publicacionDGA.bcodigo}"/>
+                            <h:panelGrid columns="2" id="gdbnumcod" rendered="#{publicacionDGA.bcodigo}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbnumcod}" id="idbnumcod" style="width: 200px">
+                                    <p:ajax update="gdbnumcod" immediate="true" />
+                                </h:inputText>
+                            </h:panelGrid>
+                            <!--NUMERO DE PAGINAS-->
+                            <h:outputText  value="#{publicacionDGA.labelPagina}" style="font-weight: bold" id="labelPagina" rendered="#{publicacionDGA.bpagina}"/>
+                            <h:panelGrid columns="2" id="gdbnumpag" rendered="#{publicacionDGA.bpagina}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbnumpag}" id="idbnumpag" style="width: 50px"
+                                             required="true" requiredMessage="Publicación/Número Paginas: se requiere un valor">
+                                    <p:ajax update="gdbnumpag" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbnumpag" display="icon"/>
+                            </h:panelGrid>
+                            <!--EDICION-->
+                            <h:outputText  value="Edición" style="font-weight: bold" rendered="#{publicacionDGA.bedicion}"/>
+                            <h:panelGrid columns="2" id="gdblistedi" rendered="#{publicacionDGA.bedicion}">
+                                <p:selectOneMenu value="#{publicacionDGA.smdbedicion.value}">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Primera" itemValue="1" />
+                                    <f:selectItem  itemLabel="Reedición" itemValue="2" />
+                                    <f:selectItem  itemLabel="Recopilación" itemValue="3" />
+                                    <p:ajax update="gdblistedi" immediate="true"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                            <h:outputText  value="N° Edición:" style="font-weight: bold" rendered="#{publicacionDGA.bnedicion}"/>
+                            <h:inputText binding="#{publicacionDGA.itxtdbedicion}" rendered="#{publicacionDGA.bnedicion}"/>
+                            <!--FORMA DE PUBLICACION-->
+                            <h:outputText  value="Forma Publicación* " style="font-weight: bold" rendered="#{publicacionDGA.bpublicacion}"/>
+                            <h:panelGrid columns="2" id="gpubformpub" rendered="#{publicacionDGA.bpublicacion}">
+                                <p:selectOneMenu value="#{publicacionDGA.smformpub.value}" id="pubformpub"
+                                                 required="true" requiredMessage="Publicación/Forma Publicación: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Impreso" itemValue="I" />
+                                    <f:selectItem  itemLabel="Digital" itemValue="D" />    
+                                    <p:ajax update="gpubformpub" />
+                                    <!--listener="#{publicacionDGA.formPublicvalueChangeListener}"/-->  
+                                </p:selectOneMenu> 
+                                <p:message for="pubformpub" display="icon"/>
+                            </h:panelGrid>
+                            <!--AUSPICIO PUBLICACION-->
+                            <h:outputText  value="Auspicio Publicación*" style="font-weight: bold" rendered="#{publicacionDGA.bauspicio}"/>
+                            <h:panelGrid columns="2" id="gpubausppub" rendered="#{publicacionDGA.bauspicio}">
+                                <p:selectOneMenu value="#{publicacionDGA.smausppub.value}" id="pubausppub"
+                                                 required="true" requiredMessage="Publicación/Auspicio: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="UASB" itemValue="U" />
+                                    <f:selectItem  itemLabel="Otro(Especifique)" itemValue="O" />                                                                       
+                                    <f:selectItem  itemLabel="N/A" itemValue="N" />    
+                                    <p:ajax update="gpubausppub gdetasup gdetnomasup" listener="#{publicacionDGA.auspPublicvalueChangeListener}"/>                  
+                                </p:selectOneMenu> 
+                                <p:message for="pubausppub" display="icon"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" id="gdetasup" rendered="#{publicacionDGA.bauspicio}">
+                                <h:outputText  value="Detalle Auspicio*" style="font-weight: bold"  rendered="#{publicacionDGA.bhabdetotausp}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" id="gdetnomasup" rendered="#{publicacionDGA.bauspicio}">
+                                <h:inputText binding="#{publicacionDGA.itxtdetotroausp}" id="idetnomausp"  
+                                             rendered="#{publicacionDGA.bhabdetotausp}" 
+                                             required="true" requiredMessage="Publicación/Otro Auspicio: se requiere un valor"
+                                             style="width: 300px">
+                                    <p:ajax update="gdetnomasup" immediate="true" />
+                                    <f:validateRequired disabled="#{publicacionDGA.bhabdetotausp}"/>
+                                </h:inputText>
+                                <p:message for="idetnomausp" display="icon"/>
+                            </h:panelGrid>
+                            <!---->
+                            <!--BASES DE INDESACION REVISTAS-->
+                            <!--SE PONEN LOS DATOS EN DESORDEN PARA NO PERDER INFO HISTORICA PEDIDO 23-11-2017-->
+                            <h:outputText  value="Base de Indexación" style="font-weight: bold" rendered="#{publicacionDGA.bparesrev}"/>
+                            <h:panelGrid columns="2" id="gdbindexacion" rendered="#{publicacionDGA.bparesrev}">
+                                <p:selectOneMenu value="#{publicacionDGA.smdbtipvarios.value}">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Latindex" itemValue="1" />
+                                    <f:selectItem  itemLabel="Scopus" itemValue="4" />
+                                    <f:selectItem  itemLabel="Scimago" itemValue="5" />
+                                    <f:selectItem  itemLabel="Isi Web" itemValue="6" />
+                                    <f:selectItem  itemLabel="Scielo" itemValue="7" />
+                                    <f:selectItem  itemLabel="Ninguno" itemValue="2" />
+                                    <f:selectItem  itemLabel="Otro (Especifique)" itemValue="3" />
+                                    <p:ajax update="gdbindexacion labelBaseIndex gdbbaseindex" listener="#{publicacionDGA.baseIndexacionValueChangeListener()}"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" id="labelBaseIndex" rendered="#{publicacionDGA.bparesrev}">
+                                <h:outputText  value="Detalle Base de Indexación" style="font-weight: bold" rendered="#{publicacionDGA.bbaseindex}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" id="gdbbaseindex" rendered="#{publicacionDGA.bparesrev}">
+                                <h:inputText binding="#{publicacionDGA.itxtbaseindex}" id="idbbaseindex" rendered="#{publicacionDGA.bbaseindex}">
+                                    <p:ajax update="gdbbaseindex" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbbaseindex" display="icon" />
+                            </h:panelGrid>
+                            <!---->
+                            <!--PONENCIAS-->
+                            <h:outputText value="Nombre Evento*" style="font-weight: bold" rendered="#{publicacionDGA.bnombeve}"/>
+                            <h:panelGrid columns="2" id="gdbnomeve" rendered="#{publicacionDGA.bnombeve}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbnomeve}" id="idbnomeve"
+                                             required="true" requiredMessage="Datos Bibliográficos/Nombre Evento: se requiere un valor" style="width: 200px">
+                                    <p:ajax update="gdbnomeve" immediate="true" />
+                                </h:inputText>
+                                <p:message for="idbnomeve" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Tipo Actividad*" style="font-weight: bold" rendered="#{publicacionDGA.bnombeve}"/>
+                            <h:panelGrid columns="2" id="gdbevento" rendered="#{publicacionDGA.bnombeve}">
+                                <p:selectOneMenu value="#{publicacionDGA.smevento.value}" id="ievento" required="true"
+                                                 requiredMessage="Datos Bibliográficos/En Evento: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Congreso" itemValue="C" />
+                                    <f:selectItem  itemLabel="Seminario" itemValue="S" />                                                                                            
+                                    <f:selectItem  itemLabel="Simposio" itemValue="I" />                               
+                                    <f:selectItem  itemLabel="Conferencia" itemValue="O" /> 
+                                    <f:selectItem  itemLabel="Encuentro" itemValue="E" /> 
+                                    <f:selectItem  itemLabel="Conversatorio" itemValue="N" /> 
+                                    <f:selectItem  itemLabel="Coloquio" itemValue="L" /> 
+                                    <f:selectItem  itemLabel="Mesa Redonda" itemValue="M" /> 
+                                    <f:selectItem  itemLabel="Foro" itemValue="F" /> 
+                                    <f:selectItem  itemLabel="Taller de Discusión" itemValue="T" /> 
+                                    <f:selectItem  itemLabel="Grupo de Discusión" itemValue="G" /> 
+                                    <f:selectItem  itemLabel="Panel" itemValue="P" /> 
+                                    <p:ajax update="gdbevento"  immediate="true"/>  
+                                </p:selectOneMenu> 
+                                <p:message for="ievento" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Entidad Sede*" style="font-weight: bold" rendered="#{publicacionDGA.bnombeve}"/>
+                            <h:panelGrid columns="2" id="gdbentsede" rendered="#{publicacionDGA.bnombeve}">
+                                <h:inputText binding="#{publicacionDGA.itxtdbentidadsede}"  id="entsede" required="true"
+                                             requiredMessage="Datos Bibliográficos/Entidad Sede: se requiere un valor" >
+                                    <p:ajax update="gdbentsede" immediate="true" />
+                                </h:inputText>
+                                <p:message for="entsede" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="Mecanismos Difusión*" style="font-weight: bold" rendered="#{publicacionDGA.bnombeve}"/>
+                            <h:panelGrid columns="2" id="gdbmecdif" rendered="#{publicacionDGA.bnombeve}">
+                                <p:selectOneMenu value="#{publicacionDGA.smmeddif.value}" id="imeddifusion"
+                                                 required="true" requiredMessage="Datos Bibliográficos/Mecanismo Difusión: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Discusión en el Foro" itemValue="D" />
+                                    <f:selectItem  itemLabel="Memoria" itemValue="M" />                                                                                            
+                                    <f:selectItem  itemLabel="Página Web" itemValue="P" />                               
+                                    <p:ajax update="gdbmecdif"  immediate="true"/>  
+                                </p:selectOneMenu> 
+                                <p:message for="imeddifusion" display="icon" />
+                            </h:panelGrid>
+                            <h:outputText  value="#{publicacionDGA.labelFecha}" style="font-weight: bold" rendered="#{publicacionDGA.bfecedicion}"/> 
+                            <h:panelGrid columns="2" id="gdbfecedicion"  rendered="#{publicacionDGA.bfecedicion}">
+                                <p:calendar  value="#{publicacionDGA.dbfecedicion}" id="fecedicion" 
+                                             required="true" requiredMessage="Datos Bibliográficos/Fecha Edicion: se requiere un valor"
+                                             pattern="dd/MM/yyyy" style="text-align: center" timeZone="America/Guayaquil" locale="es">
+                                    <p:ajax update="gdbfecedicion fecedicion" immediate="true" />
+                                </p:calendar>
+                                <p:message for="fecedicion" display="icon"/>
+                            </h:panelGrid>
+                            <!---->
+                            <!--PRODUCTOS AUDIOVISUALES-->
+                            <h:outputText  value="Duración*" style="font-weight: bold" rendered="#{publicacionDGA.bduracion}"/>
+                            <h:panelGrid columns="2" id="gdbdurac" rendered="#{publicacionDGA.bduracion}">
+                                <p:selectOneMenu value="#{publicacionDGA.smduracion.value}" id="idbdurac"
+                                                 required="true" requiredMessage="Datos Bibliográficos/Duración: se requiere un valor">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                    <f:selectItem  itemLabel="Hasta 30 Minutos" itemValue="1" />
+                                    <f:selectItem  itemLabel="Más de 30 Minutos" itemValue="2" />                                                                                                                           
+                                    <p:ajax update="gdbdurac"  immediate="true"/>  
+                                </p:selectOneMenu> 
+                                <p:message for="idbdurac" display="icon" />
+                            </h:panelGrid>
+                            <!---->
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+
+                </p:tab>           
+            </p:tabView>  
+
+
+        </h:panelGrid>
+        <p:commandButton  id="btnParaGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                          update=":formLogin:growlLogin :formMant:gdatpublicacion @form"
+                          actionListener="#{publicacionDGA.guardarButton_processAction}" process="@form" />        
+        <p:commandButton value="Cancelar" oncomplete="mantWidget.hide();" id="btnParaCancelar" 
+                         actionListener="#{publicacionDGA.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton>   
+
+    </p:panel>
+</ui:composition>

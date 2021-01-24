@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InfAnualConVinAcEvUasbDet" language="groovy" pageWidth="1130" pageHeight="595" orientation="Landscape" columnWidth="1090" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="87cd4aa4-3fc1-427e-a890-5048a02d94fe">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="styleSDatos">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{TITULO_ACTIVIDAD}!="SIN ACTIVIDAD"]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#FFFFFF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{TITULO_ACTIVIDAD}=="SIN ACTIVIDAD"]]></conditionExpression>
+			<style forecolor="#990000" backcolor="#FFFFFF" isBold="true"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="tipReporte" class="java.lang.String"/>
+	<parameter name="codProfesor" class="java.lang.String"/>
+	<parameter name="codArea" class="java.lang.String"/>
+	<parameter name="codTContrato" class="java.lang.String"/>
+	<parameter name="codDedicacion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[DECLARE @PROFESOR TABLE (CODIGO_PROFESOR NUMERIC(7,0),cod_profesor_acadant INT, nom_dedicacion varchar(15),NOM_TIPOCONTRATO VARCHAR(20) )
+INSERT  INTO @PROFESOR(CODIGO_PROFESOR,cod_profesor_acadant,nom_dedicacion, NOM_TIPOCONTRATO)
+SELECT CODIGO_PROFESOR, cod_profesor_acadant, nom_dedicacion, NOM_TIPOCONTRATO
+FROM interfaseOcu.dbo.PROFESOR
+SELECT (SELECT c.NOMBRE_CICLO
+        FROM academico.dbo.CICLO_ACADEMICO c
+        WHERE c.ANIO = e.anio) AS ANIO,
+        (SELECT f.NOMBRE_FACULTAD
+        FROM academico.dbo.FACULTAD f
+        WHERE f.CODIGO_FACULTAD = e.CODIGO_FACULTAD) AS AREA,
+e.NOMBRE_PROFESOR NOMBRE_PROFESOR,
+PROFESOR.NOM_TIPOCONTRATO,
+PROFESOR.NOM_DEDICACION DEDICACION,
+ISNULL((SELECT f.NOMBRE_FACULTAD
+        FROM academico.dbo.FACULTAD f
+        WHERE f.CODIGO_FACULTAD = voa.CODIGO_FACULTAD), 'SIN ACTIVIDAD') NOMBRE_FACULTAD,
+ISNULL(voa.TITULO_ACTIVIDAD, 'SIN ACTIVIDAD') TITULO_ACTIVIDAD,
+(SELECT pai.NOM_PAIS FROM  academico.dbo.PAIS pai WHERE pai.COD_PAIS = voa.PAIS_INVEST) NOM_PAIS,
+UPPER (CASE voa.SEDE_INST_ACTIVIDAD WHEN 'E' THEN 'Estado' WHEN 'C' THEN 'Cooperación Internacional'
+                WHEN 'O' THEN 'ONG' WHEN 'M' THEN 'Empresa' WHEN 'R' THEN 'Organización'
+                WHEN 'U' THEN 'Universidad' WHEN '9' THEN 'Otros'  END) AS SEDE_INST_ACTIVIDAD,
+UPPER (CASE voa.TIPO_ACTIVIDAD WHEN 5 THEN 'Seminarios' WHEN 6 THEN 'Congresos' WHEN 7 THEN 'Simposios'
+                WHEN 8 THEN 'Conferencias' WHEN 9 THEN 'Encuentros' WHEN 10 THEN 'Conversatorios'
+                WHEN 11 THEN 'Coloquios' WHEN 12 THEN 'Mesas Redondas' WHEN 13 THEN 'Foros'
+                WHEN 14 THEN 'Talleres específicos' WHEN 21 THEN 'Grupos de discusión' WHEN 22 THEN 'Panel'  END) AS TIPO_ACTIVIDAD,
+voa.NOMBRE_ACTIVIDAD,
+(CASE voa.TIPO7_ACTIVIDAD WHEN 'E' THEN 'EXPOSITOR' WHEN 'M' THEN 'MODERADOR'
+                WHEN 'O' THEN 'ORGANIZADOR' WHEN 'R' THEN 'CON CERTIFICADO' END) AS TIPO7_ACTIVIDAD,
+voa.DURACION_ACTIVIDAD,
+(CASE voa.NUM1_ACTIVIDAD WHEN 1 THEN 'CUENTA PROPIA' WHEN 2 THEN 'ORIGEN UASB'END) AS NUM1_ACTIVIDAD
+FROM interfaseOcu.GESTIONACADEMICA.ESTADISTICAS_INFORME_ANUAL e
+INNER JOIN @PROFESOR PROFESOR ON PROFESOR.CODIGO_PROFESOR=e.CODIGO_PROFESOR
+LEFT OUTER JOIN OTRA_ACTIVIDAD_ACADEMICA voa ON PROFESOR.cod_profesor_acadant = voa.CODIGO_PROFESOR
+AND voa.CODIGO_FACULTAD IS NOT NULL
+AND voa.TIPO_OTRA_ACTIVIDAD  in ('S')
+AND e.ANIO  BETWEEN (case when convert(datetime,voa.FINICIO_ACTIVIDAD,103)<=  convert(datetime,'01/01/1993',103) then 1992 else (select anio from CICLO_ACADEMICO where voa.FINICIO_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and voa.FINICIO_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL)  end) and
+	(case when  voa.FFIN_ACTIVIDAD is null or (select anio from CICLO_ACADEMICO where voa.FFIN_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and voa.FFIN_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL) is null then 2020 else (select anio from CICLO_ACADEMICO where voa.FFIN_ACTIVIDAD >= CICLO_ACADEMICO.F_INICIO and voa.FFIN_ACTIVIDAD <= CICLO_ACADEMICO.F_FINAL)end)
+WHERE e.anio=$P{anio}
+AND (CASE when ($P{tipReporte} = 'D' AND $P{codProfesor} IS NOT NULL) then  E.CODIGO_PROFESOR ELSE '0' END) = (CASE   when $P{tipReporte} = 'D' then $P{codProfesor} ELSE '0' END)
+AND (CASE when(($P{tipReporte} ='A' OR $P{tipReporte} ='T' OR $P{tipReporte} ='E')and $P{codArea} <>'T')  then  E.CODIGO_FACULTAD ELSE '0' END )= (CASE  when(($P{tipReporte} ='A' OR $P{tipReporte} ='T' OR $P{tipReporte} ='E')and $P{codArea} <>'T')THEN $P{codArea}  ELSE '0' END)
+AND (CASE when(($P{tipReporte}='T' OR $P{tipReporte} ='E')and $P{codTContrato} <> 'T') THEN E.COD_TIPOCONTRATO ELSE '0' END )= (CASE when(($P{tipReporte} ='T'OR $P{tipReporte} ='E')and $P{codTContrato} <> 'T')THEN  $P{codTContrato} ELSE '0' END  )
+AND (CASE when($P{tipReporte} ='E'and $P{codDedicacion}<> 'T') THEN E.DEDICACION ELSE '0' END )= (CASE when($P{tipReporte} ='E'and $P{codDedicacion} <> 'T')THEN  $P{codDedicacion}ELSE '0' END  )]]>
+	</queryString>
+	<field name="ANIO" class="java.lang.String"/>
+	<field name="AREA" class="java.lang.String"/>
+	<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
+	<field name="NOM_TIPOCONTRATO" class="java.lang.String"/>
+	<field name="DEDICACION" class="java.lang.String"/>
+	<field name="NOMBRE_FACULTAD" class="java.lang.String"/>
+	<field name="TITULO_ACTIVIDAD" class="java.lang.String"/>
+	<field name="NOM_PAIS" class="java.lang.String"/>
+	<field name="SEDE_INST_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO_ACTIVIDAD" class="java.lang.String"/>
+	<field name="NOMBRE_ACTIVIDAD" class="java.lang.String"/>
+	<field name="TIPO7_ACTIVIDAD" class="java.lang.String"/>
+	<field name="DURACION_ACTIVIDAD" class="java.lang.Integer"/>
+	<field name="NUM1_ACTIVIDAD" class="java.lang.String"/>
+	<sortField name="AREA"/>
+	<sortField name="NOMBRE_PROFESOR"/>
+	<background>
+		<band height="525" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="1086" height="525" forecolor="#CCCCCC" uuid="92f86a8a-6d25-4a25-b7cb-8e849238625c"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font size="72" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Reporte en validación por parte del usuario. Los datos aquí mostrados son válidos sólo para pruebas.]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="93" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="85" height="55" uuid="485f8ba1-c6aa-49de-9324-107eb766bf09"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="85" y="0" width="1001" height="15" uuid="21de2b9f-68e7-4fd2-be2a-2a77f5872c6e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN GENERAL ACADÉMICA - DGA ]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="1014" y="75" width="72" height="11" uuid="20866d7a-7b14-406a-b862-877dbbf67d39"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="85" y="55" width="1001" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="102eebb0-fc72-499b-abbf-c979341bb78e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ANIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="85" y="30" width="1001" height="25" uuid="b89e9cc2-0773-40c9-a33b-a10d1936d63f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORME ANUAL ACTIVIDADES DOCENTES - DETALLE ACTIVIDADES Y EVENTOS OTRAS INSTITUCIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="15" width="1001" height="15" uuid="a4fa734b-7d82-47df-97b0-d20a4296414d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="90" width="1086" height="1" uuid="7d65e543-e046-4268-aac6-df67d112c932"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="927" y="75" width="87" height="11" uuid="fe362db8-b541-4aef-9d8e-1ad5017906c4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="206" y="0" width="81" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="0c8d1c2d-4587-4362-a5ff-3a0a8379dfe7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Dedicación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="85" y="0" width="121" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="098d4a5d-b898-4a7c-ac7d-00b5e28da0a6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Profesor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="85" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="b3d08863-b752-443a-b82f-e60c3442dd41"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Area]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="0" width="130" height="25" uuid="6b04aab6-58c8-4811-af27-5806b518d30c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de la Institución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1014" y="0" width="73" height="25" uuid="56ecc1d5-f2b6-47ce-ad15-222bd2484656"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Origen Participación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="417" y="0" width="91" height="25" uuid="cb399f36-ff2d-47aa-9a1b-32789245fa44"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[País]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="94" height="25" uuid="9fc57f4c-d57b-406f-9287-ae34daaed59f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Institución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="0" width="94" height="25" uuid="914a871a-ed68-4f1a-90de-b53ba372f9df"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="696" y="0" width="178" height="25" uuid="d8856724-803d-4f4b-9ab8-4d5870e9c584"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Actividad/Evento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="874" y="0" width="53" height="25" uuid="0480896f-4e97-4cd8-a3fc-27b636545823"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rol Docente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="927" y="0" width="87" height="25" uuid="710e8d20-6552-47a7-9837-210ef5cc990b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° Horas Participación]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="85" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="f6a7bbd2-c688-44ba-8bf9-ed1050ab969d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="206" y="0" width="81" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="62950c56-3a32-44d1-9b34-bcb55a5fe1b3"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEDICACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="85" y="0" width="121" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="7726d7dd-3342-4459-a532-9a97403a3af7"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_PROFESOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleSDatos" stretchType="RelativeToBandHeight" x="287" y="0" width="130" height="11" uuid="a332f16f-8e27-4735-9de0-7599c78a1c55"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITULO_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1014" y="0" width="73" height="11" uuid="02601712-0f4a-452f-82cf-404fd8e23649"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM1_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="417" y="0" width="91" height="11" uuid="7d81f064-7ce4-40f8-bd38-89e9d5e78768"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOM_PAIS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="508" y="0" width="94" height="11" uuid="8cd4fb63-f576-4ff1-8ec0-90e3b9d2b0f0"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEDE_INST_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="602" y="0" width="94" height="11" uuid="502b7880-d5a7-4203-b051-401bd774dac2"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="696" y="0" width="178" height="11" uuid="982acfff-b215-4f86-96bc-b1b6b81544a4"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="874" y="0" width="53" height="11" uuid="50e90ffd-129d-44db-9329-cd808b7564ca"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO7_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="927" y="0" width="87" height="11" uuid="867e16a4-96dc-43b0-92d8-fa14aac17905"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DURACION_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="927" y="0" width="87" height="11" uuid="afe88a5a-d07e-45ad-8666-d2d3e024f2c4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="1014" y="0" width="72" height="11" uuid="3f3f05a7-fffc-4a6c-ac79-cb8208dd9205"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="287" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="d09120d5-7c6b-42f0-a400-f00ca3dc0d14"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ACADEMICO v1.0]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

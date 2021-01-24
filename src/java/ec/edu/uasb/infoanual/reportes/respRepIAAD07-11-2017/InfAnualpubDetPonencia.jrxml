@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="publicacionesDetallePonencias" language="groovy" pageWidth="2730" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="2730" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="f0b2b3f5-fece-467f-852e-616d6e3ebe42">
+	<property name="ireport.zoom" value="1.3310000000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codProfesor" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT  UPPER(CASE P.PUB_PARTICIPACION WHEN 'P' THEN 'Publicada' WHEN 'N' THEN 'No Publicada' ELSE NULL END) AS PUB_PARTICIPACION,
+        P.PUB_APELLIDO_AUTOR,
+        P.PUB_NOMBRE_AUTOR,
+        UPPER(CASE P.PUB_ROL WHEN 1 THEN 'Autor' WHEN 2 THEN 'Coautor' ELSE NULL END) AS PUB_ROL,
+        P.PUB_TITULO,
+        P.CAMPO5 AS NOMBRE_EVENTO,
+        UPPER(CASE P.PUB_EVENTO WHEN 'C' THEN 'Congreso' WHEN 'S' THEN 'Seminario' WHEN 'I' THEN 'Simposio' ELSE NULL END) AS PUB_EVENTO,
+        UPPER(CASE P.PUB_ALCANCE WHEN 1 THEN 'Nacional' WHEN 2 THEN 'Internacional' ELSE 'N/I' END) AS PUB_ALCANCE,
+        P.PUB_ENTIDADSEDE,
+        CONVERT(CHAR(10),P.PUB_FECEDICION,103) AS PUB_FECEDICION,
+        UPPER(CASE P.PUB_MEDDIFUSION WHEN 'D' THEN 'Discusión en el Foro' WHEN 'M' THEN 'Memoria' WHEN 'P' THEN 'Página Web'
+                ELSE 'N/I' END) AS PUB_MEDDIFUSION,
+P.PUB_URL
+FROM    academico.dbo.PUBLICACION_PROFESOR P
+WHERE   P.CODIGO_PROFESOR = $P{codProfesor}
+        AND P.TIPO_PUBLICACION = 15
+ORDER BY (CASE WHEN  P.PUB_FECEDICION IS NULL THEN CAMPO10 ELSE P.PUB_FECEDICION END)]]>
+	</queryString>
+	<field name="PUB_PARTICIPACION" class="java.lang.String"/>
+	<field name="PUB_APELLIDO_AUTOR" class="java.lang.String"/>
+	<field name="PUB_NOMBRE_AUTOR" class="java.lang.String"/>
+	<field name="PUB_ROL" class="java.lang.String"/>
+	<field name="PUB_TITULO" class="java.lang.String"/>
+	<field name="NOMBRE_EVENTO" class="java.lang.String"/>
+	<field name="PUB_EVENTO" class="java.lang.String"/>
+	<field name="PUB_ALCANCE" class="java.lang.String"/>
+	<field name="PUB_ENTIDADSEDE" class="java.lang.String"/>
+	<field name="PUB_FECEDICION" class="java.lang.String"/>
+	<field name="PUB_MEDDIFUSION" class="java.lang.String"/>
+	<field name="PUB_URL" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="21">
+			<staticText>
+				<reportElement x="0" y="0" width="180" height="21" uuid="64c5ba46-0ef4-4696-94a4-060c2e927d29"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PONENCIAS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="11">
+			<staticText>
+				<reportElement x="0" y="0" width="152" height="11" uuid="91a77b9f-6bce-4c15-9f97-346f51ead2a0"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO DE PONENCIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="140" height="11" uuid="2de2ace7-848d-49a7-9674-8d03d4782852"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="0" width="140" height="11" uuid="57088f7c-b3d5-465e-91e3-093d2e07b7a3"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="0" width="94" height="11" uuid="2015dbe1-89a1-478c-bfd5-98e24b0efd35"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ROL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="526" y="0" width="568" height="11" uuid="0b7f8964-c481-458a-b400-fa717ff67774"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TÍTULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2085" y="0" width="166" height="11" uuid="5ad7a5a3-78c6-4953-bc84-399307b8bebc"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEDIOS DIFUSIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2251" y="0" width="110" height="11" uuid="95e7c54a-b076-453a-aa12-e9439545d5dc"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE ACTIVIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2361" y="0" width="364" height="11" uuid="9d047815-83e2-46c1-a3e8-ced4de0cc2f8"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ODI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1094" y="0" width="438" height="11" uuid="2d110d17-4233-416b-92e6-a06796fc78fe"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE EVENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1532" y="0" width="149" height="11" uuid="7563fd20-b4e2-4428-a118-0c6f481c95e0"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EN EVENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1681" y="0" width="112" height="11" uuid="df0bde75-b2b1-4a39-8dd7-68247861f7ab"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALCANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1793" y="0" width="292" height="11" uuid="3927c949-ab02-4921-9829-42d0ef6ab3e9"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTIDAD SEDE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="152" height="11" uuid="305babb6-4d87-43a8-8f9e-ee840cc4cc07"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_PARTICIPACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="152" y="0" width="140" height="11" uuid="618614bf-0112-4cd3-934d-c2358670f0a0"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_APELLIDO_AUTOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="292" y="0" width="140" height="11" uuid="e42a5c04-3a11-448a-af9c-bb3cfd8f5f9c"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_NOMBRE_AUTOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="432" y="0" width="94" height="11" uuid="006f054d-55d0-4d01-bc21-e90455a00df9"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_ROL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="526" y="0" width="568" height="11" uuid="7e85fd76-270f-477b-a33b-aa46bf6f10fa"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_TITULO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2085" y="0" width="166" height="11" uuid="b9ccc380-9d0d-4b45-90d5-6415f8ad7fa0"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_MEDDIFUSION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2251" y="0" width="110" height="11" uuid="91bb911f-2347-40f9-8b6c-39f2013b1bca"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_FECEDICION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2361" y="0" width="364" height="11" uuid="c1347524-04b9-41f0-b567-ff0df8ca70bf"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_URL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1094" y="0" width="438" height="11" uuid="9b3a0f1b-e346-4c31-ac0b-d16e47539578"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_EVENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1532" y="0" width="149" height="11" uuid="e41ababc-a18e-4db1-9cf3-2b351af9024d"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_EVENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1681" y="0" width="112" height="11" uuid="e60d8a59-7b53-4453-9fec-e5b613a24396"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_ALCANCE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1793" y="0" width="292" height="11" uuid="467b2d87-43dd-471c-aa69-ac9f265dfd46"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_ENTIDADSEDE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="42">
+			<staticText>
+				<reportElement x="0" y="0" width="180" height="21" uuid="2162de92-1d97-4aea-8a1f-3c591a66ea35"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PONENCIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="21" width="180" height="21" forecolor="#FF0000" uuid="d8c8470f-1b52-440a-adb1-7d0c26d7b2d0"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NO HAY INFORMACIÓN]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{cabformulario.navigationJSFManagedBean.nombreOpcion}"> 
+        <h:form id="frecordatorioEncuesta">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltro" columns="4" style="font-family: Arial; font-size: 7pt">
+                <h:outputText  value="Tipo Encuesta* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="tipencuesta" >
+                    <p:selectOneMenu value="#{convoRecordatorioEnc.smtipencuesta}" id="itipencuesta"
+                                     required="true" requiredMessage="Tipo Encuesta: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Docente" itemValue="A" />
+                        <f:selectItem  itemLabel="Programa" itemValue="P" />          
+                        <f:selectItem  itemLabel="Tutoría" itemValue="T" />          
+                        <f:selectItem  itemLabel="Coordinador" itemValue="C" />          
+                        <f:selectItem  itemLabel="Comite" itemValue="O" />   
+                        <f:selectItem  itemLabel="Servicios" itemValue="S" /> 
+                        <p:ajax update="dataRecordatorio gencuesta" listener="#{convoRecordatorioEnc.tipencuestavalueChangeListener()}" />                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:outputText  value="Encuesta* :" style="font-weight: bold"/>
+                <h:panelGrid  columns="1" id="gencuesta" >
+                    <p:selectOneMenu value="#{convoRecordatorioEnc.smencuesta}" id="iencuesta"
+                                     required="true" requiredMessage="Tipo Encuesta: se requiere un valor">                                        
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{convoRecordatorioEnc.listCabEncuesta}" var="lencuesta" itemLabel="#{lencuesta.titulo}" itemValue="#{lencuesta.codigoEncuesta}"/>
+                        <p:ajax update="dataRecordatorio gencuesta" listener="#{convoRecordatorioEnc.encuestavalueChangeListener()}" />                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </h:panelGrid>                          
+            <p:dataTable id="dataRecordatorio"
+                         value="#{convoRecordatorioEnc.listEncConvocatoria}" 
+                         var="encconvocatoria" 
+                         scrollable="true" scrollHeight="95%" 
+                         rowIndexVar="rowIndex"
+                         rowKey="#{encconvocatoria.codigoEncrecordatorio}" 
+                         resizableColumns="true"
+                         selection="#{convoRecordatorioEnc.selectedConvocatoria}" 
+                         selectionMode="single"
+                         emptyMessage="No existen datos"
+                         widgetVar="widgetRecordatorio"
+                         styleClass="evalFormStyle"
+                         >
+                <p:ajax event="rowSelect"  update=":frecordatorioEncuesta:dataRecordatorio" />  
+                <p:ajax event="rowUnselect"  update=":frecordatorioEncuesta:dataRecordatorio"/> 
+                <f:facet name="header">
+                    <div align="right" >
+                        <p:commandButton icon="ui-icon-document"   id="btnRECNuevo" 
+                                         actionListener="#{convoRecordatorioEnc.nuevoButton_processAction(ae)}" value="Nuevo" 
+                                         update=":mantDialog :frecordatorioEncuesta:dataRecordatorio" immediate="true" 
+                                         partialSubmit="true" oncomplete="mantWidget.show();"/> 
+                    </div>
+                </f:facet>
+                <p:column headerText="N° Convoc." style="width: 5%; text-align: center">
+                    <h:outputText value="#{encconvocatoria.numConvocatoria}" />                                    
+                </p:column>
+                <p:column headerText="Días Convocatoria" style="width: 5%; text-align: center">
+                    <h:outputText value="#{encconvocatoria.diasConvocatoria}" />                                            
+                </p:column>
+                <p:column headerText="Mensaje " style="width: 40%">
+                    <h:outputText value="#{encconvocatoria.mensaje}" style="text-align: left"/>                                            
+                </p:column>
+                
+                <p:column headerText="Días Reapertura" style="width: 5%; text-align: center">
+                    <h:outputText value="#{encconvocatoria.diasReapertura}" />                                            
+                </p:column>
+                <p:column headerText="Mensaje Reapertura" style="width: 40%">
+                    <h:outputText value="#{encconvocatoria.mensajeReapertura}" style="text-align: left"/>                                            
+                </p:column>
+                 
+                <p:column headerText="Estado Convocatoria" style="width: 5%">
+                    <h:outputText value="#{encconvocatoria.getnomestado()}" style=" text-align: left"/>                                            
+                </p:column>
+                <p:column headerText="Editar"  style="text-align: center;width: 3%">  
+                    <div align="center">
+                        <p:commandLink value="Editar" title="Editar registro" immediate="true"  styleClass="ui-icon ui-icon-pencil" 
+                                       partialSubmit="true" action="#{convoRecordatorioEnc.editarButton_processAction(ae)}" style="color:blue;"
+                                       onstart="widgetRecordatorio.unselectAllRows();widgetRecordatorio.selectRow(#{rowIndex});blockUIContentenidoWidget.block()"  
+                                       oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                       update=":mantDialog ">
+                            <f:setPropertyActionListener value="#{encconvocatoria}" target="#{convoRecordatorioEnc.selectedConvocatoria}" />  
+                        </p:commandLink>  
+                    </div>
+                </p:column>
+                <p:column  style="text-align: center; width:2%">
+                    <p:commandLink value="Eliminar" title="Eliminar Encuesta" update=":formLogin:growlLogin :frecordatorioEncuesta:dataRecordatorio" immediate="true" 
+                                   id="commandLinkElimRecordatorio" styleClass="ui-icon ui-icon-trash" 
+                                   partialSubmit="true" action="#{convoRecordatorioEnc.eliminarButton_processAction(ae, null)}" style="color:blue;"
+                                   onstart="widgetRecordatorio.unselectAllRows();" 
+                                   rendered="#{convoRecordatorioEnc.selectedConvocatoria.codigoEncrecordatorio eq encconvocatoria.codigoEncrecordatorio }">
+                        <f:setPropertyActionListener value="#{encconvocatoria}" target="#{convoRecordatorioEnc.selectedConvocatoria}" />  
+                    </p:commandLink>                    
+                </p:column>   
+            </p:dataTable>               
+
+        </h:form>
+
+    </p:panel>
+</ui:composition>

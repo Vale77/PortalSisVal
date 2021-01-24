@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{InfAnualrepConPun.navigationJSFManagedBean.nombreOpcion}">        
+        <h:form id="frepInfAnualConInd">
+            <p:growl id="messagedato"/>
+            <h:panelGrid id ="gftipo" columns="1" style="font-family: Arial; font-size: 7pt">
+                <h:panelGrid columns="4" id="gftipcomb">
+                    <h:outputText  value="Tipo Reporte* :" style="font-weight: bold"/>
+                    <h:panelGrid columns="2" id="gftipfiltro">
+                        <p:selectOneMenu value="#{InfAnualrepConPun.smtipfiltro}" id="itipfiltro"
+                                         required="true" requiredMessage="Reporte se requiere un valor">
+                            <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                        
+                            <f:selectItem  itemLabel="Individual" itemValue="I" />
+                            <f:selectItem  itemLabel="General" itemValue="G" />                                           
+                            <f:selectItem  itemLabel="General con Puntuacion" itemValue="E" />  
+                            <f:selectItem  itemLabel="Promedio por Item" itemValue="P" />                                           
+                            <f:selectItem  itemLabel="Total por Docente" itemValue="D" />                                           
+                            <p:ajax event="change" update="gftipcomb gftipreporte gfiltro gtabla" listener="#{InfAnualrepConPun.tipFiltrovalueChangeListener()}"/>
+                        </p:selectOneMenu> 
+                        <p:message for="itipfiltro" display="icon"/> 
+                    </h:panelGrid>
+                    <h:outputText  value="Ambito* :" style="font-weight: bold" rendered="#{InfAnualrepConPun.smtipfiltro eq 'P'}"/>
+                    <h:panelGrid columns="2" rendered="#{InfAnualrepConPun.smtipfiltro eq 'P'}">
+                        <p:selectOneMenu value="#{InfAnualrepConPun.smtipambito}" id="itipambito"
+                                         required="true" requiredMessage="Ámbito se requiere un valor">
+                            <f:selectItem  itemLabel="Escoja uno.." itemValue="" />  
+                            <f:selectItem  itemLabel="Todos" itemValue="T" />
+                            <f:selectItem  itemLabel="Docencia" itemValue="D" />
+                            <f:selectItem  itemLabel="Investigacion" itemValue="I" />                                           
+                            <f:selectItem  itemLabel="VInculación" itemValue="V" />  
+                            <f:selectItem  itemLabel="Gestión Académica" itemValue="G" />                                                                                                             
+                            <p:ajax event="change" update="gftipcomb gftipreporte gfiltro gtabla"/>
+                        </p:selectOneMenu> 
+                        <p:message for="itipambito" display="icon"/> 
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText  value="Tipo Filtro* :" style="font-weight: bold"/>
+                <h:panelGrid columns="2" id="gftipreporte" >
+                    <p:selectOneMenu value="#{InfAnualrepConPun.smtipo}" id="itipo"
+                                     required="true" requiredMessage="Tipo de Reporte se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems value="#{InfAnualrepConPun.listtipfiltro}" />
+                        <!--f:selectItem  itemLabel="Docentes" itemValue="D"/>
+                        <f:selectItem  itemLabel="Area" itemValue="A"  />                                             
+                        <f:selectItem  itemLabel="Tipo Contrato" itemValue="T" /> 
+                        <f:selectItem  itemLabel="Dedicacion" itemValue="E" /--> 
+                        <p:ajax event="change" update="gftipreporte gfiltro gtabla" listener="#{InfAnualrepConPun.tipovalueChangeListener()}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="itipo" display="icon"/> 
+                </h:panelGrid>
+                </h:panelGrid>
+                
+            </h:panelGrid>
+            <h:panelGrid id ="gfiltro" columns="9" style="font-family: Arial; font-size: 7pt" >
+                <p:outputLabel value="Ciclo Académico:" style="font-weight: Bold;"/>
+                <h:panelGrid columns="2" id="gciclo" columnClasses="col1,col2">
+                    <p:selectOneMenu value="#{InfAnualrepConPun.smciclo}" 
+                                     id="menuCiclo">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{InfAnualrepConPun.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax  update="gciclo garea dataInfAnual" listener="#{InfAnualrepConPun.ciclovalueChangeListener()}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:outputText  value="Area* :" style="font-weight: bold"  rendered="#{InfAnualrepConPun.smtipo eq 'A'|| InfAnualrepConPun.smtipo eq 'T'||InfAnualrepConPun.smtipo eq 'E'}"/>
+                <h:panelGrid columns="2" id="garea"  rendered="#{InfAnualrepConPun.smtipo eq 'A' ||InfAnualrepConPun.smtipo eq 'T'||InfAnualrepConPun.smtipo eq 'E'}">
+                    <p:selectOneMenu value="#{InfAnualrepConPun.smarea}" 
+                                     id="iarea">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todas" itemValue="T" />
+                        <f:selectItem  itemLabel="Derecho" itemValue="1" />
+                        <f:selectItem  itemLabel="Letras" itemValue="3" />
+                        <f:selectItem  itemLabel="Gestión" itemValue="4" />
+                        <f:selectItem  itemLabel="Salud" itemValue="5" />
+                        <f:selectItem  itemLabel="Educación" itemValue="6" />
+                        <f:selectItem  itemLabel="Comunicación" itemValue="7" />
+                        <f:selectItem  itemLabel="Historia" itemValue="8" />
+                        <f:selectItem  itemLabel="Estudios Sociales y Globales" itemValue="17" />
+                        <p:ajax  update="garea gtipcontrato gdedicacion"  listener="#{InfAnualrepConPun.areavalueChangeListener()}" />
+                    </p:selectOneMenu>
+                    <p:message for="iarea" display="icon"/>
+                </h:panelGrid> 
+                <p:outputLabel value="Tipo Contrato" style="font-weight: Bold;" rendered="#{InfAnualrepConPun.smtipo eq 'T'||InfAnualrepConPun.smtipo eq 'E'}"/>                
+                <h:panelGrid columns="2" id="gtipcontrato" columnClasses="col1,col2" rendered="#{InfAnualrepConPun.smtipo eq 'T'||InfAnualrepConPun.smtipo eq 'E'}">
+                    <p:selectOneMenu value="#{InfAnualrepConPun.smtipcontrato}" 
+                                     id="itipcontrato" >
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todos" itemValue="T" />
+                        <f:selectItems  value="#{InfAnualrepConPun.listtipcontrato}" var="ltipcontrat" itemLabel="#{ltipcontrat[1]}" itemValue="#{ltipcontrat[0]}"/>                               
+                        <p:ajax  update="gtipcontrato gdedicacion" listener="#{InfAnualrepConPun.tipContvalueChangeListener()}"/>
+                    </p:selectOneMenu>
+                    <p:message for="itipcontrato" display="icon"/>
+                </h:panelGrid>
+                <p:outputLabel value="Dedicación:" style="font-weight: Bold;" rendered="#{InfAnualrepConPun.smtipo eq 'E'}"/>
+                <h:panelGrid columns="2" id="gdedicacion" columnClasses="col1,col2" rendered="#{InfAnualrepConPun.smtipo eq 'E'}">
+                    <p:selectOneMenu value="#{InfAnualrepConPun.smdedicacion}" 
+                                     id="idedicacion">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todos" itemValue="T" />
+                        <f:selectItems  value="#{InfAnualrepConPun.listdedicacion}" var="ldedicacion" itemLabel="#{ldedicacion[1]}" itemValue="#{ldedicacion[0]}"/>                               
+                        <p:ajax  update="gdedicacion" />
+                    </p:selectOneMenu>
+                    <p:message for="idedicacion" display="icon"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" id="gbutton"  rendered="#{InfAnualrepConPun.smtipo ne 'D'}">
+                    <p:commandButton id="selectButton" 
+                                     oncomplete="pdfWidget.show();"                                     
+                                     icon="ui-icon-search" title="Ver PDF" actionListener="#{InfAnualrepConPun.verReporte('pdf')}" 
+                                     update=":pdfDialog :formLogin:growlLogin @form" process="@form" 
+                                     style="text-align: center">                                  
+                    </p:commandButton>
+                    <p:commandButton id="selectButtonexcel" value="EXCEL"
+                                     oncomplete="blockUIContentenidoWidget.unblock();pdfWidget.show();"
+                                     update=":pdfDialog "
+                                     icon="ui-icon-disk" title="Ver Excel" actionListener="#{InfAnualrepConPun.verReporte('vnd.ms-excel')}" 
+                                     style="text-align: center">                                  
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid id ="gtabla" columns="1" >
+                <p:dataTable value="#{InfAnualrepConPun.lprofesor}" 
+                             id="dataInfAnual" var="profesor" 
+                             scrollable="true" scrollHeight="95%" 
+                             rowIndexVar="rowIndex"                                              
+                             rowKey="#{profesor.codigoProfesor}"
+                             selection="#{InfAnualrepConPun.selectedprofesor}"
+                             selectionMode="single"
+                             resizableColumns="true"                                             
+                             emptyMessage="No existen datos"
+                             styleClass="evalFormStyle"  
+                             widgetVar="widgetEEADA"     
+                             rendered="#{InfAnualrepConPun.smtipo eq 'D'}"
+                             filteredValue="#{InfAnualrepConPun.listProfesorFiltro}">  
+                    <p:column filterBy="#{profesor.nombreProfesor}"  filterStyle="width: 98%" filterMatchMode="contains" headerText="Docente" style="width:80%">
+                        <h:outputText value="#{profesor.nombreProfesor}" style="font-size: 7pt"  />                                            
+                    </p:column>
+                    <p:column headerText="Reporte PDF"  style="text-align: center"  width="3%">  
+                        <div align="center">
+                            <p:commandLink value="Reporte PDF" title="Reporte" immediate="true"  styleClass="ui-icon ui-icon-search" 
+                                           partialSubmit="true" action="#{InfAnualrepConPun.verReporte('pdf')}" style="color:blue;"
+                                           onstart="widgetEEADA.unselectAllRows();widgetEEADA.selectRow(#{rowIndex})"  
+                                           oncomplete="pdfWidget.show();"
+                                           update=":pdfDialog ">
+                                <f:setPropertyActionListener value="#{profesor}" target="#{InfAnualrepConPun.selectedprofesor}" />  
+                            </p:commandLink>  
+                        </div>
+                    </p:column> 
+                    <p:column headerText="Reporte EXCEL"  style="text-align: center"  width="3%">  
+                        <div align="center">
+                            <p:commandLink value="Reporte EXCEL" title="Reporte" immediate="true"  styleClass="ui-icon ui-icon-disk" 
+                                           partialSubmit="true" action="#{InfAnualrepConPun.verReporte('vnd.ms-excel')}" style="color:blue;"
+                                           onstart="widgetEEADA.unselectAllRows();widgetEEADA.selectRow(#{rowIndex})"  
+                                           oncomplete="pdfWidget.show();"
+                                           update=":pdfDialog ">
+                                <f:setPropertyActionListener value="#{profesor}" target="#{InfAnualrepConPun.selectedprofesor}" />  
+                            </p:commandLink>  
+                        </div>
+                    </p:column> 
+                </p:dataTable>   
+            </h:panelGrid>
+        </h:form>
+    </p:panel>     
+</ui:composition>

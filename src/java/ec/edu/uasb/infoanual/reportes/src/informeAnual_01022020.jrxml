@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="infoanual" language="groovy" pageWidth="910" pageHeight="595" orientation="Landscape" columnWidth="870" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="892d9b51-f9c4-4cba-a4bd-3b73c03be5c5">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="14"/>
+	<property name="ireport.y" value="646"/>
+	<parameter name="codigo" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT cod_profesor_acadant CODIGO_PROFESOR,
+CODIGO_PROFESOR COD_PROF_INTERFASE,
+NOMBRE_PROFESOR,
+APELLIDO_PROFESOR,
+area AREA_ACADEMICA,
+(select NOMBRE_CICLO from CICLO_ACADEMICO where ANIO=$P{anio}) CICLO,
+COD_TIPOCONTRATO COD_TIP_CONTRATO
+FROM interfaseOcu.dbo.PROFESOR
+WHERE cod_profesor_acadant = $P{codigo}]]>
+	</queryString>
+	<field name="CODIGO_PROFESOR" class="java.math.BigDecimal"/>
+	<field name="COD_PROF_INTERFASE" class="java.lang.Long"/>
+	<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
+	<field name="APELLIDO_PROFESOR" class="java.lang.String"/>
+	<field name="AREA_ACADEMICA" class="java.lang.String"/>
+	<field name="CICLO" class="java.lang.String"/>
+	<field name="COD_TIP_CONTRATO" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="64" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="73" height="55" uuid="32e1d9f1-272e-4ef2-888e-0fe57b2eacc0"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="73" y="0" width="729" height="20" uuid="7c5bf34d-c749-4f5e-a28d-fe368c3a971c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORME ANUAL DE ACTIVIDADES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="62" width="802" height="1" uuid="a200adec-9c55-4468-ab97-510c184baf3e"/>
+			</line>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="732" y="44" width="70" height="11" uuid="e9812a8b-716a-4f31-a0cc-f0451fe4039f"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="674" y="44" width="58" height="11" uuid="3ed6a3f4-01c2-47f8-aa6a-eee6d1feb6d3"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="327" y="38" width="278" height="11" uuid="ee7cc3ae-f8f2-429e-983e-4a951826323b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{APELLIDO_PROFESOR}+" "+$F{NOMBRE_PROFESOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="289" y="38" width="38" height="11" uuid="d0db8ce5-6b9f-4bdf-b5da-45fc7d40232c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Docente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="221" y="49" width="106" height="11" uuid="87cabaad-f174-4f40-9448-efe098d5efe5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Area Académica:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="327" y="49" width="278" height="11" uuid="9b093616-4d56-4d5a-87de-517fa09ae3b7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA_ACADEMICA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="20" width="729" height="18" uuid="9fa171ab-d7ec-4144-9e81-5c013cbbd61d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CICLO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="1" width="100" height="16" forecolor="#FF0000" uuid="551796f6-eb48-4c04-a24f-f35737c3e500">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOCENCIA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="17" width="311" height="5" uuid="cc5e21ca-93e5-43d0-8e9b-133256724aaf"/>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{COD_PROF_INTERFASE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "materia_docente_ciclo_academico.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="22" width="311" height="5" uuid="1ba31fbf-d8b1-4cab-b5bd-8c840c0aad20"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "docente_curso_otra_institucion.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="27" width="132" height="16" forecolor="#FF0000" uuid="6bc4c5b8-33e0-4c94-9615-540358d7b757">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TITULACIÓN UASB]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="43" width="311" height="5" uuid="c10541de-2518-4d09-a7c3-f4a0e879a472"/>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{COD_PROF_INTERFASE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "tesis_doctorado.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="48" width="311" height="5" uuid="52784d03-f689-4333-9746-27b56e621b75"/>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{COD_PROF_INTERFASE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "tesis_maestria.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="53" width="311" height="5" uuid="f81d10ba-1cb5-48b0-a724-f053db291375"/>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{COD_PROF_INTERFASE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "monografias_uasb.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="58" width="311" height="5" uuid="8e91b829-b927-4a3a-b1a0-d9f931ff8007"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "examenes_complexivos.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="73" width="132" height="16" forecolor="#FF0000" uuid="95b74ee5-ed85-4296-b218-d39d47523287">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGACIÓN]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="89" width="311" height="5" uuid="6cf6b827-383b-441e-ade7-a94242fa8fcf"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "actividades_investigacion.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="94" width="311" height="5" uuid="0fceb701-a95a-49e4-b3ef-fc23b5e26040"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "otra_actividad_profesor.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="63" width="311" height="5" uuid="2e00bdbf-108b-47d3-88d6-f029b94859f3"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "examenes_comprensivos.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="68" width="311" height="5" uuid="afb95877-1936-4d2a-9acd-ab8d417a425e"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_PROFESOR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cotutoria_docente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="5">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="311" height="5" uuid="1ad85647-3785-4876-be54-aa5a69bbd16e"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "investigadores_asociados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="72">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="15" width="311" height="5" uuid="e2a1cb72-a696-426b-95cb-82d054e06df1"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "publicaciones_libros.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="311" height="5" uuid="373010a6-c8a7-4415-abff-eec2fc9e68e0"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "publicaciones_revistas.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="25" width="311" height="5" uuid="1a74900c-df33-4008-a1b1-c051ecac6062"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "publicaciones_ponencias.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="30" width="311" height="5" uuid="6002ae97-829c-44dc-81c4-88517c7c74d4"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "publicaciones_audiovisuales.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="41" width="185" height="16" forecolor="#FF0000" uuid="61376d01-9d2d-4820-9959-37e87fc5c3ff">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VINCULACIÓN COLECTIVIDAD]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="57" width="311" height="5" uuid="70a8e3de-4d40-47ae-badc-22b98073ddc6"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "conferencia_uasb_docente.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="62" width="311" height="5" uuid="d5096d98-d910-40ac-bea4-c2184e7d0003"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "curabierto_uasb_docente.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="67" width="311" height="5" uuid="5db0ed40-7580-44d7-be03-fe775cecddae"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "otraacti_uasb_docente.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="35" width="311" height="5" uuid="d1f99735-e694-4ed8-8ebf-a20097bbc0a2"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_PROFESOR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "publicaciones_otrapublicaion.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="170" height="16" forecolor="#FF0000" uuid="8b282095-d51f-41a1-8bca-a79ad86e6a7e">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PUBLICACIONES]]></text>
+			</staticText>
+		</band>
+		<band height="5">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="311" height="5" uuid="98367452-8efe-47eb-97b5-1762274229f3"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "evento_otrainst_docente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="16">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="170" height="16" forecolor="#FF0000" uuid="ce7a2fd4-f671-432d-8418-b1af2b21556e">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GESTIÓN ACADÉMICA]]></text>
+			</staticText>
+		</band>
+		<band height="5">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="311" height="5" uuid="72aae865-8f7e-4837-b748-09954625eb40"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "funciones_direccion.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="65">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="311" height="5" uuid="1a6ee145-fbe3-40c1-934c-2851e4df6634"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "coordinacion_academica.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="5" width="311" height="5" uuid="9357bc7e-7c8c-4478-ae24-62b0cf48a9c5"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "miembro_comite_institucional.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="10" width="311" height="5" uuid="a7e7fa30-5fdd-4b84-a23c-9453a879b61b"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "miembro_comite_tribunal.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="15" width="311" height="5" uuid="d6ab5c94-6526-4510-8b3e-7d57e5de81d4"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "dis_programa_posgrado.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="311" height="5" uuid="5552f57c-3c67-4eb7-9a1a-fad8d60932f1"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "dis_educacion_continua.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="25" width="311" height="5" uuid="553bb8e0-c435-435e-87b7-bae06bb5dccd"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "organizacion_actividades_vinculacion.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="43" width="221" height="16" forecolor="#FF0000" uuid="c050b0c7-8831-45e0-8751-61e7e7ad8947">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERFECCIONAMIENTO DOCENTE]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="30" width="311" height="5" uuid="292e5de0-caed-4bf8-869f-c40f7462454d"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "otras_funciones.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="35" width="311" height="5" uuid="e9b9be4e-2290-4f63-834d-b029e45a521e"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "pertenencia_profesor.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="59" width="311" height="5" uuid="6c6d6515-4cb3-4317-8556-a72fe5555323"/>
+				<subreportParameter name="anio">
+					<subreportParameterExpression><![CDATA[$P{anio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="codigo">
+					<subreportParameterExpression><![CDATA[$P{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "perfeccionamiento_docente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="682" y="1" width="80" height="11" uuid="4e2ff15c-70ab-440a-8b70-7830e1da30cc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="1" width="389" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="bf507772-83bc-4b7d-aa0b-190513d1a387"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ACADEMICO v1.0]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="1" width="29" height="11" uuid="57a0746f-b055-4248-9ff2-be06d92466f5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

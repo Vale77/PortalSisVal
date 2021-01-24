@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{InfAnualCalendario.navigationJSFManagedBean.nombreOpcion}">      
+        <h:form id="freapInfAnual">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltro" columns="7" style="font-family: Arial; font-size: 7pt"> 
+                <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="ganio">
+                    <p:selectOneMenu value="#{InfAnualCalendario.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{InfAnualCalendario.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="gtipdocente gtipcontrato gdetalle" listener="#{InfAnualCalendario.ciclovalueChangeListener()}" />
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid> 
+                <h:outputText  value="Contrato* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtipcontrato" >
+                    <p:selectOneMenu value="#{InfAnualCalendario.smtipcontrato}" id="icontrato"
+                                     required="true" requiredMessage="Contrato: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Planta Escalafonado" itemValue="1" />
+                        <f:selectItem  itemLabel="Planta Contratado" itemValue="2" />          
+                        <f:selectItem  itemLabel="Contratado" itemValue="3" />          
+                        <f:selectItem  itemLabel="Contratado Designado" itemValue="4" /> 
+                        <f:selectItem  itemLabel="Invitado" itemValue="5" />                       
+                        <p:ajax update="gtipdocente gdetalle" listener="#{InfAnualCalendario.tipContratovalueChangeListener()}"/>                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:outputText  value="Dedicación* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtipdocente" >
+                    <p:selectOneMenu value="#{InfAnualCalendario.smtipdocente}" id="idedicacion"
+                                     required="true" requiredMessage="Tipo Docente: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <!--f:selectItem  itemLabel="Tiempo Completo" itemValue="C" />
+                        <f:selectItem  itemLabel="Medio Tiempo" itemValue="M" />          
+                        <f:selectItem  itemLabel="Tiempo Parcial" itemValue="P" /-->     
+                        <f:selectItems  value="#{InfAnualCalendario.listtipDedicacion}" var="ldedicacion" itemLabel="#{ldedicacion[1]}" itemValue="#{ldedicacion[0]}"/>                               
+                        <p:ajax update="gdetalle" listener="#{InfAnualCalendario.tipDedicacionvalueChangeListener()}"/>                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:commandButton   icon="ui-icon-refresh" title="Refrescar registros"   immediate="true" update="gdetalle" 
+                                   actionListener="#{InfAnualCalendario.tipDedicacionvalueChangeListener}"/> 
+            </h:panelGrid>  
+
+
+            <h:panelGrid id="gdetalle" >
+                <p:dataTable id="tcalendario" 
+                             value="#{InfAnualCalendario.listinfAnualReapertura}" 
+                             var="infreapertura" 
+                             scrollable="true" scrollHeight="95%" 
+                             style=" font-family: Arial; font-size: 7pt;width: 100%"
+                             rowKey="#{infreapertura[0]}#{infreapertura[7]}#{infreapertura[1]}" 
+                             resizableColumns="true"  
+                             selection="#{InfAnualCalendario.selectedInfAnual}" 
+                             selectionMode="single"
+                             emptyMessage="No existen datos"
+                             editable="true">
+                    <f:facet name="header">
+                        <p:ajax event="rowEdit" listener="#{InfAnualCalendario.onRowEdit}" update=":freapInfAnual:messagedato" />                               
+                    </f:facet>
+                    <p:column headerText="Año" style="width: 25%">
+                        <h:outputText value="#{infreapertura[0]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+                    <p:column  headerText="Contrato" style="width: 25%">
+                        <h:outputText value="#{infreapertura[8]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+                    <p:column  headerText="Dedicacion" style="width: 30%">
+                        <h:outputText value="#{infreapertura[5]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+
+                    <p:column headerText="Fecha Inicio" style="width: 5%">                                        
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{infreapertura[2]}"/>  </f:facet>
+                            <f:facet name="input">
+                                <p:calendar  value="#{InfAnualCalendario.fecinicio}" id="fecinicio"
+                                             pattern="dd/MM/yyyy" timeZone="America/Guayaquil" required="true" requiredMessage="Fecha Inicio: se requiere un valor"
+                                             locale="es" >
+                                    <p:ajax immediate="true"/>                
+                                </p:calendar>
+                            </f:facet>
+                        </p:cellEditor>                                                                                                                     
+                    </p:column>
+                    <p:column headerText="Fecha Fin" style="width: 5%">
+                        <h:outputText value="#{infreapertura[3]}" style="text-transform: uppercase"/>                                                                                    
+                    </p:column>
+                    <p:column headerText="Estado" style="width: 5%" >
+                        <h:outputText value="#{infreapertura[6]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>
+                    <p:column style="width: 2%;" >
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>               
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

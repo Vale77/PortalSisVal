@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{cierreInfAnual.navigationJSFManagedBean.nombreOpcion}">
+        <h:form id="fcierreInfAnual">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltrocierre" columns="6" style="font-family: Arial; font-size: 7pt">  
+                <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="ganio">
+                    <p:selectOneMenu value="#{cierreInfAnual.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{cierreInfAnual.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="ganio gtipcontrato gtipdocente gdetallecierre" listener="#{cierreInfAnual.ciclovalueChangeListener}" />
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid>
+                
+                <h:outputText  value="Contrato* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtipcontrato" >
+                    <p:selectOneMenu value="#{cierreInfAnual.smtipcontrato}" id="icontrato"
+                                     required="true" requiredMessage="Contrato: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Planta Escalafonado" itemValue="1" />
+                        <f:selectItem  itemLabel="Planta Contratado" itemValue="2" />          
+                        <f:selectItem  itemLabel="Contratado" itemValue="3" />          
+                        <f:selectItem  itemLabel="Contratado Designado" itemValue="4" /> 
+                        <f:selectItem  itemLabel="Invitado" itemValue="5" />                       
+                        <p:ajax update="gtipdocente gdetallecierre" listener="#{cierreInfAnual.tipContratovalueChangeListener}" />                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:outputText  value="Dedicación* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtipdocente" >
+                    <p:selectOneMenu value="#{cierreInfAnual.smtipodocente}" id="idedicacion"
+                                     required="true" requiredMessage="Tipo Docente: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <!--f:selectItem  itemLabel="Tiempo Completo" itemValue="C" />
+                        <f:selectItem  itemLabel="Medio Tiempo" itemValue="M" />          
+                        <f:selectItem  itemLabel="Tiempo Parcial" itemValue="P" /-->    
+                        <f:selectItems  value="#{cierreInfAnual.listtipDedicacion}" var="ldedicacion" itemLabel="#{ldedicacion[1]}" itemValue="#{ldedicacion[0]}"/>                               
+                        <p:ajax update="gdetallecierre" listener="#{cierreInfAnual.tipodocentevalueChangeListener()}"/>                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                              
+            </h:panelGrid>  
+
+            <h:panelGrid id="gdetallecierre" >
+                <p:dataTable id="tcierreInfAnual" 
+                             value="#{cierreInfAnual.listInfAnualCierre}" 
+                             var="asigcierre"                                   
+                             scrollable="true" scrollHeight="95%" 
+                             style=" font-family: Arial; font-size: 7pt;width: 100%"
+                             rowKey="#{asigcierre[0]}"
+                             resizableColumns="true"                                     
+                             selection="#{cierreInfAnual.selectedasigcierre}"                                      
+                             emptyMessage="No existen datos"  
+                             filteredValue="#{cierreInfAnual.listInfAnualFiltro}" >
+                    <f:facet name="header">
+                        <div align="right" >
+                            <p:commandButton  id="btnCAGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                                              update=":formLogin:growlLogin @form"
+                                              actionListener="#{cierreInfAnual.guardarButton_processAction}" process="@form" />    
+
+                        </div>   
+                    </f:facet>
+                    <p:column headerText="Año"  style="width: 20%">
+                        <h:outputText value="#{asigcierre[0]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+                   <p:column  headerText="Contrato" style="width: 20%">
+                        <h:outputText value="#{asigcierre[9]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>                    
+                    <p:column  headerText="Dedicación" style="width: 20%">
+                        <h:outputText value="#{asigcierre[5]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>
+                    
+                    <p:column  headerText="Fin Evaluación" style="width: 5%">
+                        <h:outputText value="#{asigcierre[8]}" />                                                                                    
+                    </p:column>
+                    <p:column   style="width: 10%" >    
+                        <f:facet name="header">                                    
+                            <p:outputLabel value="%Avance >="/>
+                            <p:panelGrid columns="2">
+                                <h:inputText value="#{cierreInfAnual.sfiltro}" style="width:95%"/>
+                                <p:commandButton icon="ui-icon-search" title="View" actionListener="#{cierreInfAnual.filtrarValorvalueChangeListener}" update=":fcierreInfAnual:tcierreInfAnual">                                        
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </f:facet>
+                        <h:outputText value="#{asigcierre[7]}" >
+                            <f:converter converterId="javax.faces.Double" />                                    
+                        </h:outputText>                                                                                       
+                    </p:column>  
+                    <p:column  headerText="Cerrar" selectionMode="multiple" style="width:5%;text-align:center"/>
+                </p:dataTable>               
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

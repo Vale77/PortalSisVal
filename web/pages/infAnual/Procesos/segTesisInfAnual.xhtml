@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{segtesis.navigationJSFManagedBean.nombreOpcion}">      
+        <h:form id="fsegInfAnual">
+            <p:growl id="messagedato"/> 
+             
+            <h:panelGrid id="gfiltro" columns="7" style="font-family: Arial; font-size: 7pt"> 
+                <h:panelGrid columns="1" id="gfecfiltro" >
+                        <p:selectOneRadio id="idetfiltro" value="#{segtesis.smtipo}" >                           
+                            <f:selectItem itemLabel="Docente" itemValue="D" />
+                            <f:selectItem itemLabel="Estudiante" itemValue="E" />
+                            <p:ajax event="click" update="gfiltro ganio" />
+                        </p:selectOneRadio>
+                    </h:panelGrid> 
+                <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" rendered="#{segtesis.smtipo eq 'D'}"/>
+                <h:panelGrid columns="2" id="ganio" rendered="#{segtesis.smtipo eq 'D'}">
+                    <p:selectOneMenu value="#{segtesis.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{segtesis.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="gdocente" listener="#{segtesis.ciclovalueChangeListener()}" />
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid> 
+
+                <h:outputText  value="Docentes* :" style="font-weight: bold" rendered="#{segtesis.smtipo eq 'D'}"/>
+                <h:panelGrid columns="2" id="gdocente" rendered="#{segtesis.smtipo eq 'D'}">
+                    <p:selectOneMenu value="#{segtesis.smprofesor}" id="idocente"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{segtesis.lprofesor}" var="lprofesor" itemLabel="#{lprofesor.nombreProfesor}" itemValue="#{lprofesor.codigoProfesor}"/>                               
+                        <p:ajax update="gdocente gdetalle" listener="#{segtesis.profesorvalueChangeListener()}" />
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid> 
+                <h:outputText  value="Estudiante* :" style="font-weight: bold" rendered="#{segtesis.smtipo eq 'E'}"/>
+                <h:panelGrid columns="2" id="gestudiante" rendered="#{segtesis.smtipo eq 'E'}">
+                    <h:inputText value="#{segtesis.scedula}" style=" width: 100px; text-transform: uppercase" required="true" requiredMessage="Cedula: se requiere un valor" >
+                        <p:ajax update="gestudiante" immediate="true"/>
+                    </h:inputText>                    
+                </h:panelGrid>
+                
+                <p:commandButton   icon="ui-icon-refresh" title="Refrescar registros"  rendered="#{segtesis.smtipo eq 'E'}"
+                                   immediate="true" update="gdetalle" 
+                                   actionListener="#{segtesis.estudvalueChangeListener}"/> 
+            </h:panelGrid>  
+
+
+            <h:panelGrid id="gdetalle" >
+                <p:dataTable value="#{segtesis.listTesdocuasb}" var="tesisuasb3" 
+                             id="ttesisd"
+                             paginator="true" paginatorPosition="top" rows="4" 
+                             style=" font-family: Arial; font-size: 6pt;width: 100% "
+                             rowKey="#{tesisuasb3[13]}#{tesisuasb3[14]}#{tesisuasb3[17]}#{tesisuasb3[18]}" 
+                             resizableColumns="true"
+                             selectionMode="single"
+                             emptyMessage="#{segtesis.msgtablavacia}">
+                    <f:facet name="header">
+                             <h:outputText  value="DOCTORADO" style="font-weight: bold" />
+                    </f:facet>
+                    <p:column headerText="Programa" style="width: 20%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[2]}" style="text-transform: uppercase" />                                            
+                    </p:column>                    
+                    <p:column headerText="Nombre del Estudiante" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[6]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Profesor" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[15]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Rol docente" style="width: 8%;text-align: center">
+                        <h:outputText value="#{tesisuasb3[12]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Fec. Designación" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[18]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[20]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[21]}" />                                            
+                    </p:column>
+                    <p:column headerText="Año Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[22]}" />                                            
+                    </p:column>
+                     <p:column headerText="Año Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[23]}" />                                            
+                    </p:column>
+                    <p:column headerText="Estado Rol" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[17]}" />                                            
+                    </p:column>  
+                     <p:column headerText="Estado Tesis" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[16]}" />                                            
+                    </p:column>  
+                    <p:column headerText="Sistema" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb3[25]}" />                                            
+                    </p:column> 
+                </p:dataTable>    
+                <p:dataTable value="#{segtesis.listTesisuasb}" var="tesisuasb2" 
+                             id="ttesism"
+                             paginator="true" paginatorPosition="top" rows="4" 
+                             style=" font-family: Arial; font-size: 6pt;width: 100% "
+                             rowKey="#{tesisuasb2[13]}#{tesisuasb2[14]}#{tesisuasb2[17]}#{tesisuasb2[18]}" 
+                             resizableColumns="true"
+                             selectionMode="single"
+                             emptyMessage="#{segtesis.msgtablavacia}">
+                    <f:facet name="header">
+                             <h:outputText  value="MAESTRIA" style="font-weight: bold" />
+                    </f:facet>
+                    <p:column headerText="Programa" style="width: 20%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[2]}" style="text-transform: uppercase" />                                            
+                    </p:column>
+                    <p:column headerText="Nombre del Estudiante" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[6]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Profesor" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[15]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Rol docente" style="width: 8%;text-align: center">
+                        <h:outputText value="#{tesisuasb2[12]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Fec. Designación" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[18]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[20]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[21]}" />                                            
+                    </p:column>
+                    <p:column headerText="Año Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[22]}" />                                            
+                    </p:column>
+                     <p:column headerText="Año Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[23]}" />                                            
+                    </p:column>
+                    <p:column headerText="Estado Rol" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[17]}" />                                            
+                    </p:column> 
+                    <p:column headerText="Estado Tesis" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[16]}" />                                            
+                    </p:column> 
+                     <p:column headerText="Sistema" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb2[25]}" />                                            
+                    </p:column> 
+                </p:dataTable>    
+                <p:dataTable value="#{segtesis.listTesmonuasb}" var="tesisuasb1" 
+                             id="ttesis"
+                             paginator="true" paginatorPosition="top" rows="4" 
+                             style=" font-family: Arial; font-size: 6pt;width: 100% "
+                             rowKey="#{tesisuasb1[13]}#{tesisuasb1[14]}#{tesisuasb1[17]}#{tesisuasb1[18]}" 
+                             resizableColumns="true"
+                             selectionMode="single"
+                             emptyMessage="#{segtesis.msgtablavacia}">
+                    <f:facet name="header">
+                             <h:outputText  value="ESPECIALIZACIÓN SUPERIOR" style="font-weight: bold" />
+                    </f:facet>
+                    <p:column headerText="Programa" style="width: 20%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[2]}" style="text-transform: uppercase" />                                            
+                    </p:column>
+                    <p:column headerText="Nombre del Estudiante" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[6]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Profesor" style="width: 15%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[15]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Rol docente" style="width: 8%;text-align: center">
+                        <h:outputText value="#{tesisuasb1[12]}" style="text-transform: uppercase"/>                                            
+                    </p:column>
+                    <p:column headerText="Fec. Designación" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[18]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[20]}" />                                            
+                    </p:column>
+                    <p:column headerText="Fec. Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[21]}" />                                            
+                    </p:column>
+                    <p:column headerText="Año Inicio " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[22]}" />                                            
+                    </p:column>
+                     <p:column headerText="Año Fin " style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[23]}" />                                            
+                    </p:column>
+                    <p:column headerText="Estado Rol" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[17]}" />                                            
+                    </p:column> 
+                    <p:column headerText="Estado Tesis" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[16]}" />                                            
+                    </p:column> 
+                     <p:column headerText="Sistema" style="width: 9%; text-align: center">
+                        <h:outputText value="#{tesisuasb1[25]}" />                                            
+                    </p:column> 
+                </p:dataTable>      
+                  
+
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

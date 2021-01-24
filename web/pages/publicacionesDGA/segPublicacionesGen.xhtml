@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{publicacionDGA.navigationJSFManagedBean.nombreOpcion}">      
+        <h:form id="fsegPublicacionDAG">
+            <p:growl id="messagedato"/> 
+           
+            <h:panelGrid id="gdetlibro" >
+                <p:dataTable id="tpublibro"
+                             value="#{publicacionDGA.listpublicacion}" 
+                             var="publicacion"                             
+                             scrollable="true" scrollHeight="95%" 
+                             rowIndexVar="rowIndex"
+                             rowKey="#{publicacion.codigoPublicacion}" 
+                             selection="#{publicacionDGA.selectedPublicacion}"
+                             resizableColumns="true"                         
+                             selectionMode="single"
+                             emptyMessage="No existen datos"
+                             widgetVar="widgetPublicacion"
+                             styleClass="evalFormStyle"
+                             filteredValue="#{publicacionDGA.listpublicacionfilter}">
+                    <p:ajax event="rowSelect"  update=":fsegPublicacionDAG:tpublibro"/>  
+                    <p:ajax event="rowUnselect"  update=":fsegPublicacionDAG:tpublibro"/> 
+                    <f:facet name="header">   
+                        <h:outputText  value="Publicaciones" style="font-weight: bold" />
+                        <div align="right" >                             
+                            <p:commandButton icon="ui-icon-document"   id="btnPUBNuevo" 
+                                             actionListener="#{publicacionDGA.nuevoButton_processAction(ae)}" value="Nuevo" 
+                                             update=":mantDialog :fsegPublicacionDAG:tpublibro" immediate="true" 
+                                             partialSubmit="true" oncomplete="mantWidget.show();" />                                        
+                        </div>
+                    </f:facet>
+                    <p:column headerText="Categoría" style=" width: 5%">
+                        <h:outputText value="#{publicacion.tipoPersona eq 'D'?'Docente':publicacion.tipoPersona eq 'E'?'Estudiante':''}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Cédula" style=" width: 5%">
+                        <h:outputText value="#{publicacion.cedulaPersona}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Nombres" style=" width: 10%" filterBy="#{publicacion.nombrePERSONA}"  filterMatchMode="contains" filterStyle="width:100%" >
+                        <h:outputText value="#{publicacion.nombrePERSONA}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Tipo Publicación" style=" width: 7%" filterBy="#{publicacion.getnomtippublicacion()}"  filterMatchMode="contains" filterStyle="width:100%">
+                        <h:outputText value="#{publicacion.getnomtippublicacion()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Rol" style=" width: 8%" filterBy="#{publicacion.getDesRol()}"  filterMatchMode="contains"  filterStyle="width:100%">
+                        <h:outputText value="#{publicacion.getDesRol()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Datos Bibliográficos" style=" width: 50%" filterBy="#{publicacion.getDatosBibliograficos()}"  filterMatchMode="contains" filterStyle="width:100%">
+                        <h:outputText value="#{publicacion.getDatosBibliograficos()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Año" style=" width: 5%" filterBy="#{publicacion.campo10}"  filterMatchMode="contains" filterStyle="width:100%">
+                        <h:outputText value="#{publicacion.campo10}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column>
+                    <p:column headerText="Editar"  style="text-align: center;width: 3%">  
+                        <div align="center">
+                            <p:commandLink value="Editar" title="Editar registro" immediate="true"  styleClass="ui-icon ui-icon-pencil" 
+                                           partialSubmit="true" action="#{publicacionDGA.editarButton_processAction(ae)}" style="color:blue;"
+                                           onstart="widgetPublicacion.unselectAllRows();widgetPublicacion.selectRow(#{rowIndex});blockUIContentenidoWidget.block()"  
+                                           oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                           update=":mantDialog ">
+                                <f:setPropertyActionListener value="#{publicacion}" target="#{publicacionDGA.selectedPublicacion}" />  
+                            </p:commandLink>  
+                        </div>
+                    </p:column>
+                    
+                    <p:column  style="text-align: center; width:2%">                                     
+                         <p:commandLink value="Eliminar" title="Eliminar Publicacion" update=":mantDialog" 
+                                       immediate="true" 
+                                       id="commandLinkElimPub" styleClass="ui-icon ui-icon-trash" 
+                                       partialSubmit="true" action="#{publicacionDGA.eliminarPub_processAction(ae)}" style="color:blue;"
+                                       onstart="widgetPublicacion.unselectAllRows();" 
+                                       oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                       rendered="#{publicacionDGA.selectedPublicacion.codigoPublicacion eq publicacion.codigoPublicacion}">
+                            <f:setPropertyActionListener value="#{publicacion}" target="#{publicacionDGA.selectedPublicacion}" />  
+                        </p:commandLink>   
+                    </p:column>   
+                    <!--p:column headerText="Alcance Actividad" style=" width: 10%">
+                        <h:outputText value="#{publicacion.getDesAlcance()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                    <!--p:column headerText="País" style=" width: 5%">
+                        <h:outputText value="#{publicacion.nomPais}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                    <!--p:column headerText="Ciudad" style=" width: 5%">
+                        <h:outputText value="#{publicacion.nomCiudad}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                    <!--p:column headerText="Forma Publicación" style=" width: 5%">
+                        <h:outputText value="#{publicacion.getnomformpub()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                    <!--p:column headerText="Idioma" style=" width: 5%">
+                        <h:outputText value="#{publicacion.getnomidioma()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                    <!--p:column headerText="Auspicio" style=" width: 10%">
+                        <h:outputText value="#{publicacion.getnomausp()}" style="text-transform: uppercase"/>                                                                                 
+                    </p:column-->
+                </p:dataTable>                
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

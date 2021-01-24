@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:pe="http://primefaces.org/ui/extensions"
+                 xmlns:f="http://java.sun.com/jsf/core">    
+     <h:outputScript library="js" name="jquery.mask.min.js"/>
+            <script>
+                $(document).ready(function () {
+                    $('.maskp').mask("#Z.#Z.#Z.#Z", {
+                        translation: {
+                            'Z': {pattern: /[0-9]/, optional: true} 
+                        },placeholder: "__.__.__.__",selectOnFocus: true}
+                    );
+                });
+            </script>
+    
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;width: 850px;"  >
+        <h:panelGrid columns="2" id="dataencuesta">       
+            <h:outputText  value="Encuesta *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="pregpadre">
+                <p:selectOneMenu value="#{detformulario.smencuesta.value}" id="iencuesta"
+                                 required="true" requiredMessage="Encuesta: se requiere un valor"
+                                 disabled="true">                                        
+                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                    <f:selectItems  value="#{cabformulario.listCabEncuesta}" var="lencuesta" itemLabel="#{lencuesta.titulo}" itemValue="#{lencuesta.codigoEncuesta}"/>                
+                </p:selectOneMenu>
+                <p:message for="iencuesta" display="icon"/>
+            </h:panelGrid> 
+            <h:outputText  value="Pregunta Padre *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="pregpadencuesta">
+                <h:outputText value="#{detformulario.spregpadre}" id="ipregpadencuesta"/>            
+            </h:panelGrid>  
+            <h:outputText  value="Código *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="pregencuesta">           
+                <h:inputText id="icodpregunta" value="#{detformulario.itxtcodpregunta}" class="maskp" disabled="#{!(detformulario.selectedPregunta eq null)}"/>             
+            </h:panelGrid> 
+            <h:outputText  value="Descripción *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="pregdescrip">
+                <h:inputText id="ipregdescrip"  value="#{detformulario.itxtdescripcion}" style=" width: 300px; text-transform: uppercase" required="true" requiredMessage="Pregunta/Descripción: se requiere un valor">
+                    <p:ajax update="pregdescrip" immediate="true"/>
+                </h:inputText>
+                <p:message for="ipregdescrip" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Referencia" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="pregreferencia">
+                <h:inputText id="ipregreferencia"  value="#{detformulario.itxtreferencia}" style=" width: 300px; text-transform: uppercase" >
+                    <p:ajax update="pregreferencia" immediate="true"/>
+                </h:inputText>
+                <p:message for="ipregreferencia" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Tipo Respuesta*" style="font-weight: bold"/>
+            <h:panelGrid  id="gtipregpes" columns="3">            
+                <h:panelGrid columns="2" id="pregtipresp" >
+                    <p:selectOneRadio id="ipregtipresp" value="#{detformulario.stipopregunta}"  >
+                        <f:selectItem itemLabel="Descripción Encuesta" itemValue="5" />
+                        <f:selectItem itemLabel="Numerico" itemValue="1" />
+                        <f:selectItem itemLabel="Texto" itemValue="2" />
+                        <f:selectItem itemLabel="Seleccion" itemValue="3" />
+                        <f:selectItem itemLabel="Título" itemValue="4" />
+                        <p:ajax update="pregpeso" immediate="true"/>
+                        <p:ajax update="gtipregpes" immediate="true"/>
+                    </p:selectOneRadio>
+                </h:panelGrid>
+                <h:outputText  value="Peso *" style="font-weight: bold" rendered="#{detformulario.stipopregunta eq '1'}"/>
+                <h:panelGrid columns="2" id="pregpeso" rendered="#{detformulario.stipopregunta eq '1'}">
+                    <p:spinner id="ipregpeso" value="#{detformulario.peso}" min="0" max="5" stepFactor="1" >
+                        <p:ajax update="pregpeso" immediate="true"/>
+                    </p:spinner>            
+                    <p:message for="ipregpeso" display="icon"/>
+                </h:panelGrid> 
+            </h:panelGrid>
+        </h:panelGrid>
+        <p:commandButton  id="btnPREGGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                              update=":formLogin:growlLogin @form"
+                              actionListener="#{detformulario.guardarButton_processAction}" process="@form" />        
+        <p:commandButton value="Cancelar" oncomplete="mantWidget.hide();" id="btnPREGuardarCancelar" 
+                         actionListener="#{detformulario.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton>          
+    </p:panel>
+</ui:composition>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{cabformulario.navigationJSFManagedBean.nombreOpcion}">        
+        <h:form id="fpregunta">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltro" columns="4" style="font-family: Arial; font-size: 7pt">
+                <h:outputText  value="Tipo Encuesta* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="tipencuesta" >
+                    <p:selectOneMenu value="#{detformulario.smtipencuesta.value}" id="itipencuesta"
+                                     required="true" requiredMessage="Tipo Encuesta: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Docente" itemValue="A" />
+                        <f:selectItem  itemLabel="Programa" itemValue="P" />          
+                        <f:selectItem  itemLabel="Tutoría" itemValue="T" />          
+                        <f:selectItem  itemLabel="Coordinador" itemValue="C" />          
+                        <f:selectItem  itemLabel="Comite" itemValue="O" />   
+                        <f:selectItem  itemLabel="Servicios" itemValue="S" /> 
+                        <p:ajax update="dataPregunta gencuesta" listener="#{detformulario.tipencuestavalueChangeListener()}"  />                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:outputText  value="Encuesta* :" style="font-weight: bold"/>
+                <h:panelGrid  columns="1" id="gencuesta" >
+                    <p:selectOneMenu value="#{detformulario.smencuesta.value}" id="iencuesta"
+                                     required="true" requiredMessage="Tipo Encuesta: se requiere un valor">                                        
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{detformulario.listCabEncuesta}" var="lencuesta" itemLabel="#{lencuesta.titulo}" itemValue="#{lencuesta.codigoEncuesta}"/>
+                        <p:ajax update="dataPregunta" listener="#{detformulario.encuestavalueChangeListener()}" />                                         
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </h:panelGrid>                           
+
+            <p:dataTable id="dataPregunta"
+                         value="#{detformulario.listdetEncuesta}" 
+                         var="detencuesta" 
+                         scrollable="true" scrollHeight="80%"                              
+                         rowKey="#{detencuesta.preguntaPK}" 
+                         rowIndexVar="rowIndex"
+                         resizableColumns="true"
+                         selection="#{detformulario.selectedPregunta}" 
+                         selectionMode="single"
+                         emptyMessage="No existen datos"
+                         widgetVar="widgetPregunta"
+                         styleClass="evalFormStyle"
+                         >
+                <p:ajax event="rowSelect"  update=":fpregunta:dataPregunta" />  
+                <p:ajax event="rowUnselect"  update=":fpregunta:dataPregunta"/> 
+                <f:facet name="header">
+                    <div align="right" >
+                        <p:commandButton icon="ui-icon-document"   id="btnPRENuevo" 
+                                         actionListener="#{detformulario.nuevoButton_processAction(ae)}" value="Nuevo" 
+                                         update=":mantDialog :fpregunta:dataPregunta" immediate="true" 
+                                         partialSubmit="true" oncomplete="mantWidget.show();"/>    
+                        <!--p:commandButton icon="ui-icon-document"   id="btnENCNuevo" actionListener="#{detformulario.nuevoRegistro}" value="Nuevo" update=":fingformulario btnPREEditar btnPREEliminar"/-->                                          
+                        
+                    </div>
+                </f:facet>
+                <p:column headerText="Código" style="width: 5%">
+                    <h:outputText value="#{detencuesta.getformato()}" style="text-transform: uppercase; text-align: left"  />                            
+                </p:column>
+                <p:column headerText="Descripción" style="width: 30%">
+                    <h:outputText value="#{detencuesta.descripcion}" style="text-transform: uppercase; text-align: left"/>                                            
+                </p:column>
+                <p:column headerText="Referencia" style="width: 20%">
+                    <h:outputText value="#{detencuesta.referencia}" style="text-transform: uppercase; text-align: left"/>                                            
+                </p:column>
+                <p:column headerText="Tipo de Respuesta" style="width: 40%">
+                    <p:selectOneRadio  value="#{detencuesta.tipo}"  style="font-family: Arial; font-size: 4pt" disabled="true">
+                        <f:selectItem itemLabel="Descripción Encuesta" itemValue="5" />
+                        <f:selectItem itemLabel="Numerico" itemValue="1" />
+                        <f:selectItem itemLabel="Texto" itemValue="2" />
+                        <f:selectItem itemLabel="Seleccion" itemValue="3" />
+                        <f:selectItem itemLabel="Título" itemValue="4" />                                           
+                    </p:selectOneRadio>
+                </p:column>
+                <p:column headerText="Peso Calificación" style="width: 2%">
+                    <h:outputText value="#{detencuesta.peso}" style="text-transform: uppercase; text-align: left"/>                                            
+                </p:column> 
+                 <p:column headerText="Editar"  style="text-align: center;width: 3%">  
+                    <div align="center">
+                        <p:commandLink value="Editar" title="Editar registro" immediate="true"  styleClass="ui-icon ui-icon-pencil" 
+                                       partialSubmit="true" action="#{detformulario.editarButton_processAction(ae)}" style="color:blue;"
+                                       onstart="widgetPregunta.unselectAllRows();widgetPregunta.selectRow(#{rowIndex});blockUIContentenidoWidget.block()"  
+                                       oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                       update=":mantDialog ">
+                            <f:setPropertyActionListener value="#{detencuesta}" target="#{detformulario.selectedPregunta}" />  
+                        </p:commandLink>  
+                    </div>
+                </p:column>
+                <p:column  style="text-align: center; width:2%">
+                    <p:commandLink value="Eliminar" title="Eliminar Encuesta" update=":formLogin:growlLogin :fpregunta:dataPregunta" immediate="true" 
+                                   id="commandLinkElimPregunta" styleClass="ui-icon ui-icon-trash" 
+                                   partialSubmit="true" action="#{detformulario.eliminarButton_processAction(ae, null)}" style="color:blue;"
+                                   onstart="widgetPregunta.unselectAllRows();" 
+                                   rendered="#{detformulario.selectedPregunta.preguntaPK eq detencuesta.preguntaPK }">
+                        <f:setPropertyActionListener value="#{detencuesta}" target="#{detformulario.selectedPregunta}" />  
+                    </p:commandLink>                    
+                </p:column>   
+            </p:dataTable>               
+        </h:form>       
+    </p:panel> 
+</ui:composition>

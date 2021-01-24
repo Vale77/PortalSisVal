@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{EvalEstADocAnual.navigationJSFManagedBean.nombreOpcion}">
+        <h:form id="frepasiganual">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id ="gftipo" columns="3" style="font-family: Arial; font-size: 7pt">
+                <h:outputText  value="Tipo Reporte* :" style="font-weight: bold"/>
+                <h:panelGrid columns="2" id="gftipreporte" >
+                    <p:selectOneMenu value="#{EvalEstADocAnual.smtipo}" id="itipo"
+                                     required="true" requiredMessage="Tipo de Reporte se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Ciclo Académico" itemValue="C" />
+                        <f:selectItem  itemLabel="Docentes" itemValue="D" />
+                        <f:selectItem  itemLabel="Area" itemValue="A" />
+                        <f:selectItem  itemLabel="Programa" itemValue="P" />
+                        <f:selectItem  itemLabel="Trimestre" itemValue="T" />
+                        <p:ajax event="change" update="gftipreporte gfiltro gtabla" listener="#{EvalEstADocAnual.tipovalueChangeListener()}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="itipo" display="icon"/> 
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid id ="gfiltro" columns="9" style="font-family: Arial; font-size: 7pt" >
+                <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="ganio">
+                    <p:selectOneMenu value="#{EvalEstADocAnual.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{EvalEstADocAnual.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="ganio dataEvalEstADocAnual gtrimestre" listener="#{EvalEstADocAnual.ciclovalueChangeListener()}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid>
+                <h:outputText  value="Area* :" style="font-weight: bold"  rendered="#{EvalEstADocAnual.smtipo eq 'A'||EvalEstADocAnual.smtipo eq 'P' ||EvalEstADocAnual.smtipo eq 'T' }"/>
+                <h:panelGrid columns="2" id="garea"  rendered="#{EvalEstADocAnual.smtipo eq 'A'||EvalEstADocAnual.smtipo eq 'P' ||EvalEstADocAnual.smtipo eq 'T'}">
+                    <p:selectOneMenu value="#{EvalEstADocAnual.smarea}" id="iarea"
+                                     required="true" requiredMessage="Área: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todas" itemValue="T" />
+                        <f:selectItems  value="#{reaperturaEvalEstADoc.listarea}" var="larea" itemLabel="#{larea[1]}" itemValue="#{larea[0]}"/>                               
+                        <p:ajax update="garea gprograma" listener="#{EvalEstADocAnual.areavalueChangeListener()}" />   
+                    </p:selectOneMenu>
+                    <p:message for="iarea" display="icon"/> 
+                </h:panelGrid> 
+                <h:outputText  value="Programa* :" style="font-weight: bold"  rendered="#{EvalEstADocAnual.smtipo eq 'P' ||EvalEstADocAnual.smtipo eq 'T'}"/>
+                <h:panelGrid columns="2" id="gprograma"  rendered="#{EvalEstADocAnual.smtipo eq 'P' ||EvalEstADocAnual.smtipo eq 'T'}">
+                    <p:selectOneMenu value="#{EvalEstADocAnual.smprograma}" id="iprograma"
+                                     required="true" requiredMessage="Programa: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todos" itemValue="T" />
+                        <f:selectItems  value="#{EvalEstADocAnual.lprograma}" var="lprograma" itemLabel="#{lprograma.nombrePrograma}" itemValue="#{lprograma.codigoPrograma}"/>                               
+                        <p:ajax update="gprograma"/>   
+                    </p:selectOneMenu>
+                    <p:message for="iprograma" display="icon"/> 
+                </h:panelGrid> 
+                <h:outputText  value="Trimestre* :" style="font-weight: bold" rendered="#{EvalEstADocAnual.smtipo eq 'T'}"/>
+                <h:panelGrid columns="2" id="gtrimestre" rendered="#{EvalEstADocAnual.smtipo eq 'T'}" >
+                    <p:selectOneMenu value="#{EvalEstADocAnual.smtrimestre}" id="itrimestre"
+                                     required="true" requiredMessage="Trimestre: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{EvalEstADocAnual.listtrimestre}" var="ltrimestre" itemLabel="#{ltrimestre[1]}" itemValue="#{ltrimestre[0]}"/>                               
+                        <p:ajax update="gtrimestre" />
+                    </p:selectOneMenu>
+                    <p:message for="itrimestre" display="icon"/> 
+                </h:panelGrid> 
+                <h:panelGrid columns="1" id="gbutton"  rendered="#{EvalEstADocAnual.smtipo ne 'D'}">
+                    <p:commandButton id="selectButton" 
+                                     oncomplete="pdfWidget.show();"                                     
+                                     icon="ui-icon-search" title="Ver PDF" actionListener="#{EvalEstADocAnual.verReporte('pdf')}" 
+                                      update=":pdfDialog :formLogin:growlLogin @form" process="@form" 
+                                     style="text-align: center">                                  
+                    </p:commandButton>
+                </h:panelGrid>
+            </h:panelGrid>
+
+            <h:panelGrid id ="gtabla" columns="1" >
+                <p:dataTable value="#{EvalEstADocAnual.lprofesor}" 
+                             id="dataEvalEstADocAnual" var="profesor" 
+                             scrollable="true" scrollHeight="95%" 
+                             rowIndexVar="rowIndex"                                              
+                             rowKey="#{profesor.codigoProfesor}"
+                             selection="#{EvalEstADocAnual.selectedprofesor}"
+                             selectionMode="single"
+                             resizableColumns="true"                                             
+                             emptyMessage="No existen datos"
+                             styleClass="evalFormStyle"  
+                             widgetVar="widgetEEADA"
+                             rendered="#{EvalEstADocAnual.smtipo eq 'D'}"
+                             filteredValue="#{EvalEstADocAnual.listProfesorFiltro}">  
+                    <p:column filterBy="#{profesor.nombreProfesor}"  filterStyle="width: 98%" filterMatchMode="contains" headerText="Docente" style="width:80%">
+                        <h:outputText value="#{profesor.nombreProfesor}" style="font-size: 7pt"  />                                            
+                    </p:column>
+                    <p:column headerText="Reporte PDF"  style="text-align: center"  width="3%">  
+                        <div align="center">
+                            <p:commandLink value="Reporte PDF" title="Reporte" immediate="true"  styleClass="ui-icon ui-icon-search" 
+                                           partialSubmit="true" action="#{EvalEstADocAnual.verReporte('pdf')}" style="color:blue;"
+                                           onstart="widgetEEADA.unselectAllRows();widgetEEADA.selectRow(#{rowIndex})"  
+                                           oncomplete="pdfWidget.show();"
+                                           update=":pdfDialog ">
+                                <f:setPropertyActionListener value="#{profesor}" target="#{EvalEstADocAnual.selectedprofesor}" />  
+                            </p:commandLink>  
+                        </div>
+                    </p:column> 
+                </p:dataTable>   
+            </h:panelGrid>
+
+        </h:form>
+    </p:panel>  
+</ui:composition>

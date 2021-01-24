@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{estadistSilaboBean.navigationJSFManagedBean.nombreOpcion}">
+        <style>
+            .estiloPanelSelectOneMenu .ui-selectonemenu-list,.ui-selectonemenu-table tr {font-size: 8pt;border-color: whitesmoke}
+            .estiloPanelSelectOneMenu .ui-selectonemenu-filter{text-transform: uppercase;width: 165%;font-size: 8pt;}
+            .estiloPanelSelectOneMenu .ui-selectonemenu-filter-container .ui-icon{right: -100px;}
+            .estiloSelectOneMenuAre.ui-state-disabled {opacity: 1 ;border:none;}
+            .pdfReport .ui-panel-content{height: 475px}
+        </style>
+        <h:form id="formSilabo">
+                <h:panelGrid columns="1" id="gtipfiltro" >
+                <p:selectOneRadio id="itfiltro" value="#{estadistSilaboBean.smtipfiltro}" >                           
+                    <f:selectItem itemLabel="Gráfico" itemValue="G" />
+                    <f:selectItem itemLabel="Consolidado" itemValue="C"/>                    
+                    <f:selectItem itemLabel="No registrados" itemValue="R"/>    
+                                   </p:selectOneRadio>
+            </h:panelGrid>
+            <h:panelGrid id="pnlArea" columns="5" cellpadding="5" cellspacing="0">
+                <p:outputLabel id="outputLabelArea" value="Área:" style="font-weight: bold;color: blue" />
+                <p:selectOneMenu id="selectOneMenuArea" value="#{estadistSilaboBean.area}" style="width: 300px;" 
+                                 disabled="#{estadistSilaboBean.areas.size()==1}"
+                                 styleClass="estiloSelectOneMenuAre" panelStyleClass="estiloPanelSelectOneMenu">  
+                    <f:selectItem itemValue="" itemLabel="Seleccione ..." noSelectionOption="true" />                    
+                    <f:selectItems value="#{estadistSilaboBean.areas}"  var="area" itemValue="#{area.areCodigo}"
+                                   itemLabel="#{area.nombreArea}" itemDescription="#{area.areCodigo.toString()}"/>
+                    <p:ajax update="selectOneMenuProg :iFramePdf formSilabo:btnBuscar" listener="#{estadistSilaboBean.handleAreaAnioProgChange('areas')}" />                 
+                </p:selectOneMenu> 
+                <p:spacer width="10"/>
+                <p:outputLabel id="outputLabelAnio" value="Año académico:" style="font-weight: bold;color: blue" />
+                <p:selectOneMenu id="selectOneMenuAnio" value="#{estadistSilaboBean.anio}" style="width: 100px;" 
+                                 styleClass="estiloSelectOneMenuAre" panelStyleClass="estiloPanelSelectOneMenu">  
+                    <f:selectItem itemValue="" itemLabel="Seleccione ..." noSelectionOption="true" />                        
+                    <f:selectItems value="#{estadistSilaboBean.academicos}"  var="anioAcad" itemValue="#{anioAcad.anio}"
+                                   itemLabel="#{anioAcad.nombreCiclo}" itemDescription="#{anioAcad.nombreCiclo}"/>
+                    <p:ajax update="selectOneMenuProg :iFramePdf formSilabo:btnBuscar"  listener="#{estadistSilaboBean.handleAreaAnioProgChange('anio')}"/>                 
+                </p:selectOneMenu> 
+            </h:panelGrid>
+            <h:panelGrid columns="7" cellpadding="7" cellspacing="0">
+                <p:outputLabel id="outputLabelProg" value="Programa:" style="font-weight: bold;color: blue" />
+                <p:selectOneMenu id="selectOneMenuProg" value="#{estadistSilaboBean.progra}" style="width: 600px" converter="programaConverter"
+                                 disabled="#{estadistSilaboBean.programas.size()==1}"  styleClass="estiloSelectOneMenuAre" panelStyleClass="estiloPanelSelectOneMenu">  
+                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione ..." noSelectionOption="true" />          
+                    <f:selectItems value="#{estadistSilaboBean.programas}"  var="prog" itemValue="#{prog}"
+                                   itemLabel="#{prog.nombrePrograma}" itemDescription="#{prog.programaPK.prgCodigo.toString()}"/>
+                    <p:ajax update=":iFramePdf formSilabo:btnBuscar"   listener="#{estadistSilaboBean.handleAreaAnioProgChange('silabos')}" />                 
+                </p:selectOneMenu>  
+                <h:outputText  value="Trimestre* :" style="font-weight: bold" />
+            <h:panelGrid columns="2" id="gtrimestre" >
+                <p:selectOneMenu value="#{estadistSilaboBean.smtrimestre}" id="itrimestre"
+                                 required="true" requiredMessage="Trimestre: se requiere un valor">
+                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione ..." noSelectionOption="true" />  
+                    <f:selectItem itemValue="T" itemLabel="Todos"/>  
+                    <f:selectItem itemValue="1" itemLabel="Primero"/>  
+                    <f:selectItem itemValue="2" itemLabel="Segundo"/>  
+                    <f:selectItem itemValue="3" itemLabel="Tercero"/>  
+                    <f:selectItem itemValue="4" itemLabel="Cuarto"/>  
+                    <p:ajax update=":iFramePdf formSilabo:btnBuscar"   listener="#{estadistSilaboBean.handleAreaAnioProgChange('silabos')}" />                 
+                </p:selectOneMenu>
+                <p:message for="itrimestre" display="icon"/> 
+            </h:panelGrid> 
+                <p:commandButton  icon="ui-icon-search" title="Buscar reportes" value="Buscar" id="btnBuscar" 
+                                  disabled="#{estadistSilaboBean.area eq null or estadistSilaboBean.anio eq null or estadistSilaboBean.progra eq null}"
+                                  action="#{estadistSilaboBean.recupSeries()}" update=":iFramePdf" />          
+            </h:panelGrid>    
+            
+        </h:form> 
+        <p:outputPanel id="iFramePdf" >
+            <p:panel styleClass="pdfReport" 
+                     rendered="#{estadistSilaboBean.anio ne null and estadistSilaboBean.area ne null and estadistSilaboBean.progra ne null and sessionScope.get('urlRep') ne null}">
+                <iframe src="#{facesContext.externalContext.requestContextPath}/delay.xhtml" frameborder="0"  width="100%" height="100%" />
+            </p:panel>
+        </p:outputPanel>
+    </p:panel>
+
+</ui:composition>
+

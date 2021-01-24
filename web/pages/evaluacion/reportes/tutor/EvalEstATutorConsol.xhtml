@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{EvalEstATutorConsol.navigationJSFManagedBean.nombreOpcion}">
+        <h:form id="frepEvlaEstATutorConsol">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid columns="1" id="gtipfiltro" >
+                <p:selectOneRadio id="itfiltro" value="#{EvalEstATutorConsol.smtipfiltro}" >                           
+                    <f:selectItem itemLabel="Detalle" itemValue="D" />
+                    <f:selectItem itemLabel="Consolidado" itemValue="C" />
+                    <f:selectItem itemLabel="Consolidado Informe" itemValue="I" />
+                    <p:ajax event="click" update="gfiltro" />
+                </p:selectOneRadio>
+            </h:panelGrid>
+            <h:panelGrid id ="gfiltro" columns="2" style="font-family: Arial; font-size: 7pt">
+                <h:panelGrid columns="5" id="gfiltrodet" rendered="#{EvalEstATutorConsol.smtipfiltro eq 'D'}" >
+                    <h:panelGrid columns="1" id="gfecfiltro" >
+                        <p:selectOneRadio id="idetfiltro" value="#{EvalEstATutorConsol.smfiltrodet}" >                           
+                            <f:selectItem itemLabel="Año" itemValue="A" />
+                            <f:selectItem itemLabel="Fecha" itemValue="F" />
+                            <p:ajax event="click" update="gfiltro ganio" />
+                        </p:selectOneRadio>
+                    </h:panelGrid> 
+                    <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" rendered="#{EvalEstATutorConsol.smfiltrodet eq 'A'}" />
+                    <h:panelGrid columns="1" id="ganio"  rendered="#{EvalEstATutorConsol.smfiltrodet eq 'A'}">
+                        <p:selectOneMenu value="#{EvalEstATutorConsol.smciclo}" id="iciclo"
+                                         required="true" requiredMessage="Anio se requiere un valor"  >
+                            <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                            <f:selectItems  value="#{EvalEstATutorConsol.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                            <p:ajax update="iciclo"/>
+                        </p:selectOneMenu> 
+                    </h:panelGrid>
+                    <h:outputText  value="Fecha Incio* :" style="font-weight: bold" rendered="#{EvalEstATutorConsol.smfiltrodet eq 'F'}"/>
+                    <h:panelGrid columns="1" id="gfecini" rendered="#{EvalEstATutorConsol.smfiltrodet eq 'F'}" >
+                        <p:calendar  value="#{EvalEstATutorConsol.fecInicio}" id="fecinicio"
+                                     pattern="dd/MM/yyyy" timeZone="America/Guayaquil" required="true" requiredMessage="Fecha Inicio: se requiere un valor"
+                                     locale="es" >
+                            <p:ajax immediate="true"/>                
+                        </p:calendar>
+                    </h:panelGrid>
+                    <h:outputText  value="Fecha Fin* :" style="font-weight: bold" rendered="#{EvalEstATutorConsol.smfiltrodet eq 'F'}"/>
+                    <h:panelGrid columns="1" id="gfecfin" rendered="#{EvalEstATutorConsol.smfiltrodet eq 'F'}" >
+                        <p:calendar  value="#{EvalEstATutorConsol.fecFin}" id="fecfin"
+                                     pattern="dd/MM/yyyy" timeZone="America/Guayaquil" required="true" requiredMessage="Fecha Fin: se requiere un valor"
+                                     locale="es" >
+                            <p:ajax immediate="true"/>                
+                        </p:calendar>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid columns="1" id="gfiltroconsol" rendered="#{EvalEstATutorConsol.smtipfiltro eq 'C'
+                                                                        ||EvalEstATutorConsol.smtipfiltro eq 'I'}" >
+                    <h:panelGrid id ="gftipo" columns="4" style="font-family: Arial; font-size: 7pt">
+                        
+                        <h:outputText  value="Tipo Reporte* :" style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="gftipreporte" >
+                            <p:selectOneMenu value="#{EvalEstATutorConsol.smtipo}" id="itipo"
+                                             required="true" requiredMessage="Tipo de Reporte se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItem  itemLabel="Ciclo Académico" itemValue="C" />                                
+                                <f:selectItem  itemLabel="Area" itemValue="A" />
+                                <!--f:selectItem  itemLabel="Programa" itemValue="P" /-->                                
+                                <p:ajax event="change" update="gftipreporte gfconsol" listener="#{EvalEstATutorConsol.tipovalueChangeListener()}"/>
+                            </p:selectOneMenu> 
+                            <p:message for="itipo" display="icon"/> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid id ="gfconsol" columns="9" style="font-family: Arial; font-size: 7pt" >
+                        <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                        <h:panelGrid columns="2" id="ganioconsol">
+                            <p:selectOneMenu value="#{EvalEstATutorConsol.smciclo}" id="icicloconsol"
+                                             required="true" requiredMessage="Anio se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItems  value="#{EvalEstATutorConsol.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                                <p:ajax update="ganioconsol " />
+                            </p:selectOneMenu> 
+                            <p:message for="iciclo" display="icon"/> 
+                        </h:panelGrid>
+                        <h:outputText  value="Area* :" style="font-weight: bold"  rendered="#{EvalEstATutorConsol.smtipo eq 'A'||EvalEstATutorConsol.smtipo eq 'P' ||EvalEstATutorConsol.smtipo eq 'T' }"/>
+                        <h:panelGrid columns="2" id="garea"  rendered="#{EvalEstATutorConsol.smtipo eq 'A'||EvalEstATutorConsol.smtipo eq 'P' ||EvalEstATutorConsol.smtipo eq 'T'}">
+                            <p:selectOneMenu value="#{EvalEstATutorConsol.smarea}" id="iarea"
+                                             required="true" requiredMessage="Área: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItem  itemLabel="Todas" itemValue="T" />
+                                <f:selectItems  value="#{reaperturaEvalEstADoc.listarea}" var="larea" itemLabel="#{larea[1]}" itemValue="#{larea[0]}"/>                               
+                                <p:ajax update="garea gprograma" listener="#{EvalEstATutorConsol.areavalueChangeListener()}" />   
+                            </p:selectOneMenu>
+                            <p:message for="iarea" display="icon"/> 
+                        </h:panelGrid> 
+                        <h:outputText  value="Programa* :" style="font-weight: bold"  rendered="#{EvalEstATutorConsol.smtipo eq 'P' ||EvalEstATutorConsol.smtipo eq 'T'}"/>
+                        <h:panelGrid columns="2" id="gprograma"  rendered="#{EvalEstATutorConsol.smtipo eq 'P' ||EvalEstATutorConsol.smtipo eq 'T'}">
+                            <p:selectOneMenu value="#{EvalEstATutorConsol.smprograma}" id="iprograma"
+                                             required="true" requiredMessage="Programa: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                                <f:selectItem  itemLabel="Todos" itemValue="T" />
+                                <f:selectItems  value="#{EvalEstATutorConsol.lprograma}" var="lprograma" itemLabel="#{lprograma.nombrePrograma}" itemValue="#{lprograma.codigoPrograma}"/>                               
+                                <p:ajax update="gprograma"/>   
+                            </p:selectOneMenu>
+                            <p:message for="iprograma" display="icon"/> 
+                        </h:panelGrid> 
+
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2" id="grepcp" rendered="#{EvalEstATutorConsol.smtipfiltro eq 'C' 
+                                                                 || EvalEstATutorConsol.smtipfiltro eq 'D'
+                                                                 || EvalEstATutorConsol.smtipfiltro eq 'I'}">
+                    <p:commandButton id="selectButton" 
+                                     oncomplete="blockUIContentenidoWidget.unblock();pdfWidget.show();"
+                                     update=":pdfDialog "
+                                     icon="ui-icon-search" title="Ver PDF" actionListener="#{EvalEstATutorConsol.verReporte('pdf')}" 
+                                     style="text-align: center">                                  
+                    </p:commandButton>
+                    <p:commandButton id="selectButtonexcel"  value="EXCEL"
+                                     oncomplete="blockUIContentenidoWidget.unblock();pdfWidget.show();"
+                                     update=":pdfDialog "
+                                     icon="ui-icon-disk" title="Ver EXCEL" actionListener="#{EvalEstATutorConsol.verReporte('vnd.ms-excel')}" 
+                                     style="text-align: center">                                  
+                    </p:commandButton>                   
+                </h:panelGrid>
+
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+</ui:composition >

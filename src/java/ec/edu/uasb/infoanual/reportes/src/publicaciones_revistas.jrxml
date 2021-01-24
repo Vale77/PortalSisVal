@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="publicaciones_revistas" language="groovy" pageWidth="878" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="878" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4ffe69ed-61bd-400d-bd86-622907368a6e">
+	<property name="ireport.zoom" value="2.928200000000003"/>
+	<property name="ireport.x" value="1009"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codigo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  P.CAMPO8,
+        UPPER(CASE P.PUB_ROL WHEN 1 THEN 'Autor' WHEN 2 THEN 'Coautor' WHEN 3 THEN 'Revisor' WHEN 4 THEN 'Editor'
+                WHEN 5 THEN 'Director' WHEN 6 THEN 'Coordinador Número Monográfico' ELSE 'N/I' END) AS PUB_ROL,
+        UPPER(CASE P.PUB_PARTICIPACION WHEN 'I' THEN 'Indexada' WHEN 'N' THEN 'N Indexada'
+                ELSE 'N/I' END) AS PUB_PARTICIPACION,
+        UPPER(CASE P.PUB_TIPOSVARIOS WHEN 1 THEN 'Latindex' WHEN 2 THEN 'Ninguno' WHEN 3 THEN 'Otro'
+	WHEN 4 THEN 'Scopus' WHEN 5 THEN 'Scimago' WHEN 6 THEN 'Isi Web' WHEN 7 THEN 'Scielo' ELSE 'N/I' END) AS PUB_TIPOSVARIOS,
+        P.CAMPO6,
+        P.CAMPO10,
+        P.PUB_APELLIDO_AUTOR,
+        P.PUB_NOMBRE_AUTOR,
+        P.PUB_TITULO,
+        P.CAMPO7,
+        P.PUB_EDITORIAL,
+        P.PUB_NUMPAGINAS,
+        CONVERT(CHAR(10),P.PUB_FECEDICION,103) AS PUB_FECEDICION,
+        P.PUB_NUMISSN,
+        UPPER(CASE P.FORMA_PUBLICACION WHEN 'I' THEN 'Impreso' WHEN 'D' THEN 'Digital' ELSE 'N/I' END) AS FORMA_PUBLICACION,
+        P.PUB_URL,
+	(CASE P.PUB_ALCANCE WHEN 1 THEN 'NACIONAL' WHEN 2 THEN 'INTERNACIONAL' ELSE 'N/I' END) AS PUB_ALCANCE,
+p.campo1 as numrevista,
+p.campo2 as periodicidad,
+p.pub_rangpagina,
+p.pub_volumen,
+ (SELECT dbo.PAIS.NOM_PAIS FROM PAIS WHERE dbo.PAIS.COD_PAIS = P.PAIS_AUSPICIO) PAIS,
+  (SELECT CIUDAD.NOM_CIUDAD  FROM CIUDAD WHERE COD_PAIS= P.PAIS_AUSPICIO AND COD_CIUDAD = P.CIUDAD_AUSPICIO) CIUDAD,
+(SELECT (CASE WHEN COUNT(1)>0 THEN 'SI' ELSE 'NO' END) FROM PRIN_DOCUMENTO WHERE DOC_ENTIDAD_CODIGO = P.CODIGO_PUBLICACION )PDF_SUBIDO
+FROM    PUBLICACION_PROFESOR P
+WHERE   P.CODIGO_PROFESOR = $P{codigo}
+AND P.TIPO_PUBLICACION = 14
+AND P.CAMPO9 IS NULL
+AND P.PUB_APELLIDO_AUTOR IS NOT NULL
+AND P.CAMPO10 >= $P{anio}-1
+ORDER BY P.CAMPO10 DESC]]>
+	</queryString>
+	<field name="CAMPO8" class="java.lang.String"/>
+	<field name="PUB_ROL" class="java.lang.String"/>
+	<field name="PUB_PARTICIPACION" class="java.lang.String"/>
+	<field name="PUB_TIPOSVARIOS" class="java.lang.String"/>
+	<field name="CAMPO6" class="java.lang.String"/>
+	<field name="CAMPO10" class="java.lang.String"/>
+	<field name="PUB_APELLIDO_AUTOR" class="java.lang.String"/>
+	<field name="PUB_NOMBRE_AUTOR" class="java.lang.String"/>
+	<field name="PUB_TITULO" class="java.lang.String"/>
+	<field name="CAMPO7" class="java.lang.String"/>
+	<field name="PUB_EDITORIAL" class="java.lang.String"/>
+	<field name="PUB_NUMPAGINAS" class="java.lang.String"/>
+	<field name="PUB_FECEDICION" class="java.lang.String"/>
+	<field name="PUB_NUMISSN" class="java.lang.String"/>
+	<field name="FORMA_PUBLICACION" class="java.lang.String"/>
+	<field name="PUB_URL" class="java.lang.String"/>
+	<field name="PUB_ALCANCE" class="java.lang.String"/>
+	<field name="numrevista" class="java.lang.String"/>
+	<field name="periodicidad" class="java.lang.String"/>
+	<field name="pub_rangpagina" class="java.lang.String"/>
+	<field name="pub_volumen" class="java.lang.Integer"/>
+	<field name="PAIS" class="java.lang.String"/>
+	<field name="CIUDAD" class="java.lang.String"/>
+	<field name="PDF_SUBIDO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="cb7e28b0-f971-49d6-a158-713d21a07b68"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[REVISTAS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="1" width="115" height="25" uuid="90a5ffd3-db88-4d44-94e1-177a3263cae0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Nombre Revista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="489" y="1" width="387" height="25" uuid="0e7ee09d-6759-4a0c-bb34-330b86acfe8e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos Bibliográficos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="1" width="66" height="25" uuid="47ccc375-eda6-4ee2-b79c-c5944767c7fa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Rol Docente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="1" width="66" height="25" uuid="aa3ae5ff-9367-4562-a24e-ae2245008a08"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Tipo de Artículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="1" width="87" height="25" uuid="d6c677ca-e99d-4313-8760-71a94e6d77e4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Base de Indexación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="1" width="77" height="25" uuid="3a436f24-09eb-4167-8303-81d476805637"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Año Publicación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="413" y="1" width="76" height="25" uuid="93c0c003-68c9-4d90-b051-b7ec7c9166d6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PDF Subido]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2" y="1" width="115" height="11" uuid="04766036-0c3e-4a33-aee4-ff17ae199398"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAMPO8}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="4" y="12" width="795" height="1" uuid="923976d0-7501-481b-b9c2-efae1898627e"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="489" y="1" width="387" height="11" uuid="6abb53a2-7ad2-4d21-a755-9a9f78718388"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="html">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<p><b>Apellido: </b>" + ($F{PUB_APELLIDO_AUTOR} == null ? "" : $F{PUB_APELLIDO_AUTOR}) + "</p>"
++ "<p><b>Nombre: </b>" + ($F{PUB_NOMBRE_AUTOR} == null ? "" : $F{PUB_NOMBRE_AUTOR}) + "</p>"
++ "<p><b>Alcance de la Actividad: </b>" + ($F{PUB_ALCANCE} == null ? "" : $F{PUB_ALCANCE}) + "</p>"
++ "<p><b>Título del Artículo: </b>" + ($F{PUB_TITULO} == null ? "" : $F{PUB_TITULO}) + "</p>"
++ "<p><b>Editorial: </b>" + ($F{PUB_EDITORIAL} == null ? "" : $F{PUB_EDITORIAL}) + "</p>"
++ "<p><b>Total Número de Páginas: </b>" + ($F{PUB_NUMPAGINAS} == null ? "" : $F{PUB_NUMPAGINAS}) + "</p>"
++ "<p><b>Rango Páginas: </b>" + ($F{pub_rangpagina} == null ? "" : $F{pub_rangpagina}) + "</p>"
++ "<p><b>Número Revista: </b>" + ($F{numrevista} == null ? "" : $F{numrevista}) + "</p>"
++ "<p><b>Periodicidad: </b>" + ($F{periodicidad} == null ? "" : $F{periodicidad}) + "</p>"
++ "<p><b>Volumen: </b>" + ($F{pub_volumen} == null ? "" : $F{pub_volumen}) + "</p>"
++($F{PAIS} ==null ? "" : "<p><b>País: </b>" +$F{PAIS}  + "</p>")
++($F{CIUDAD}==null ? "" : "<p><b>Ciudad: </b>" +$F{CIUDAD}  + "</p>")
++ "<p><b>N° ISSN: </b>" + ($F{PUB_NUMISSN} == null ? "" : $F{PUB_NUMISSN}) + "</p>"
++ "<p><b>Forma Publicación: </b>"+ ($F{FORMA_PUBLICACION} == null ? "" : $F{FORMA_PUBLICACION}) + "</p>"
++ "<b>ODI/URI/URL: </b>" + ($F{PUB_URL} == null ? "" : $F{PUB_URL})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="183" y="1" width="66" height="11" uuid="cce8a558-d3fa-4ed0-bc57-05a21d87c6e9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_ROL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="117" y="1" width="66" height="11" uuid="81291724-9abc-4e2a-bd5c-92895babc533"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_PARTICIPACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="249" y="1" width="87" height="11" uuid="f98d5eea-700c-46e9-82f6-b53e67d79df7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PUB_TIPOSVARIOS} + ($F{CAMPO6} == null ? "" : " - "+$F{CAMPO6})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="336" y="1" width="77" height="11" uuid="ddaac8d9-0478-4722-bd6a-f98d9a3afbe9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAMPO10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="413" y="1" width="76" height="11" uuid="3895a0d0-49a8-4a73-94bb-1f9718ca8762"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PDF_SUBIDO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="37">
+			<staticText>
+				<reportElement x="4" y="12" width="391" height="20" forecolor="#000000" uuid="d20753ae-f42d-4229-986e-4f79237010ea"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sin actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="0" width="256" height="12" forecolor="#0000FF" uuid="6cbebb50-4fad-4f5b-a4f3-5c46b08f4fa0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[REVISTAS]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

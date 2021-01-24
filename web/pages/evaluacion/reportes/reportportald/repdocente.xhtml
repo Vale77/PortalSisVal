@@ -1,0 +1,92 @@
+<!--<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"    
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>          
+            <h:outputStylesheet library="css" name="infoanual.css"/> 
+        </h:head>
+        <h:body>
+            <p:panel id="pnlContent" style="font-size: 11px;background-color: aliceblue" >
+                <h:form id="detalle">
+                    <p:growl id="messages"/>
+
+                    <h:panelGrid columns="7" id="display">
+                        <h:outputText  value="Reporte Evaluación: " style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="greporte">
+                            <p:selectOneMenu value="#{repdocente.smreporte.value}" 
+                                             required="true" requiredMessage="Reporte: se requiere un valor"
+                                             id="isreporte">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                       
+                                <f:selectItem  itemLabel="Docente" itemValue="D" />                       
+                                <f:selectItem  itemLabel="Asignatura/Módulo" itemValue="A" /> 
+                                <f:selectItem  itemLabel="Coordinador" itemValue="C" /> 
+                                <p:ajax update="greporte gciclo gtabla" listener="#{repdocente.reporteChangeListener}" immediate="true" />
+                            </p:selectOneMenu>
+                            <p:message for="isreporte" display="icon"/> 
+                        </h:panelGrid>  
+                        <h:outputText  value="Ciclo Académico: " style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="gciclo">
+                            <p:selectOneMenu value="#{repdocente.smciclo.value}" 
+                                             required="true" requiredMessage="Ciclo Académico: se requiere un valor"
+                                             id="isciclo">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                       
+                                <f:selectItems  value="#{repdocente.ciclos}" var="listciclo" itemLabel="#{listciclo.nombreCiclo}" itemValue="#{listciclo.anio}"/>
+                                <p:ajax update="gciclo gtabla"  listener="#{repdocente.cicloChangeListener}" />
+                            </p:selectOneMenu>
+                            <p:message for="isciclo" display="icon"/> 
+                        </h:panelGrid>  
+                    </h:panelGrid>  
+                    <h:panelGrid columns="1" id="gtabla" style="font-family: Arial; font-size: 10pt;width: 60%">
+                        <p:dataTable value="#{repdocente.listMateriaciclo}" var="mateciclo" 
+                                     paginator="true" rows="10" style="width: 100%"
+                                     rowKey="#{mateciclo[0]}#{mateciclo[4]}#{mateciclo[2]}"  
+                                     selection="#{repdocente.selectedMateriaciclo}" 
+                                     selectionMode="single"
+                                     resizableColumns="true"
+                                     emptyMessage="#{repdocente.ls_tabvacia}"
+                                     id="tabdoc">  
+                            <p:column headerText="Programa" style="width:30%; font-size:9pt" rendered="#{repdocente.smreporte.value eq 'C'}">
+                                <h:outputText value="#{mateciclo[5]}" style="font-size: 7pt" />                                            
+                            </p:column>
+                            <p:column headerText="Trimestre" style="width:10%; font-size:9pt">
+                                <h:outputText value="#{mateciclo[3]}" style="font-size: 7pt" />                                            
+                            </p:column>
+                            <p:column headerText="Materia" style="width:58%; font-size:9pt">
+                                <h:outputText value="#{mateciclo[1]} " style="font-size: 8pt" />                                            
+                            </p:column>
+                            <p:column headerText="Reporte PDF" style="width:6%;font-size:9pt">  
+                                <p:commandButton id="selectButton" update="tabdoc :detalle" oncomplete="repWidget.show()"   
+                                                 icon="ui-icon-search" title="Ver PDF" action="#{repdocente.verReporte('pdf')}" immediate="true"
+                                                 style="font-size: 8pt">                                  
+                                    <f:setPropertyActionListener value="#{mateciclo}" target="#{repdocente.selectedMateriaciclo}" />  
+                                </p:commandButton>  
+
+                            </p:column>  
+                            <p:column headerText="Reporte Excel" style="width:6%;font-size:9pt">  
+                                <p:commandButton id="selectButtonexcel" update="tabdoc :detalle" 
+                                                 icon="ui-icon-disk" title="Ver Excel" action="#{repdocente.verReporte('vnd.ms-excel')}" 
+                                                 immediate="true" style="font-size: 8pt" >                                  
+                                    <f:setPropertyActionListener value="#{mateciclo}" target="#{repdocente.selectedMateriaciclo}" />  
+                                </p:commandButton> 
+
+                            </p:column>  
+                        </p:dataTable>     
+
+                    </h:panelGrid>
+                    <p:dialog id="repDialog" header="Reporte Mis Evaluaciones" widgetVar="repWidget"  modal="true" resizable="false" 
+                              style="left:170px;" width="985" height="540" draggable="false" >
+                        <p:media id="visorPdf" width="100%" height="100%" player="pdf" value="#{repdocente.displayReporte}" >              
+                        </p:media> 
+                    </p:dialog>                
+                </h:form> 
+            </p:panel>
+        </h:body>  
+    </f:view>
+
+</html>
+

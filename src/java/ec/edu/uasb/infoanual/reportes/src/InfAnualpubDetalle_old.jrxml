@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InfAnualpubDetalle" language="groovy" pageWidth="2745" pageHeight="595" orientation="Landscape" columnWidth="2705" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="892d9b51-f9c4-4cba-a4bd-3b73c03be5c5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="tipReporte" class="java.lang.String"/>
+	<parameter name="codProfesor" class="java.lang.String"/>
+	<parameter name="codArea" class="java.lang.String"/>
+	<parameter name="codTContrato" class="java.lang.String"/>
+	<parameter name="codDedicacion" class="java.lang.String"/>
+	<parameter name="pathDocumento" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[DECLARE @PROFESOR TABLE (CODIGO_PROFESOR NUMERIC(7,0),cod_profesor_acadant INT)
+INSERT  INTO @PROFESOR(CODIGO_PROFESOR,cod_profesor_acadant)
+SELECT CODIGO_PROFESOR, cod_profesor_acadant
+FROM interfaseOcu.dbo.PROFESOR
+SELECT  e.CODIGO_PROFESOR,
+        e.NOMBRE_PROFESOR,
+        (SELECT f.NOMBRE_FACULTAD
+        FROM academico.dbo.FACULTAD f
+        WHERE f.CODIGO_FACULTAD = e.CODIGO_FACULTAD) AS CODIGO_FACULTAD,
+        (CASE e.DEDICACION
+                WHEN 'C' THEN 'TIEMPO COMPLETO'
+                WHEN 'M' THEN 'MEDIO TIEMPO'
+                WHEN 'P' THEN 'TIEMPO PARCIAL'
+        ELSE 'N/I' END) AS DEDICACION,
+        (SELECT c.NOMBRE_CICLO
+        FROM academico.dbo.CICLO_ACADEMICO c
+        WHERE c.ANIO = e.ANIO) AS ANIO,
+cod_profesor_acadant
+FROM    interfaseOcu.GESTIONACADEMICA.ESTADISTICAS_INFORME_ANUAL e
+INNER JOIN @PROFESOR PROFESOR ON PROFESOR.CODIGO_PROFESOR = E.CODIGO_PROFESOR
+WHERE   e.ANIO= $P{anio}
+AND (CASE when ($P{tipReporte} = 'D' AND $P{codProfesor} IS NOT NULL) then  E.CODIGO_PROFESOR ELSE '0' END) = (CASE   when $P{tipReporte} = 'D' then $P{codProfesor} ELSE '0' END)
+AND (CASE when(($P{tipReporte} ='A' OR $P{tipReporte} ='T' OR $P{tipReporte} ='E')and $P{codArea} <>'T')  then  E.CODIGO_FACULTAD ELSE '0' END )= (CASE  when(($P{tipReporte} ='A' OR $P{tipReporte} ='T' OR $P{tipReporte} ='E')and $P{codArea} <>'T')THEN $P{codArea}  ELSE '0' END)
+AND (CASE when(($P{tipReporte}='T' OR $P{tipReporte} ='E')and $P{codTContrato} <> 'T') THEN E.COD_TIPOCONTRATO ELSE '0' END )= (CASE when(($P{tipReporte} ='T'OR $P{tipReporte} ='E')and $P{codTContrato} <> 'T')THEN  $P{codTContrato} ELSE '0' END  )
+AND (CASE when($P{tipReporte} ='E'and $P{codDedicacion}<> 'T') THEN E.DEDICACION ELSE '0' END )= (CASE when($P{tipReporte} ='E'and $P{codDedicacion} <> 'T')THEN  $P{codDedicacion}ELSE '0' END  )]]>
+	</queryString>
+	<field name="CODIGO_PROFESOR" class="java.lang.Integer"/>
+	<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
+	<field name="CODIGO_FACULTAD" class="java.lang.String"/>
+	<field name="DEDICACION" class="java.lang.String"/>
+	<field name="ANIO" class="java.lang.String"/>
+	<field name="cod_profesor_acadant" class="java.lang.Integer"/>
+	<group name="area" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{CODIGO_FACULTAD}]]></groupExpression>
+		<groupHeader>
+			<band height="11">
+				<textField>
+					<reportElement x="108" y="0" width="718" height="11" uuid="baaf63d0-e172-4aec-bc8f-b2f8ee25e73a"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CODIGO_FACULTAD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="0" width="108" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="45c78793-a89c-477b-8a16-628394a2c671"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[AREA ACADÉMICA:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="dedicacion" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{DEDICACION}]]></groupExpression>
+		<groupHeader>
+			<band height="11">
+				<textField>
+					<reportElement x="108" y="0" width="718" height="11" uuid="a1035b73-3ae7-4ae4-a2e9-ed8e5fdeda84"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DEDICACION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="0" width="108" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="a84da181-d60f-43b6-b9b2-f4f4b6b40694"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[DEDICACIÓN:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="profesor" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{NOMBRE_PROFESOR}]]></groupExpression>
+		<groupHeader>
+			<band height="11">
+				<textField>
+					<reportElement x="108" y="0" width="718" height="11" uuid="8ab06e43-5e45-4e8b-8093-f148e45f2f6c"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE_PROFESOR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="0" width="108" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="344207a9-3217-461f-816e-4e36fb35cdcf"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[PROFESOR:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band height="525" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="1854" height="525" forecolor="#CCCCCC" uuid="f35d17c8-77b6-4156-a680-200397f88066"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font size="72" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Reporte en validación por parte del usuario. Los datos aquí mostrados son válidos sólo para pruebas.]]></text>
+			</staticText>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="105">
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="763" y="89" width="63" height="11" uuid="1caf290c-e6d4-45ba-8e2e-e6e003b8a1f4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="108" y="10" width="718" height="15" uuid="4e1292ff-d8ab-4f5a-9c3f-097aa40a0078"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN GENERAL ACADÉMICA - DGA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="40" width="718" height="47" uuid="b4e059bd-7f3c-4828-b47a-952d985bb895"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE PUBLICACIONES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="100" width="2700" height="1" uuid="d6ba35e0-7fb2-40d1-9d9b-d9e1ab29a583"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<image>
+				<reportElement x="0" y="0" width="108" height="87" uuid="14c7cd74-453e-4988-9264-6bdf025a04c4"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="698" y="89" width="60" height="11" uuid="4df93726-84c9-44bd-9328-d44094499a68"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="25" width="718" height="15" uuid="751a4b1c-3b99-4813-a40c-1b40d50a44a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="374" height="5" uuid="47f021c4-ae93-43c3-a4aa-8ed652ef9f56"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="codProfesor">
+					<subreportParameterExpression><![CDATA[$F{cod_profesor_acadant}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "InfAnualpubDetLibro.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="5" width="374" height="5" uuid="e43266cc-6a06-4405-8736-4ae2e426cff0"/>
+				<subreportParameter name="codProfesor">
+					<subreportParameterExpression><![CDATA[$F{cod_profesor_acadant}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "InfAnualpubDetCapLibro.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="10" width="374" height="5" uuid="43ec9172-33de-4445-8b1f-6620c0306017"/>
+				<subreportParameter name="codProfesor">
+					<subreportParameterExpression><![CDATA[$F{cod_profesor_acadant}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "InfAnualpubDetRevista.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="15" width="374" height="5" uuid="f3ee07da-1c38-4a1a-a6cf-87fff384dbed"/>
+				<subreportParameter name="codProfesor">
+					<subreportParameterExpression><![CDATA[$F{cod_profesor_acadant}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "InfAnualpubDetPonencia.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="Float" x="0" y="20" width="2700" height="1" uuid="26452016-650b-4412-a882-47554b5edce1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12">
+			<textField evaluationTime="Report">
+				<reportElement x="759" y="0" width="67" height="11" uuid="a1ef7fdc-cb01-4913-89d5-5e31d8970b64"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="453" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="19aac84d-af80-46a1-88c5-9f471ba01694"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ACADEMICO v1.0]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="698" y="1" width="60" height="11" uuid="0375b8b0-22c1-4b26-964c-9d50b754b3a6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

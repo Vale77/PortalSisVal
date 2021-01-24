@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;width: 850px;"  >
+        <h:panelGrid columns="1" id="dataencconvocatoria">
+            <h:panelGrid columns="2">
+                <h:outputText  value="Dedicación*" style="font-weight: bold"/>
+                <h:panelGrid columns="2" id="idedicacion">
+                    <p:selectOneMenu value="#{rangoInfAnual.sdedicacion}" id="somdedicacion"
+                                     required="true" requiredMessage="Rango/Dedicación: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno..." itemValue="" />
+                        <f:selectItem  itemLabel="Tiempo Completo" itemValue="C" />
+                        <f:selectItem  itemLabel="Medio Tiempo" itemValue="M" />          
+                        <f:selectItem  itemLabel="Tiempo Parcial" itemValue="P" />                              
+                        <p:ajax update="somdedicacion" immediate="true"/>
+                    </p:selectOneMenu>
+                    <p:message for="idedicacion" display="icon"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="1" id="datrang">
+                    <h:outputText  value="Rango Mínimo Anual" style="font-weight: bold"/>   
+                    <h:panelGrid columns="2">
+                        <h:outputText  value="Desde *" style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="irmdesde">
+                            <p:spinner  value="#{rangoInfAnual.rmdesde}" stepFactor="10" />               
+                            <p:message for="irmdesde" display="icon"/>
+                        </h:panelGrid> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText  value="Hasta *" style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="irmhasta">
+                            <p:spinner  value="#{rangoInfAnual.rmhasta}" stepFactor="10" />               
+                            <p:message for="irmhasta" display="icon"/>
+                        </h:panelGrid> 
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="1" id="datpagext">
+                    <h:outputText  value="Rango Pago Extra" style="font-weight: bold"/>   
+                    <h:panelGrid columns="2">
+                        <h:outputText  value="Desde *" style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="irpedesde">
+                            <p:spinner  value="#{rangoInfAnual.rpedesde}" stepFactor="10" />               
+                            <p:message for="irpedesde" display="icon"/>
+                        </h:panelGrid> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText  value="Hasta *" style="font-weight: bold"/>
+                        <h:panelGrid columns="2" id="irpehasta">
+                            <p:spinner  value="#{rangoInfAnual.rpehasta}" stepFactor="10" />               
+                            <p:message for="irpehasta" display="icon"/>
+                        </h:panelGrid> 
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:outputText  value="Estado*" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="encestado" >
+                    <p:selectOneMenu value="#{rangoInfAnual.sestado}" id="sencestado"
+                                     required="true" requiredMessage="Puntuación/Estado: se requiere un valor">
+                        <f:selectItem  itemLabel="Activo" itemValue="A" />
+                        <f:selectItem  itemLabel="Inactivo" itemValue="I" />          
+                        <p:ajax update="sencestado" immediate="true"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGrid>
+        <p:commandButton  id="commandButtonGrabar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                          update=":formLogin:growlLogin @form"
+                          actionListener="#{rangoInfAnual.guardarButton_processAction}" process="@form" />        
+        <p:commandButton value="Cancelar" oncomplete="mantWidget.hide();" id="btnENCCancelar" 
+                         actionListener="#{rangoInfAnual.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton> 
+    </p:panel>
+</ui:composition>

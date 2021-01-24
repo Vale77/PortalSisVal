@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeEstudAlTutorDetalle" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a4b1f08d-394a-4273-8f7b-e2f78dbf858e">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="728"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codEncu" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codEsp" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codProfe" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[WITH PREGUNTA_CTE  ( CODIGO_PREGUNTA,CODIGO_ENCUESTA,PREGUNTA_PADRE, DESCRIPCION,TIPO)AS(
+SELECT CODIGO_PREGUNTA,CODIGO_ENCUESTA,isnull(PREGUNTA_PADRE,CODIGO_PREGUNTA),  DESCRIPCION,TIPO
+FROM interfaseOcu.EVALUACION.PREGUNTA WITH (NOLOCK)
+WHERE CODIGO_ENCUESTA = $P{codEncu}
+and PREGUNTA_PADRE IS NULL
+UNION ALL
+SELECT e.CODIGO_PREGUNTA,e.CODIGO_ENCUESTA,e.PREGUNTA_PADRE, e.DESCRIPCION,e.TIPO
+FROM interfaseOcu.EVALUACION.PREGUNTA e WITH (NOLOCK) INNER JOIN PREGUNTA_CTE pcte
+ON  e.PREGUNTA_PADRE =  pcte.CODIGO_PREGUNTA
+WHERE e.CODIGO_ENCUESTA = $P{codEncu})
+SELECT  iif (TIPO= 4,PREGUNTA_CTE.CODIGO_PREGUNTA, substring(convert(char(2),PREGUNTA_CTE.CODIGO_PREGUNTA),2,1))CODPREGUNTA, DESCRIPCION,TIPO, CONVERT(DECIMAL(8,2), AVG(VALOR)  )PROMEDIO
+ FROM PREGUNTA_CTE  LEFT OUTER JOIN interfaseOcu.EVALUACION.RESPUESTA WITH (NOLOCK)
+ON PREGUNTA_CTE.CODIGO_PREGUNTA = RESPUESTA.CODIGO_PREGUNTA
+AND PREGUNTA_CTE.CODIGO_ENCUESTA = RESPUESTA.CODIGO_ENCUESTA
+AND  RESPUESTA.anio =$P{anio}  AND RESPUESTA.CODIGO_ESP =$P{codEsp}
+AND RESPUESTA.CODIGO_PROFESOR = $P{codProfe}
+WHERE  PREGUNTA_CTE.tipo NOT IN(2,5)
+group by PREGUNTA_CTE.PREGUNTA_PADRE,PREGUNTA_CTE.CODIGO_PREGUNTA,DESCRIPCION,TIPO]]>
+	</queryString>
+	<field name="CODPREGUNTA" class="java.math.BigDecimal"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="PROMEDIO" class="java.math.BigDecimal"/>
+	<variable name="PROM" class="java.math.BigDecimal" resetType="Group" resetGroup="tipo" calculation="Average">
+		<variableExpression><![CDATA[$F{PROMEDIO}]]></variableExpression>
+	</variable>
+	<group name="tipo">
+		<groupExpression><![CDATA[$F{TIPO}]]></groupExpression>
+		<groupHeader>
+			<band height="9">
+				<textField>
+					<reportElement x="26" y="0" width="337" height="9" uuid="a4645198-ab24-4920-806c-d940a4130a38"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+						<paragraph leftIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO}.equals("4")?$F{DESCRIPCION}:""]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="13" y="0" width="12" height="9" uuid="379f5d6f-5cdd-4e52-b8e8-e0db6cff6356"/>
+					<textElement textAlignment="Center">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO}.equals("4")?$F{CODPREGUNTA}:""]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10">
+				<line>
+					<reportElement x="9" y="0" width="541" height="1" printWhenGroupChanges="tipo" uuid="cef62265-19d0-4479-b5d1-665156d9b19e">
+						<printWhenExpression><![CDATA[!$F{TIPO}.equals("4")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<textField evaluationTime="Group" evaluationGroup="tipo" pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="441" y="1" width="33" height="9" uuid="a1d26e84-d0e7-490e-98fb-d5019c5956cb">
+						<printWhenExpression><![CDATA[!($F{TIPO}.equals("4") || $F{TIPO}.equals("3"))]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PROM}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="402" y="1" width="39" height="9" uuid="272bb286-47d7-4270-85e1-5b5f22d08bfc">
+						<printWhenExpression><![CDATA[!($F{TIPO}.equals("4") || $F{TIPO}.equals("3"))]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Promedio:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="33" y="0" width="388" height="10" isRemoveLineWhenBlank="true" uuid="7f9352ac-dc51-4c36-8ad1-86210bc2cd92"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO}.equals("4")?"":$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="441" y="0" width="33" height="10" isRemoveLineWhenBlank="true" uuid="59d40d33-029a-407f-b47f-41e596e63a45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROMEDIO}]]></textFieldExpression>
+				<patternExpression><![CDATA[$F{TIPO}.equals("3")?"#,##0.00 %":"#,##0.00"]]></patternExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="21" y="0" width="12" height="10" isRemoveLineWhenBlank="true" uuid="2ce6c3e9-bd50-44d5-bbb8-1af4ac2d8df5"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO}.equals("4")?"":$F{CODPREGUNTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

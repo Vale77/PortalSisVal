@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{cierreEvalEstADoc.navigationJSFManagedBean.nombreOpcion}">
+        <h:form id="fcierreAsig">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltrocierre" columns="7" style="font-family: Arial; font-size: 7pt">  
+                 <h:outputText  value="Ciclo Académico* :" style="font-weight: bold" />
+                <h:panelGrid columns="2" id="ganio">
+                    <p:selectOneMenu value="#{cierreEvalEstADoc.smciclo}" id="iciclo"
+                                     required="true" requiredMessage="Anio se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{cierreEvalEstADoc.ciclos}" var="lanio" itemLabel="#{lanio.nombreCiclo}" itemValue="#{lanio.anio}"/>                               
+                        <p:ajax update="ganio garea gtrimestre" listener="#{cierreEvalEstADoc.ciclovalueChangeListener()}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="iciclo" display="icon"/> 
+                </h:panelGrid>
+                  <h:outputText  value="Area* :" style="font-weight: bold"  />
+                        <h:panelGrid columns="2" id="garea"  >
+                            <p:selectOneMenu value="#{cierreEvalEstADoc.smarea}" id="iarea"
+                                             required="true" requiredMessage="Área: se requiere un valor">
+                                <f:selectItem  itemLabel="Escoja uno.." itemValue="" noSelectionOption="true"  />
+                                <f:selectItem  itemLabel="TODAS" itemValue="T" />
+                                <f:selectItems  value="#{cierreEvalEstADoc.listarea}" var="larea" itemLabel="#{larea[1]}" itemValue="#{larea[0]}"/>                               
+                                <p:ajax update="garea gtrimestre" listener="#{cierreEvalEstADoc.areavalueChangeListener()}"  />   
+                            </p:selectOneMenu>
+                            <p:message for="iarea" display="icon"/> 
+                        </h:panelGrid> 
+
+                <h:outputText  value="Trimestre* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtrimestre" >
+                    <p:selectOneMenu value="#{cierreEvalEstADoc.strimestre}" id="itrimestre"
+                                     required="true" requiredMessage="Trimestre: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItems  value="#{cierreEvalEstADoc.listtrimestre}" var="ltrimestre" itemLabel="#{ltrimestre[1]}" itemValue="#{ltrimestre[0]}"/>                               
+                        <p:ajax update="gtrimestre gdetallecierre" listener="#{cierreEvalEstADoc.trimestervalueChangeListener()}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>                        
+            </h:panelGrid>  
+
+            <h:panelGrid id="gdetallecierre" >
+                <p:dataTable id="tcierreAsig" 
+                             value="#{cierreEvalEstADoc.listAsignaturaCierre}" 
+                             var="asigcierre"                                   
+                             scrollable="true" scrollHeight="95%" 
+                             style=" font-family: Arial; font-size: 7pt;width: 100%"
+                             rowKey="#{asigcierre[0]}"
+                             resizableColumns="true"                                     
+                             selection="#{cierreEvalEstADoc.selectedasigcierre}"                                      
+                             emptyMessage="No existen datos"  
+                             filteredValue="#{cierreEvalEstADoc.listAsignaturaFiltro}" >
+                    <f:facet name="header">
+                        <div align="right" >
+                            <p:commandButton  id="btnCAGuardar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                                              update=":formLogin:growlLogin @form"
+                                              actionListener="#{cierreEvalEstADoc.guardarButton_processAction}" process="@form" />    
+                                                 
+                        </div>   
+                    </f:facet>
+                    <p:column filterBy="#{asigcierre[10]}" filterStyle="width: 98%" filterMatchMode="contains"  headerText="Programa"  style="width: 20%">
+                        <h:outputText value="#{asigcierre[10]}" style="text-transform: uppercase; text-align: left"  />          
+                    </p:column>
+                    <p:column  filterBy="#{asigcierre[11]}" filterStyle="width: 98%" filterMatchMode="contains" headerText="Materia" style="width: 20%">
+                        <h:outputText value="#{asigcierre[11]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>
+                    <p:column filterBy="#{asigcierre[16]}" filterStyle="width: 98%" filterMatchMode="contains" headerText="Paralelo" style="width: 15%">
+                        <h:outputText value="#{asigcierre[16]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>
+                    <p:column filterBy="#{asigcierre[17]}" filterStyle="width: 98%" filterMatchMode="contains" headerText="Docente" style="width: 20%">
+                        <h:outputText value="#{asigcierre[17]}" style="text-transform: uppercase; text-align: left"/>                                            
+                    </p:column>
+
+                    <p:column headerText="Inicio Asignatura" style="width: 5%">   
+                        <h:outputText value="#{asigcierre[21]}" />                                                                                                                                                         
+                    </p:column>
+                    <p:column headerText="Fin Asignatura" style="width: 5%">
+                        <h:outputText value="#{asigcierre[22]}" />                                                                                    
+                    </p:column>
+                    <p:column  headerText="Fin Evaluación" style="width: 5%">
+                        <h:outputText value="#{asigcierre[20]}" />                                                                                    
+                    </p:column>
+                    <p:column   style="width: 10%" >    
+                        <f:facet name="header">                                    
+                            <p:outputLabel value="%Avance >="/>
+                            <p:panelGrid columns="2">
+                                <h:inputText value="#{cierreEvalEstADoc.sfiltro}" style="width:95%"/>
+                                <p:commandButton icon="ui-icon-search" title="View" actionListener="#{cierreEvalEstADoc.filtrarValorvalueChangeListener}" update=":fcierreAsig:tcierreAsig">                                        
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </f:facet>
+                        <h:outputText value="#{asigcierre[18]}" >
+                            <f:converter converterId="javax.faces.Double" />                                    
+                        </h:outputText>                                                                                       
+                    </p:column>  
+                    <p:column  headerText="Cerrar" selectionMode="multiple" style="width:5%;text-align:center"/>
+                </p:dataTable>               
+            </h:panelGrid>
+        </h:form>
+    </p:panel>  
+
+</ui:composition>

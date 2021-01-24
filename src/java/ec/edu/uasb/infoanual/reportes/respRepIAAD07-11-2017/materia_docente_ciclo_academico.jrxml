@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="materia_docente_ciclo_academico" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5d51d71c-c732-4815-ad1c-2c42428cfb1d">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codigo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT vcp.PROGRAMA AS PROGRAMA,
+vcp.TRIMESTRE AS TRIMESTRE,
+UPPER(vcp.NOMBRE_MATERIA + ' PARALELO ' + vcp.NOMBRE_PARALELO) AS NOMBRE_MATERIA,
+(CASE WHEN vcp.CREDITO_DOCENTE=0 THEN vcp.NUMCLASE_PRACTICA ELSE CONVERT(decimal(4,2),vcp.CREDITO_DOCENTE*10) END) NUM_CLASES,
+vnm.NUMEST,
+CASE vcp.TIPO_ASIGNATURA WHEN 'T' THEN 'SI' ELSE 'NO' END TIPO_ASIGNATURA
+FROM  interfaseOcu.dbo.VISTA_NUMESTUDIANTE_MATERIA vnm
+INNER JOIN interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA vcp  ON vnm.CODIGO_PROFESOR = vcp.CODIGO_PROFESOR
+	AND vnm.ANIO = vcp.ANIO
+          AND vnm.CODIGO_NIVEL = vcp.codigo_nivel
+	AND vnm.CODIGO_MATERIA = vcp.CODIGO_MATERIA
+	AND vnm.CODIGO_ESP = vcp.CODIGO_ESP
+	AND vnm.CODIGO_PARALELO = vcp.COD_PARALELO
+WHERE   vnm.CODIGO_PROFESOR =$P{codigo}
+AND vnm.ANIO = $P{anio}
+AND vcp.TIPO_ASIGNATURA NOT IN ('L');]]>
+	</queryString>
+	<field name="PROGRAMA" class="java.lang.String"/>
+	<field name="TRIMESTRE" class="java.lang.String"/>
+	<field name="NOMBRE_MATERIA" class="java.lang.String"/>
+	<field name="NUM_CLASES" class="java.math.BigDecimal"/>
+	<field name="NUMEST" class="java.math.BigDecimal"/>
+	<field name="TIPO_ASIGNATURA" class="java.lang.String"/>
+	<sortField name="TRIMESTRE"/>
+	<sortField name="NOMBRE_MATERIA"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="0" width="260" height="12" forecolor="#0000FF" uuid="5532d383-a322-4a46-9d3e-65eb6efde610"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ASIGNATURAS POSGRADO UASB]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="259" height="24" uuid="10ad4f6b-c108-4aaf-97c7-31954cad97a2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Programa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="1" width="84" height="24" uuid="2feecda4-62cd-41a1-aead-c9c3f7b033cb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Trimestre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="343" y="1" width="300" height="24" uuid="b52683d0-3759-4e7d-b116-f976ceaab588"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[Asignatura  / Módulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="643" y="1" width="55" height="24" uuid="943f7051-75cb-485b-911a-8663e415682d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° Horas Aula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="698" y="1" width="57" height="24" uuid="994da98c-028a-4157-ab3b-784bd1775ed6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° Estudiantes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="755" y="1" width="47" height="24" uuid="c700487d-6a39-42a1-b1a3-e562ccdb4818"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asignatura Remedial]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="259" height="11" uuid="92247494-c0e9-4818-bc87-e41d289a9744"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROGRAMA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="259" y="0" width="84" height="11" uuid="5a1ed7bf-fa6a-465a-b3f3-f804a6edda79"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="343" y="0" width="300" height="11" uuid="33aeaed2-86b9-4d57-bd42-7618d31f49fb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_MATERIA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="false">
+				<reportElement x="643" y="0" width="55" height="11" uuid="1a8156eb-6f7d-40f2-99ac-384a9db10253"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_CLASES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="698" y="0" width="57" height="11" uuid="4657d17b-8e6a-4be0-9bae-68d18dbc8ad0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMEST}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="755" y="0" width="47" height="11" uuid="df42a49d-fb28-41c7-abd8-4b30b7c0a318"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_ASIGNATURA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="37">
+			<staticText>
+				<reportElement x="4" y="13" width="392" height="20" forecolor="#000000" uuid="aa049af4-285d-40a0-af3f-b07cb7591f15"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sin actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="0" width="260" height="12" forecolor="#0000FF" uuid="6f7dd0e6-0aec-4b78-b2b7-b126eac7a29d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ASIGNATURAS POSGRADO UASB]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;width: 850px;"  >
+        <h:panelGrid columns="2" id="dataencuesta" >
+            <h:outputText  value="Tipo *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="enctipo">
+                <p:selectOneMenu value="#{cabformulario.smtipencuesta.value}" id="ienctipo"
+                                 required="true" requiredMessage="Tipo Encuesta: se requiere un valor"
+                                 disabled="true" >
+                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                    <f:selectItem  itemLabel="Docente" itemValue="A" />
+                    <f:selectItem  itemLabel="Programa" itemValue="P" />          
+                    <f:selectItem  itemLabel="Tutoría" itemValue="T" />          
+                    <f:selectItem  itemLabel="Coordinador" itemValue="C" />          
+                    <f:selectItem  itemLabel="Comite" itemValue="O" />   
+
+                </p:selectOneMenu>
+            </h:panelGrid>  
+            <h:outputText  value="Subtipo" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="encsubtipo">
+                <p:selectOneMenu value="#{cabformulario.smsubtipencuesta.value}" id="iencsubtipo"                             >
+                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                    <f:selectItem  itemLabel="Doctorado" itemValue="DO" />
+                    <f:selectItem  itemLabel="Maestría Profesional" itemValue="MP" />          
+                    <f:selectItem  itemLabel="Maestría Investigación" itemValue="MI" />          
+                    <f:selectItem  itemLabel="Especialización" itemValue="ES" />         
+                  </p:selectOneMenu>
+            </h:panelGrid>  
+            <h:outputText  value="Título *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="enctitulo">
+                <h:inputText id="ienctitulo"  binding="#{cabformulario.itxttitencuesta}" style=" width: 300px; text-transform: uppercase" required="true" requiredMessage="Encuesta/Título: se requiere un valor">
+                    <p:ajax update="enctitulo" immediate="true"/>
+                </h:inputText>
+                <p:message for="ienctitulo" display="icon"/>
+            </h:panelGrid>  
+            <h:outputText  value="Descrpción *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="encdescrip">
+                <h:inputText id="iencdescrip"  binding="#{cabformulario.itxtdescripcion}" style=" width: 300px; text-transform: uppercase" required="true" requiredMessage="Encuesta/Desrcipción: se requiere un valor">
+                    <p:ajax update="encdescrip" immediate="true"/>
+                </h:inputText>
+                <p:message for="iencdescrip" display="icon"/>
+            </h:panelGrid>   
+            <h:outputText  value="Referencia *" style="font-weight: bold"/>
+            <h:panelGrid columns="2" id="encrefe">
+                <h:inputText id="iencrefe"  binding="#{cabformulario.itxtreferencia}" style=" width: 300px; text-transform: uppercase" required="true" requiredMessage="Encuesta/Referencia: se requiere un valor">
+                    <p:ajax update="encrefe" immediate="true"/>
+                </h:inputText>
+                <p:message for="iencrefe" display="icon"/>
+            </h:panelGrid> 
+            <h:outputText  value="Uso*" style="font-weight: bold"/>
+            <h:panelGrid columns="1" id="encuso" >
+                <p:selectOneMenu value="#{cabformulario.smtipuso.value}" id="tipcotext"
+                                 required="true" requiredMessage="Encuesta/Uso: se requiere un valor">
+                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                    <f:selectItem  itemLabel="Académico" itemValue="S" />
+                    <f:selectItem  itemLabel="Seguimiento" itemValue="D" />          
+                    <p:ajax update="encuso" immediate="true"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <h:outputText  value="Estado*" style="font-weight: bold"/>
+            <h:panelGrid columns="1" id="encestado" >
+                <p:selectOneMenu value="#{cabformulario.smestadencuesta.value}" id="sencestado"
+                                 required="true" requiredMessage="Encuesta/Estado: se requiere un valor">
+                    <f:selectItem  itemLabel="Activo" itemValue="A" />
+                    <f:selectItem  itemLabel="Inactivo" itemValue="I" />          
+                    <p:ajax update="sencestado" immediate="true"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+        </h:panelGrid>
+        <p:commandButton  id="commandButtonGrabar" value="Guardar" icon="ui-icon-disk" title="Guardar datos ingresados"                                
+                              update=":formLogin:growlLogin @form"
+                              actionListener="#{cabformulario.guardarButton_processAction}" process="@form" />        
+        <p:commandButton value="Cancelar" oncomplete="mantWidget.hide();" id="btnENCCancelar" 
+                         actionListener="#{cabformulario.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton>   
+    </p:panel>
+</ui:composition>

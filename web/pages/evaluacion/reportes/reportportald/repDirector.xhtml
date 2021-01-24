@@ -1,0 +1,120 @@
+<!--<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"    
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>          
+            <h:outputStylesheet library="css" name="infoanual.css"/> 
+        </h:head>
+        <h:body>
+            <p:panel id="pnlContent" style="font-size: 11px;background-color: aliceblue" >
+                <h:form id="detalle">
+                    <p:growl id="messages"/>
+
+                    <h:panelGrid columns="1" id="display">
+                        <h:panelGrid columns="6" id="gfiltro">
+                            <h:outputText  value="Reporte Evaluación: " style="font-weight: bold"/>
+                            <h:panelGrid columns="2" id="greporte">
+                                <p:selectOneMenu value="#{repdirectorBean.smreporte.value}" 
+                                                 required="true" requiredMessage="Reporte: se requiere un valor"
+                                                 id="isreporte">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                       
+                                    <f:selectItem  itemLabel="Del Estudiante Al Docente" itemValue="D" />            
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante Al Docente" itemValue="CD" />
+                                    <f:selectItem  itemLabel="Del Estudiante A la Asignatura/Módulo" itemValue="A"/> 
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante A La Asignatura/Módulo" itemValue="CA" />
+                                    <f:selectItem  itemLabel="Del Estudiante Al Tutor" itemValue="T"/>
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante Al Tutores" itemValue="CT"/>
+
+                                    <f:selectItem  itemLabel="Del Estudiante Al Programa" itemValue="P"/>
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante Al Programa- Especialización " itemValue="CP"/>
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante Al Programa -Maestría Investigación" itemValue="CPM"/>
+                                    <f:selectItem  itemLabel="Consolidado Del Estudiante Al Programa - Doctorado " itemValue="CPD"/>
+
+                                    <f:selectItem  itemLabel="Del Coordinador Al Docente" itemValue="C" />
+                                    <f:selectItem  itemLabel="Consolidado Del Coordinador Al Docente" itemValue="CC" />
+                                    <f:selectItem  itemLabel="Del Comité Al Programa" itemValue="COP" />
+                                    <f:selectItem  itemLabel="Consolidado Del Comité  Al Programa" itemValue="CCOP" />
+                                    <p:ajax event="change" update="greporte gfiltro display gtabladoc" listener="#{repdirectorBean.reporteChangeListener}"/>
+                                </p:selectOneMenu>
+                                <p:message for="isreporte" display="icon"/> 
+                            </h:panelGrid>                          
+                            <h:outputText  value="Ciclo Académico: " style="font-weight: bold"/>
+                            <h:panelGrid columns="2" id="gciclo">
+                                <p:selectOneMenu value="#{repdirectorBean.smciclo.value}" 
+                                                 required="true" requiredMessage="Ciclo Académico: se requiere un valor"
+                                                 id="isciclo">
+                                    <f:selectItem  itemLabel="Escoja uno.." itemValue="" />                       
+                                    <f:selectItems  value="#{repdirectorBean.ciclos}" var="listciclo" itemLabel="#{listciclo.nombreCiclo}" itemValue="#{listciclo.anio}"/>
+                                    <p:ajax update="detalle:tabdoc grepcp"  listener="#{repdirectorBean.cicloChangeListener}" />
+                                </p:selectOneMenu>
+                                <p:message for="isciclo" display="icon"/> 
+                            </h:panelGrid>  
+                            
+                            <h:panelGrid columns="2" id="grepcp" rendered="#{repdirectorBean.smreporte.value eq 'CP' or 
+                                                                             repdirectorBean.smreporte.value eq 'CCOP' or 
+                                                                             repdirectorBean.smreporte.value eq 'CPD'or  
+                                                                             repdirectorBean.smreporte.value eq 'CPM' or 
+                                                                             repdirectorBean.smreporte.value eq 'T' or 
+                                                                             repdirectorBean.smreporte.value eq 'CT'}">
+                                <p:commandButton id="selectButton" value="PDF" update="tabdoc :detalle"                                               
+                                                 oncomplete="repWidget.show();"
+                                                 icon="ui-icon-search"  action="#{repdirectorBean.verReporte('pdf')}"/>
+                                <p:commandButton id="selectButtonexcel" update="tabdoc :detalle" value="EXCEL"
+                                                 icon="ui-icon-disk" action="#{repdirectorBean.verReporte('vnd.ms-excel')}" immediate="true"/>       
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" id="gtabladoc"  style="font-family: Arial; font-size: 8pt;width: 60%" 
+                                     rendered="#{not (repdirectorBean.smreporte.value eq 'CP' or 
+                                                 repdirectorBean.smreporte.value eq 'CCOP' or 
+                                                 repdirectorBean.smreporte.value eq 'CPD'or 
+                                                 repdirectorBean.smreporte.value eq 'CPM' or
+                                                 repdirectorBean.smreporte.value eq 'T' or 
+                                                 repdirectorBean.smreporte.value eq 'CT')}">
+                            <p:dataTable value="#{repdirectorBean.listProgCiclo}" 
+                                         id="tabdoc" var="progciclo" 
+                                         paginator="true" rows="10" style="width: 100%"
+                                         rowKey="#{progciclo[0]}#{progciclo[4]}"  
+                                         selection="#{repdirectorBean.selectedProgDocMateria}" 
+                                         selectionMode="single"
+                                         resizableColumns="true"
+                                         emptyMessage="#{repdirectorBean.ls_tabvacia}">  
+                                <p:column headerText="#{repdirectorBean.ls_cabecera}" style="width:88%;font-family: Arial; font-size:9pt">
+                                    <h:outputText value="#{progciclo[1]}" style="font-size: 7pt"  />                                            
+                                </p:column>
+                                <p:column headerText="Reporte PDF" style="width:6%;font-size:9pt">  
+                                    <p:commandButton id="selectButton"  icon="ui-icon-search" title="Ver PDF"  update="tabdoc :detalle"
+                                                     action="#{repdirectorBean.verReporte('pdf')}" 
+                                                     oncomplete="repWidget.show();">   
+                                        <f:setPropertyActionListener value="#{progciclo}" target="#{repdirectorBean.selectedProgDocMateria}" />  
+                                    </p:commandButton>                             
+                                </p:column>  
+                                <p:column headerText="Reporte Excel" style="width:6%;font-size:9pt">  
+                                    <p:commandButton id="selectButtonexcel" update="tabdoc :detalle" 
+                                                     icon="ui-icon-disk" title="Ver Excel" action="#{repdirectorBean.verReporte('vnd.ms-excel')}" 
+                                                     immediate="true" style="font-size: 8pt" oncomplete="repWidget.show();">                                  
+                                        <f:setPropertyActionListener value="#{progciclo}" target="#{repdirectorBean.selectedProgDocMateria}" />  
+                                    </p:commandButton>                                 
+                                </p:column>  
+                            </p:dataTable>    
+                        </h:panelGrid>
+                    </h:panelGrid>  
+                    <p:dialog id="repDialog" header="Reporte Mis Programas" widgetVar="repWidget"  modal="true" resizable="false" 
+                              style="left:170px;" width="985" height="540" draggable="false" >
+                        <p:media id="visorPdf" width="100%" height="100%" player="pdf" value="#{repdirectorBean.displayReporte}" >              
+                        </p:media> 
+                    </p:dialog>
+                </h:form>
+
+            </p:panel>
+
+
+        </h:body>  
+    </f:view>
+
+</html>
+

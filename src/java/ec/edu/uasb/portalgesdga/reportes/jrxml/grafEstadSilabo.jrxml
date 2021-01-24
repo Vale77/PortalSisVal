@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grafEstadSilabo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8321890a-6c92-4c16-9f7f-c9e69e0d0724">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="153"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="consolidado" uuid="e8a1cd4d-7e82-4613-9bd2-5d0ec817346d">
+		<parameter name="anAnio" class="java.math.BigDecimal">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anArea" class="java.math.BigDecimal">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anProg" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anTrim" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT  VCP.CODIGO_FACULTAD, VCP.AREA,VCP.CODIGO_ESP, VCP.PROGRAMA,VCP.CODIGO_NIVEL, VCP.TRIMESTRE,
+ COUNT(1) NUM_ASIGNATURAS,
+CONVERT(DECIMAL(10,4),( SUM(IIF(SY.ESTADO_SYLABUS ='P' OR SY.ESTADO_SYLABUS ='A',1,0)))/CONVERT(DECIMAL(10,4),COUNT(1))) POR_REG,
+ CONVERT(DECIMAL(10,4),( SUM(IIF(SY.ESTADO_SYLABUS ='A',1,0)))/CONVERT(DECIMAL(10,4),COUNT(1))) POR_APROBADO,
+ CONVERT(DECIMAL(10,4),(SUM(IIF(SY.ESTADO_SYLABUS is NULL AND SY.ESTADO_ENVIO is NULL,1,0)))/CONVERT(DECIMAL(10,4),COUNT(1))) POR_NOREGISTRADA,
+ SUM(IIF(SY.ESTADO_SYLABUS is NULL AND SY.ESTADO_ENVIO is NULL,1,0)) NO_REGISTRADAS,
+ SUM(IIF(SY.ESTADO_SYLABUS ='P' AND SY.ESTADO_ENVIO='P',1,0)) REGISTRADAS,
+ SUM(IIF(SY.ESTADO_SYLABUS ='P' AND SY.ESTADO_ENVIO='E',1,0)) POR_APROBAR,
+ SUM(IIF(SY.ESTADO_SYLABUS ='A' AND SY.ESTADO_ENVIO='E',1,0)) APROBADAS
+ FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA VCP LEFT OUTER JOIN interfaseOcu.dbo.SYLABUS_DOCENTE SY ON VCP.CODIGO_PROFESOR = SY.CODIGO_PROFESOR AND
+ VCP.CODIGO_NIVEL = SY.CODIGO_NIVEL AND VCP.CODIGO_MATERIA = SY.CODIGO_MATERIA AND VCP.CODIGO_ESP = SY.COD_PROGRAMA AND
+ VCP.ANIO = SY.ANIO AND VCP.CICLO = SY.CICLO AND VCP.VAC_CODNUM = SY.VAC_CODNUM AND VCP.COD_PARALELO = SY.COD_PARALELO
+WHERE  VCP.ANIO = $P{anAnio} AND VCP.CICLO = 1 AND VCP.RESPONSABLE_MATERIA = 'S'
+AND VCP.CODIGO_NIVEACAD NOT IN(3)
+ AND VCP.CODIGO_FACULTAD =   $P{anArea}
+AND VCP.CODIGO_ESP = $P{anProg}
+AND (case $P{anTrim} WHEN 'T' THEN 0 ELSE VCP.CODIGO_NIVEL END) = (case $P{anTrim} WHEN 'T' THEN 0 ELSE $P{anTrim} END)
+GROUP BY VCP.CODIGO_FACULTAD, VCP.AREA,VCP.CODIGO_ESP, VCP.PROGRAMA,VCP.CODIGO_NIVEL, VCP.TRIMESTRE]]>
+		</queryString>
+		<field name="CODIGO_FACULTAD" class="java.math.BigDecimal"/>
+		<field name="AREA" class="java.lang.String"/>
+		<field name="CODIGO_ESP" class="java.lang.String"/>
+		<field name="PROGRAMA" class="java.lang.String"/>
+		<field name="CODIGO_NIVEL" class="java.math.BigDecimal"/>
+		<field name="TRIMESTRE" class="java.lang.String"/>
+		<field name="NUM_ASIGNATURAS" class="java.lang.Integer"/>
+		<field name="POR_REG" class="java.math.BigDecimal"/>
+		<field name="POR_APROBADO" class="java.math.BigDecimal"/>
+		<field name="POR_NOREGISTRADA" class="java.math.BigDecimal"/>
+		<field name="NO_REGISTRADAS" class="java.lang.Integer"/>
+		<field name="REGISTRADAS" class="java.lang.Integer"/>
+		<field name="POR_APROBAR" class="java.lang.Integer"/>
+		<field name="APROBADAS" class="java.lang.Integer"/>
+		<sortField name="CODIGO_ESP"/>
+	</subDataset>
+	<parameter name="anAnio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anArea" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anProg" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anTrim" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  DISTINCT VCP.ANIO,VCP.CODIGO_FACULTAD,VCP.AREA ,VCP.CODIGO_ESP, VCP.PROGRAMA
+ FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA VCP
+WHERE  VCP.ANIO = $P{anAnio} AND VCP.CICLO = 1
+ AND VCP.RESPONSABLE_MATERIA = 'S'
+AND VCP.CODIGO_NIVEACAD NOT IN(3)
+ AND (case $P{anArea} WHEN 'T' THEN 0 ELSE VCP.CODIGO_FACULTAD END) = (case  $P{anArea} WHEN 'T' THEN 0 ELSE  $P{anArea} END)
+ AND (case $P{anProg} WHEN 'T' THEN 0 ELSE VCP.CODIGO_ESP END) = (case $P{anProg} WHEN 'T' THEN 0 ELSE $P{anProg} END)
+ AND (case $P{anTrim} WHEN 'T' THEN 0 ELSE VCP.CODIGO_NIVEL END) = (case $P{anTrim} WHEN 'T' THEN 0 ELSE $P{anTrim} END)]]>
+	</queryString>
+	<field name="ANIO" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FACULTAD" class="java.math.BigDecimal"/>
+	<field name="AREA" class="java.lang.String"/>
+	<field name="CODIGO_ESP" class="java.lang.String"/>
+	<field name="PROGRAMA" class="java.lang.String"/>
+	<sortField name="CODIGO_FACULTAD"/>
+	<sortField name="CODIGO_ESP"/>
+	<group name="programa" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{CODIGO_ESP}]]></groupExpression>
+		<groupHeader>
+			<band height="51">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="0" y="25" width="553" height="14" forecolor="#660000" uuid="1ff814e2-b6b6-4182-b0d4-bc57d3b9ce7b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PROGRAMA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="57" splitType="Stretch">
+			<staticText>
+				<reportElement x="67" y="0" width="428" height="15" uuid="0512fc99-defc-4af6-9f30-ae4c168c0d0b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACION Y SEGUIMIENTO]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy hh:mm">
+				<reportElement x="482" y="43" width="71" height="11" uuid="5bbd406e-5ba1-40df-bb2a-4a6217e69766"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="432" y="43" width="50" height="11" uuid="d3775173-ff8b-41ab-b084-6e95d93e5694"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr.]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="67" height="55" uuid="0dbf052c-1c0d-40e2-903d-f174eb4eff43"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="67" y="15" width="428" height="13" uuid="3d6d2c88-0313-42ef-adec-effa19912b21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE SILABOS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="56" width="555" height="1" uuid="f439bc34-08a2-474b-bd69-e050fdc059b5"/>
+			</line>
+			<textField>
+				<reportElement x="112" y="42" width="320" height="13" uuid="b13adf01-ee22-42b0-90f3-702329e4ff87"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ciclo Académico "+$F{ANIO}.toString()+" - "+($F{ANIO}+1).toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="28" width="428" height="13" uuid="83d52abf-4ddd-44e3-9cae-7e1e153cf20c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="172" splitType="Prevent">
+			<bar3DChart>
+				<chart>
+					<reportElement x="41" y="0" width="482" height="125" uuid="9ccde129-df3c-42c3-b549-c1bcad9b3664"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Right"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="consolidado" uuid="09cb3dcd-1731-4b27-966a-478d9528b5af">
+							<datasetParameter name="anAnio">
+								<datasetParameterExpression><![CDATA[$F{ANIO}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="anArea">
+								<datasetParameterExpression><![CDATA[$F{CODIGO_FACULTAD}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="anProg">
+								<datasetParameterExpression><![CDATA[$F{CODIGO_ESP}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="anTrim">
+								<datasetParameterExpression><![CDATA[$P{anTrim}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Asignaturas"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{TRIMESTRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{APROBADAS}+$F{NO_REGISTRADAS}+$F{REGISTRADAS}+$F{POR_APROBAR}]]></valueExpression>
+						<labelExpression><![CDATA[($F{APROBADAS}+$F{NO_REGISTRADAS}+$F{REGISTRADAS}+$F{POR_APROBAR}).toString()]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Aprobadas"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{TRIMESTRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{APROBADAS}]]></valueExpression>
+						<labelExpression><![CDATA[$F{APROBADAS}.toString()]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Por aprobar"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{TRIMESTRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{POR_APROBAR}]]></valueExpression>
+						<labelExpression><![CDATA[$F{POR_APROBAR}.toString()]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["No ingresadas"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{TRIMESTRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{NO_REGISTRADAS}]]></valueExpression>
+						<labelExpression><![CDATA[$F{NO_REGISTRADAS}.toString()]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["No enviadas"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{TRIMESTRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{REGISTRADAS}]]></valueExpression>
+						<labelExpression><![CDATA[$F{REGISTRADAS}.toString()]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot isShowLabels="true">
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<tickLabelFont>
+								<font size="8" isBold="true"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="0">
+							<labelFont>
+								<font size="8" isBold="true"/>
+							</labelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+			<componentElement>
+				<reportElement key="table" style="table" stretchType="RelativeToBandHeight" x="41" y="125" width="482" height="45" uuid="03d5aecc-13f5-4cbb-b696-c0e9a3933d65"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="consolidado" uuid="871cbe41-569f-4052-a878-cb1db4a01a4b">
+						<datasetParameter name="anAnio">
+							<datasetParameterExpression><![CDATA[$F{ANIO}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anArea">
+							<datasetParameterExpression><![CDATA[$F{CODIGO_FACULTAD}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anProg">
+							<datasetParameterExpression><![CDATA[$F{CODIGO_ESP}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anTrim">
+							<datasetParameterExpression><![CDATA[$P{anTrim}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="90" uuid="90c9a754-4842-4ce5-a072-2b5dfc860a82">
+						<jr:tableHeader style="table_TH" height="0" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="7cb53e7b-4f03-485b-bccf-4e3fa5ec0c6a"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Trimestre]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="12" rowSpan="1">
+							<textField isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="11" uuid="eb48df4b-5e3e-4b95-8741-bbb9583dda0b"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="4ee54a55-fdc0-4c30-9758-ed05f2d8e1c4">
+						<jr:tableHeader style="table_TH" height="0" rowSpan="1"/>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="9bd2cf81-197c-4f62-92c5-0f714c920007"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Asignatura]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="12" rowSpan="1">
+							<textField isBlankWhenNull="true">
+								<reportElement x="0" y="1" width="90" height="11" uuid="c0c688be-20ea-4ce2-ad25-26b1b5773970"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textElement textAlignment="Center">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NUM_ASIGNATURAS}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="eaf56469-1a88-4def-8252-e04894b5bdcc">
+						<jr:tableHeader style="table_TH" height="0" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="0f641f20-558f-43f3-96fe-b97846fff250"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[% Registro]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="12" rowSpan="1">
+							<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="11" uuid="f27e2c4f-335e-44d7-a75a-d2f06bf5d9b2"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{POR_REG}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="c78e7c58-6934-45af-8970-3a9ee6e556a8">
+						<jr:tableHeader style="table_TH" height="0" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="67a41c3d-feea-458b-ba51-8479ffa76fb5"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[% Aprobación]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="12" rowSpan="1">
+							<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="11" uuid="f098413e-fbe0-43e4-a549-42e08f74754d"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{POR_APROBADO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="6b14f30b-6113-4d7f-8cde-7b28070717d7">
+						<jr:tableHeader style="table_TH" height="0" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="6ea92112-4c21-4704-9f0e-304efc1432bd"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[% No Registro]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="12" rowSpan="1">
+							<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="90" height="11" uuid="273373a0-b67e-44bb-9240-091e1963dfc5"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{POR_NOREGISTRADA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="1" width="389" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="2b8971a7-bc0a-47da-8265-21682c84183f"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACION Y SEGUIMIENTO v1.0]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="465" y="1" width="48" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="4ffcb7f0-a0da-4c84-bd0e-8d671d10700f"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="513" y="1" width="34" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="4f8fdc45-bd68-43d1-9d01-f1a6b8b0fc27"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

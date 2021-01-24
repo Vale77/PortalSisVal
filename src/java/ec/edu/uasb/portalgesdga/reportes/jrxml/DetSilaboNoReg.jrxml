@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DetSilaboNoReg" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4598f503-40c7-435d-8444-b3a873b11299">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="40"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="NoRegistrados" uuid="cd27d630-b2df-46ef-a71d-7e55268c5ffb">
+		<parameter name="anAnio" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anArea" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anProg" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anTrim" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT  DISTINCT VCP.CODIGO_FACULTAD, VCP.AREA,VCP.CODIGO_NIVEACAD ,VCP.CODIGO_ESP, VCP.PROGRAMA,VCP.CODIGO_NIVEL, VCP.TRIMESTRE,
+VCP.CODIGO_MATERIA, VCP.IDENTIF_MATERIA, VCP.NOMBRE_MATERIA, VCP.CODIGO_PROFESOR,
+VCP.CED_PAS_PROFESOR, VCP.NOMBRE_PROFESOR, VCP.APELLIDO_PROFESOR, VCP.EMAIL_PROFESOR,
+IIF(SY.ESTADO_SYLABUS is NULL AND SY.ESTADO_ENVIO is NULL,'NO REGISTRADO','REGISTRADO') ESTADO
+ FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA VCP
+ LEFT OUTER JOIN interfaseOcu.dbo.SYLABUS_DOCENTE SY ON VCP.CODIGO_PROFESOR = SY.CODIGO_PROFESOR AND
+ VCP.CODIGO_NIVEL = SY.CODIGO_NIVEL AND VCP.CODIGO_MATERIA = SY.CODIGO_MATERIA AND VCP.CODIGO_ESP = SY.COD_PROGRAMA AND
+ VCP.ANIO = SY.ANIO AND VCP.CICLO = SY.CICLO AND VCP.VAC_CODNUM = SY.VAC_CODNUM AND VCP.COD_PARALELO = SY.COD_PARALELO
+WHERE  VCP.ANIO = $P{anAnio}
+ AND VCP.CICLO = 1
+ AND VCP.RESPONSABLE_MATERIA = 'S'
+AND VCP.CODIGO_NIVEACAD NOT IN(3)
+AND(SY.ESTADO_SYLABUS is NULL AND SY.ESTADO_ENVIO is NULL)
+AND (case $P{anArea} WHEN 'T' THEN 0 ELSE VCP.CODIGO_FACULTAD END) = (case  $P{anArea} WHEN 'T' THEN 0 ELSE  $P{anArea} END)
+AND (case $P{anProg} WHEN 'T' THEN 0 ELSE VCP.CODIGO_ESP END) = (case $P{anProg} WHEN 'T' THEN 0 ELSE $P{anProg} END)
+AND (case $P{anTrim} WHEN 'T' THEN 0 ELSE VCP.CODIGO_NIVEL END) = (case $P{anTrim} WHEN 'T' THEN 0 ELSE $P{anTrim} END)]]>
+		</queryString>
+		<field name="CODIGO_FACULTAD" class="java.math.BigDecimal"/>
+		<field name="AREA" class="java.lang.String"/>
+		<field name="CODIGO_NIVEACAD" class="java.lang.String"/>
+		<field name="CODIGO_ESP" class="java.lang.String"/>
+		<field name="PROGRAMA" class="java.lang.String"/>
+		<field name="CODIGO_NIVEL" class="java.math.BigDecimal"/>
+		<field name="TRIMESTRE" class="java.lang.String"/>
+		<field name="CODIGO_MATERIA" class="java.math.BigDecimal"/>
+		<field name="IDENTIF_MATERIA" class="java.lang.String"/>
+		<field name="NOMBRE_MATERIA" class="java.lang.String"/>
+		<field name="CODIGO_PROFESOR" class="java.math.BigDecimal"/>
+		<field name="CED_PAS_PROFESOR" class="java.lang.String"/>
+		<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
+		<field name="APELLIDO_PROFESOR" class="java.lang.String"/>
+		<field name="EMAIL_PROFESOR" class="java.lang.String"/>
+		<field name="ESTADO" class="java.lang.String"/>
+		<sortField name="CODIGO_FACULTAD"/>
+		<sortField name="CODIGO_NIVEACAD" order="Descending"/>
+		<sortField name="CODIGO_ESP"/>
+		<sortField name="CODIGO_NIVEL"/>
+		<sortField name="NOMBRE_MATERIA"/>
+	</subDataset>
+	<parameter name="anAnio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anArea" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anProg" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anTrim" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  DISTINCT VCP.ANIO,VCP.CODIGO_FACULTAD,VCP.AREA
+ FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA VCP
+WHERE  VCP.ANIO = $P{anAnio} AND VCP.CICLO = 1
+ AND VCP.RESPONSABLE_MATERIA = 'S'
+ AND (case $P{anArea} WHEN 'T' THEN 0 ELSE VCP.CODIGO_FACULTAD END) = (case  $P{anArea} WHEN 'T' THEN 0 ELSE  $P{anArea} END)
+ AND (case $P{anProg} WHEN 'T' THEN 0 ELSE VCP.CODIGO_ESP END) = (case $P{anProg} WHEN 'T' THEN 0 ELSE $P{anProg} END)
+ AND (case $P{anTrim} WHEN 'T' THEN 0 ELSE VCP.CODIGO_NIVEL END) = (case $P{anTrim} WHEN 'T' THEN 0 ELSE $P{anTrim} END)]]>
+	</queryString>
+	<field name="ANIO" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FACULTAD" class="java.math.BigDecimal"/>
+	<field name="AREA" class="java.lang.String"/>
+	<sortField name="CODIGO_FACULTAD"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="56" splitType="Stretch">
+			<staticText>
+				<reportElement x="374" y="28" width="50" height="11" uuid="fe9436d7-2517-4cab-a362-428587a10645"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr.]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="67" height="55" uuid="bc4be5ba-e05f-4331-883c-1604fc7bb48c"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="67" y="0" width="428" height="15" uuid="24b61ed0-6100-40b8-916e-62b725f1b03f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACION Y SEGUIMIENTO]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy hh:mm">
+				<reportElement x="424" y="28" width="71" height="11" uuid="bfa4274f-f142-4a6d-aa17-5764b063b7a7"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="67" y="15" width="428" height="13" uuid="7b077995-2d2a-4eeb-893e-80a09febfda8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SILABOS NO REGISTRADOS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="112" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 6" style="table 6" x="0" y="0" width="802" height="110" uuid="4e242b87-5b6b-4554-ae84-cd53a2ca5855"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="NoRegistrados" uuid="7c9233d7-93f9-4932-b747-c51c952a79d4">
+						<datasetParameter name="anAnio">
+							<datasetParameterExpression><![CDATA[$P{anAnio}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anArea">
+							<datasetParameterExpression><![CDATA[$P{anArea}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anProg">
+							<datasetParameterExpression><![CDATA[$P{anProg}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="anTrim">
+							<datasetParameterExpression><![CDATA[$P{anTrim}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="90" uuid="2f978ff0-6734-4ba2-9750-b16c1237a327">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="d5816467-dec4-4fc9-9cb2-7b6df4206793"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[AREA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="af9c865f-7a27-402d-ae52-f44d74b158d4"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="16eaefa8-530f-4aa5-9de0-1486a0506d92">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="09314455-a1cd-49d5-b68b-8765076c7d1e"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[PROGRAMA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="b48ceed6-f595-400c-866e-8e29daa36805"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{PROGRAMA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="15f21539-51be-4c69-9bbd-454cdb419748">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="43b6d294-0fbe-4c08-8100-24dc50df3b51"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[TRIMESTRE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="e5b031c8-8bf3-434e-9163-1ef65c1fad87"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="93e82c06-762f-465d-a652-0e68ed1c453a">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="f6172bf0-3c7d-4c48-84ed-be687e064e15"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[IDENTIF_MATERIA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="cc4399be-e323-4be7-aba2-e853f8fa04e7"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{IDENTIF_MATERIA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="dad8a78e-faa8-44ec-885a-58ce4f597d46">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="b72ae8db-73da-4db9-bfdb-69011cdef948"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[MATERIA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="a39966e1-d72d-48e4-b778-f04eaf773cbe"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NOMBRE_MATERIA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="e4f3d0ce-fd54-4ce4-ba97-f707fbad7d9c">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="c86066b1-4381-4034-a219-5ac9febdad1d"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[NOMBRE PROFESOR]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="3d19623e-2ed5-41fc-953e-543e47ac3d02"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NOMBRE_PROFESOR}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="30f87b38-868d-4f9a-8b2f-33b2693b144d">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="9fb858b7-2732-4fac-ae98-35d10a25d88a"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[APELLIDO PROFESOR]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="dc06c282-b5e1-49a9-bbb6-bdcae3111c84"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{APELLIDO_PROFESOR}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="e8828c7f-1960-4377-9302-d738ac2b8735">
+						<jr:tableHeader style="table 6_TH" height="1" rowSpan="1"/>
+						<jr:tableFooter style="table 6_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 6_CH" height="31" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="9e21623c-263c-446f-b4f7-d21390b26e3c"/>
+								<textElement textAlignment="Center">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[EMAIL]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 6_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table 6_TD" height="12" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="90" height="11" uuid="4e9d293a-0482-44a2-a846-b734e10b72b7"/>
+								<textElement>
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{EMAIL_PROFESOR}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="513" y="0" width="34" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="5b63fccd-4fbd-4681-bdaa-20aad0a113c8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="465" y="0" width="48" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="7edb03c5-949e-4f48-a560-ddfc63c585d8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="389" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="44c1b2a7-8476-413b-b8bd-1ba4f3d0259c"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACION Y SEGUIMIENTO v1.0]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

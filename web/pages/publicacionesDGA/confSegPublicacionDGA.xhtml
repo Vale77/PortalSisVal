@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel id="panelMant"  style="border-width: thin;background-color: transparent;"  >
+        <h:panelGrid columns="1" id="gdatpublicacion">
+            <h:outputText value="Esta seguro de eliminar los registros" style=" align-content: center"/>
+        </h:panelGrid>
+           
+        <p:commandButton  id="btnSi" value="Si"  title="Eliminar datos ingresados"  
+                          onstart="widgetPublicacion.unselectAllRows();" 
+                          update=":formLogin:growlLogin :fsegPublicacionDAG:tpublibro"
+                          actionListener="#{publicacionDGA.eliminarButton_processAction(ae, null)}" process="@form" />        
+        <p:commandButton value="No" oncomplete="mantWidget.hide();" id="btnNo" 
+                         actionListener="#{publicacionDGA.cancelarButton_processAction(ae)}" process="@this" 
+                         update="formMant:panelMant" immediate="true">        
+        </p:commandButton>   
+
+    </p:panel>
+</ui:composition>

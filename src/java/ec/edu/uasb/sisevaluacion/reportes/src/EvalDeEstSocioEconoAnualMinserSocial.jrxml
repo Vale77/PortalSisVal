@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeEstSocioEconoAnualMinserSocial" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="893fabd0-8f49-4106-a3f8-f9af74174d81">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT CICLO.NOMBRE_CICLO,CODIGO_GRUPO,GRUPO,
+CONCAT('PREGUNTA ',CODIGO_PREGUNTA) CODIGO_PREGUNTA,TOTRESP
+FROM interfaseOcu.EVALUACION.VISTA_TAB_MATINSERCIONSOCIAL VEVAL
+INNER JOIN interfaseOcu.dbo.CICLO_ACADEMICO CICLO ON VEVAL.ANIO = CICLO.ANIO
+WHERE VEVAL.anio = $P{anio}]]>
+	</queryString>
+	<field name="NOMBRE_CICLO" class="java.lang.String"/>
+	<field name="CODIGO_GRUPO" class="java.lang.Integer"/>
+	<field name="GRUPO" class="java.lang.String"/>
+	<field name="CODIGO_PREGUNTA" class="java.lang.String"/>
+	<field name="TOTRESP" class="java.lang.String"/>
+	<sortField name="CODIGO_GRUPO"/>
+	<sortField name="CODIGO_PREGUNTA"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="77" splitType="Stretch">
+			<image>
+				<reportElement x="6" y="3" width="73" height="55" uuid="cadceba7-b311-4fe0-b9e7-61e4936005b9"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="509" y="63" width="46" height="11" uuid="21c5b254-d5e6-4b49-818d-c69ace17e7cb"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="466" y="63" width="43" height="11" uuid="230ec750-dd15-4db6-9bbd-82d47b972ea3"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="18" width="476" height="15" uuid="d8dab9bc-e208-401d-8df7-b7ec5a6cb844"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="48" width="476" height="15" uuid="06c8f1b3-fdc1-4555-a298-6e2abad32948"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE MATRIZ PARA GRUPOS DE INSERCIÓN SOCIAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="79" y="33" width="476" height="15" uuid="ff58a873-6cd4-4d81-bb16-a1440ee9eebd"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="79" y="3" width="476" height="15" uuid="06a3f08b-0ebe-4582-abab-8e952f190e99"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACIÓN ACADÉMICA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="91" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="0" width="555" height="87" uuid="952e50ba-9fc5-4524-b053-92b21fc331e6"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement style="Crosstab Data Text" x="70" y="0" width="160" height="30" uuid="2740f0dd-7743-489c-ae37-084e9dd881ad"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[FRACCION SOCIAL]]></text>
+						</staticText>
+						<staticText>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="30" uuid="f5b2877a-3b18-4a12-b2b0-c1b17b6fc932"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[INSERCION SOCIAL]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="CODIGO_GRUPO" width="70">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{CODIGO_GRUPO}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" uuid="6f84e57a-3725-445d-bb4d-e3577ced97ab"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{CODIGO_GRUPO}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<rowGroup name="GRUPO" width="160">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{GRUPO}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="160" height="25" uuid="016b21fe-0fe8-41da-a4fc-b8d26960739c"/>
+								<textElement textAlignment="Justified" verticalAlignment="Middle">
+									<font size="8" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{GRUPO}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="CODIGO_PREGUNTA" height="30">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{CODIGO_PREGUNTA}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="55" height="30" uuid="7eb89ab7-9bd4-4fc8-b2b5-53e6c7a2d591"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{CODIGO_PREGUNTA}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="TOTRESPMeasure" class="java.lang.String">
+					<measureExpression><![CDATA[$F{TOTRESP}]]></measureExpression>
+				</measure>
+				<crosstabCell width="55" height="25">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="55" height="25" uuid="6ee8b4cf-45e9-4582-b592-1ba7e4b67416"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="CODIGO_GRUPO">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF" uuid="8f863bf8-82c0-41f8-8266-79f4ed78a0f2"/>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="CODIGO_PREGUNTA">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="cb111c57-dcfb-45bf-b5a0-b7408d62496a"/>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="CODIGO_GRUPO" columnTotalGroup="CODIGO_PREGUNTA">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF" uuid="60ab5e4a-d6a2-411d-84ff-06dec3e32e5f"/>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="GRUPO">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="1d3aeb12-e054-48b5-9e14-7136f569e221"/>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="GRUPO" columnTotalGroup="CODIGO_PREGUNTA">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="e3d38518-f432-4c5c-b762-2487da8a156d"/>
+							<textFieldExpression><![CDATA[$V{TOTRESPMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InfAnualConGen" language="groovy" pageWidth="680" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="640" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="f0b2b3f5-fece-467f-852e-616d6e3ebe42">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="240"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="tipReporte" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codProfesor" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codArea" class="java.lang.String"/>
+	<parameter name="codTContrato" class="java.lang.String"/>
+	<parameter name="codDedicacion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[EXEC interfaseOcu.GESTIONACADEMICA.sp_calcula_promedio_item_puntuacion_IAAD $P{anio}, $P{tipReporte}, $P{codArea},$P{codDedicacion},$P{codTContrato},$P{codProfesor}]]>
+	</queryString>
+	<field name="COD_DEDICACION" class="java.lang.String"/>
+	<field name="DEDICACION" class="java.lang.String"/>
+	<field name="COD_TIPOCONTRATO" class="java.lang.Integer"/>
+	<field name="TIPO_CONTRATO" class="java.lang.String"/>
+	<field name="ANIO" class="java.lang.Integer"/>
+	<field name="HORAS_AULA_UASB_PUNT" class="java.math.BigDecimal"/>
+	<field name="HORAS_AULAREM_UASB_PUNT" class="java.math.BigDecimal"/>
+	<field name="HORAS_AULA_OTRAS_PUNT" class="java.math.BigDecimal"/>
+	<field name="INVESTIGACION_CONCLUIDA_PUNT" class="java.math.BigDecimal"/>
+	<field name="INVESTIGACION_PROCESO_PUNT" class="java.math.BigDecimal"/>
+	<field name="INVESTIGACION_DIRECCI_COLE_PUNT" class="java.math.BigDecimal"/>
+	<field name="INVESTIGACION_LECTURA_PROY_PUNT" class="java.math.BigDecimal"/>
+	<field name="INVESTIGACION_LECTURA_INFO_PUNT" class="java.math.BigDecimal"/>
+	<field name="PONENCIA_INTERNACIONAL_PUNT" class="java.math.BigDecimal"/>
+	<field name="PONENCIA_NACIONAL_PUNT" class="java.math.BigDecimal"/>
+	<field name="MONOGRAFIA_REVISION_PLAN_PUNT" class="java.math.BigDecimal"/>
+	<field name="MONOGRAFIA_CALIFICADAS_PUNT" class="java.math.BigDecimal"/>
+	<field name="EXAMENES_COMPLEX_ELABORADO_PUNT" class="java.math.BigDecimal"/>
+	<field name="EXAMENES_COMPLEX_CALIFICAD_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_MAESTRIA_DIRPRO_CONCLUIDAS_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_MAESTRIA_DIRINV_CONCLUIDAS_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_MAESTRIA_TRIBUNAL_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_MAESTRIA_TRIB_PLAN_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_DOCTORADO_DIR_CONCLU_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_DOCTORADO_LECTURA_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_DOCTORADO_TRIBUNAL_PUNT" class="java.math.BigDecimal"/>
+	<field name="TESIS_DOCTORADO_TRIB_PLAN_PUNT" class="java.math.BigDecimal"/>
+	<field name="ACOMPANIAMIENTO_TRES_MESES_PUNT" class="java.math.BigDecimal"/>
+	<field name="ACOMPANIAMIENTO_SEIS_MESES_PUNT" class="java.math.BigDecimal"/>
+	<field name="ACOMPANIAMIENTO_PROMETEO_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_INDIVIDUAL_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_ACADEMICO_COAUTORIA_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_INDIVIDUAL_ACADEMICO_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_REEDICION_INDI_ACAD_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_INDIVIDUAL_NO_ACADEMICO_PUNT" class="java.math.BigDecimal"/>
+	<field name="AUDIVISUAL_HASTA_TREINTA_PUNT" class="java.math.BigDecimal"/>
+	<field name="AUDIVISUAL_MAS_TREINTA_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_CAPITULO_ACAD_COLEC_PUNT" class="java.math.BigDecimal"/>
+	<field name="LIBRO_EDICION_ACADEMICO_PUNT" class="java.lang.Integer"/>
+	<field name="LIBRO_COMPILACION_ACADEMICO_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_ARTICULOS_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_ARTICULOS_NO_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="RESENIAS_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_EDITOR_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_EDITOR_NO_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_COOR_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_COOR_NO_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_COOR_MONO_INDEX_PUNT" class="java.lang.Integer"/>
+	<field name="REVISTA_REVISOR_ART_INDEXADA_PUNT" class="java.lang.Integer"/>
+	<field name="LIBRO_REVISOR_PUNT" class="java.lang.Integer"/>
+	<field name="COORDINADOR_INFORME_PERIO_PUNT" class="java.lang.Integer"/>
+	<field name="VINCULACION_HORAS_CURSOS_SIN_PUNT" class="java.lang.Integer"/>
+	<field name="VINCULACION_HORAS_CURSOS_CON_PUNT" class="java.lang.Integer"/>
+	<field name="VINCULACION_PARTI_EXPOSITOR_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_RECTOR_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_VICRECTOR_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DIRGENACAD_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DIRECTOR_AREA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_INVESTIGACION_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_PADH_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_COMITEVC_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_MIEMBRO_SESIONCA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_MIEMBRO_TRIBUNAL_CON_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_ESPECIALIZACION_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_MAESTRIA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_DOCTORADO_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_CATEDRA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_OBSERVATORIO_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_COOR_TALLER_PERMANETE_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_ESPECIALIZACION_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_MAESTRIA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_DOCTORADO_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_CURSO_AVANZADO_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_CURSO_ABIERTO_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_DISE_CURSO_CAPACITA_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_ORGA_ACTIVIDADES_PUNT" class="java.lang.Integer"/>
+	<field name="GESTION_ORGA_CAPACITA_DOCENTE_PUNT" class="java.lang.Integer"/>
+	<sortField name="ANIO"/>
+	<sortField name="COD_TIPOCONTRATO"/>
+	<sortField name="DEDICACION"/>
+	<background>
+		<band height="525" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="430" height="525" forecolor="#CCCCCC" uuid="abf6dee0-c36d-41d3-8d02-51e66f12ab26"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font size="72" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="93">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="130" height="61" uuid="83943eca-0c67-4008-924c-b0629c52e5bb"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="130" y="45" width="500" height="32" uuid="c9c25a59-bc05-4d88-85c6-67d37c041bf6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RESULTADOS PROMEDIO POR ITEM  Y DEDICACION DEL INFORME ANUAL ACTIVIDADES DEL DOCENTE"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="130" y="30" width="500" height="15" uuid="c4670345-95af-49d7-8090-891254f7a6bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ANIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="130" y="0" width="500" height="15" uuid="68c3054d-8797-4526-ae3c-a12fd27c8e30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN GENERAL ACADÉMICA - DGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="15" width="500" height="15" uuid="0aab8687-b438-47a6-8ef2-7e57f66fee3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="89" width="630" height="1" uuid="bfe9e272-064e-4b6c-99a5-14434b1be883"/>
+			</line>
+			<staticText>
+				<reportElement x="430" y="77" width="100" height="11" uuid="5122f618-ae9d-4480-a9e9-0433a23e5df8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr:]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="530" y="77" width="100" height="11" uuid="136a49c8-5c52-4601-8c24-423f18e2a549"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="118">
+			<staticText>
+				<reportElement x="330" y="53" width="100" height="65" uuid="7a3d1453-db98-4639-b309-2c23809de7bd"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N° Horas Dictadas en Cursos y Talleres (Sin Remuneración Adicional):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="430" y="53" width="100" height="65" uuid="f2a1cf9e-f59c-4c35-b8ce-9cb7f79a65e6"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N° Horas Dictadas en Cursos y Talleres (Con Remuneración Adicional):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="530" y="53" width="100" height="65" uuid="af975e2e-f2a3-4308-ac2c-ea8caae19654"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N° Participaciones Como Expositor en Actividades/Eventos Académicos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="130" height="118" forecolor="#000000" backcolor="#FFFFFF" uuid="fdaf9456-ef31-4dea-83d9-296351323cbd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipo de Contrato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="0" width="200" height="118" uuid="e30958c4-27f7-40ad-8628-8454172f4177"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dedicación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="300" height="53" uuid="51d61633-05f0-4403-b28d-92b097140deb"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VINCULACIÓN CON LA COLECTIVIDAD]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="130" y="0" width="200" height="12" uuid="49602834-7543-4a4d-be86-2b3dbfd99bfd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEDICACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="130" height="12" uuid="2918619d-1b0f-4237-8515-60217c40c3dd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_CONTRATO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="330" y="0" width="100" height="12" uuid="7d499784-96ff-4c1f-a775-5e032a27b6a4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VINCULACION_HORAS_CURSOS_SIN_PUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="430" y="0" width="100" height="12" uuid="c30fd30c-97f2-4c37-8e44-a8a7f92e1a42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VINCULACION_HORAS_CURSOS_CON_PUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="530" y="0" width="100" height="12" uuid="87a8b56c-ee29-492b-bfbe-4865409deae3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VINCULACION_PARTI_EXPOSITOR_PUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="11">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="430" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="d3e48b5a-b68e-4df4-b697-9264682dd4a5"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ACADEMICO v1.0]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="530" y="0" width="100" height="11" uuid="e06203a3-8514-40a8-8e86-e0dd42b4ff5c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="0" width="100" height="11" uuid="6d0f1a31-8997-4afb-bc84-f93f29d1addb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="53">
+			<staticText>
+				<reportElement x="0" y="0" width="430" height="53" uuid="b8d0f7b1-9766-4942-aed1-6772dcf24ce3"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No hay información para las opciones seleccionadas]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

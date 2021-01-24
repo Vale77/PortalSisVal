@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pnlContent" styleClass="myPanelHoja" header="#{rangoInfAnual.navigationJSFManagedBean.nombreOpcion}"> 
+        <h:form id="frangoInfAnual">
+            <p:growl id="messagedato"/> 
+            <h:panelGrid id="gfiltro" columns="4" style="font-family: Arial; font-size: 7pt">
+                 <h:outputText  value="Tipo Contrato* :" style="font-weight: bold"/>
+                <h:panelGrid columns="1" id="gtipdocente" >
+                    <p:selectOneMenu value="#{rangoInfAnual.smtipcontrato}" id="icontrato"
+                                     required="true" requiredMessage="Contrato: se requiere un valor">
+                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Planta Escalafonado" itemValue="1" />
+                        <f:selectItem  itemLabel="Planta Contratado" itemValue="2" />          
+                        <f:selectItem  itemLabel="Contratado" itemValue="3" />          
+                        <f:selectItem  itemLabel="Contratado Designado" itemValue="4" /> 
+                        <f:selectItem  itemLabel="Invitado" itemValue="5" />                       
+                        <p:ajax update="gtipdocente dataRango" listener="#{rangoInfAnual.tipcontratovalueChangeListener()}" />                                         
+                    </p:selectOneMenu>
+                    
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:dataTable id="dataRango"
+                         value="#{rangoInfAnual.listRangos}" 
+                         var="rango" 
+                         scrollable="true" scrollHeight="95%" 
+                         rowIndexVar="rowIndex"
+                         rowKey="#{rango.iarCodigo}" 
+                         resizableColumns="true"
+                         selection="#{rangoInfAnual.selectedRangos}" 
+                         selectionMode="single"
+                         emptyMessage="No existen datos"
+                         widgetVar="widgetRecordatorio"
+                         styleClass="evalFormStyle"
+                         >
+                <p:ajax event="rowSelect"  update=":frangoInfAnual:dataRango" />  
+                <p:ajax event="rowUnselect"  update=":frangoInfAnual:dataRango"/> 
+                <f:facet name="header">
+                    <div align="right" >
+                        <p:commandButton icon="ui-icon-document"   id="btnRECNuevo" 
+                                         actionListener="#{rangoInfAnual.nuevoButton_processAction(ae)}" value="Nuevo" 
+                                         update=":mantDialog :frangoInfAnual:dataRango" immediate="true" 
+                                         partialSubmit="true" oncomplete="mantWidget.show();"/> 
+                    </div>
+                </f:facet>
+               <p:column headerText="Tipo Docente" style="width: 5%; text-align: center">
+                   <h:outputText value="#{rango.iarTipoDocente eq 'C'?'Tiempo Completo':rango.iarTipoDocente eq 'M'?'Medio Tiempo':'Tiempo Parcial'}" />                                    
+                </p:column>
+                <p:column headerText="Valor Mínimo" style="width: 5%; text-align: center">
+                    <h:outputText value="#{rango.iarRminDesde}" />                                    
+                </p:column>
+                <p:column headerText="Valor Máximo" style="width: 5%; text-align: center">
+                    <h:outputText value="#{rango.iarRminHasta}" />                                    
+                </p:column>
+                <p:column headerText="Valor Mínimo" style="width: 5%; text-align: center">
+                    <h:outputText value="#{rango.iarRmaxDesde}" />                                    
+                </p:column>
+                <p:column headerText="Valor Máximo" style="width: 5%; text-align: center">
+                    <h:outputText value="#{rango.iarRmaxHasta}" />                                    
+                </p:column>
+                 
+                <p:column headerText="Estado" style="width: 5%">                    
+                    <h:outputText value="#{rango.iarEstadoRango eq 'A'?'ACTIVO':'INACTIVO'}" style=" text-align: left"/>                                            
+                </p:column>
+                <p:column headerText="Editar"  style="text-align: center;width: 3%">  
+                    <div align="center">
+                        <p:commandLink value="Editar" title="Editar registro" immediate="true"  styleClass="ui-icon ui-icon-pencil" 
+                                       partialSubmit="true" action="#{rangoInfAnual.editarButton_processAction(ae)}" style="color:blue;"
+                                       onstart="widgetRecordatorio.unselectAllRows();widgetRecordatorio.selectRow(#{rowIndex});blockUIContentenidoWidget.block()"  
+                                       oncomplete="blockUIContentenidoWidget.unblock();mantWidget.show();"
+                                       update=":mantDialog ">
+                            <f:setPropertyActionListener value="#{rango}" target="#{rangoInfAnual.selectedRangos}" />  
+                        </p:commandLink>  
+                    </div>
+                </p:column>
+                <p:column  style="text-align: center; width:2%">
+                    <p:commandLink value="Eliminar" title="Eliminar Encuesta" update=":formLogin:growlLogin :frangoInfAnual:dataRango" immediate="true" 
+                                   id="commandLinkElimRecordatorio" styleClass="ui-icon ui-icon-trash" 
+                                   partialSubmit="true" action="#{rangoInfAnual.eliminarButton_processAction(ae, null)}" style="color:blue;"
+                                   onstart="widgetRecordatorio.unselectAllRows();" 
+                                   rendered="#{rangoInfAnual.selectedRangos.iarCodigo eq rango.iarCodigo }">
+                        <f:setPropertyActionListener value="#{rango}" target="#{rangoInfAnual.selectedRangos}" />  
+                    </p:commandLink>                    
+                </p:column>   
+            </p:dataTable>               
+
+        </h:form>
+
+    </p:panel>
+</ui:composition>

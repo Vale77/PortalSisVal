@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeCoordAlProgramaConsol" language="groovy" pageWidth="595" pageHeight="842" columnWidth="565" leftMargin="15" rightMargin="15" topMargin="20" bottomMargin="20" uuid="8f444923-4a80-4ea0-9a79-ff68c8fe454b">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="147"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<subDataset name="Comparativo" uuid="23811cbd-e5b3-46c6-886b-5c14ef0f6a6c">
+		<parameter name="codProfe" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT DISTINCT CONVERT(DECIMAL(8, 2), AVG( VEVAL.VALOR)) AS VALOR,
+VEVAL.anio
+FROM interfaseOcu.EVALUACION.VISTA_TABULACION_EVALDOCENTEANIO VEVAL WITH (NOLOCK) INNER JOIN interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA MATERIA WITH (NOLOCK)
+ON MATERIA.ANIO = VEVAL.ANIO
+AND MATERIA.CODIGO_ESP = VEVAL.CODIGO_ESP
+WHERE VEVAL.TIPO_encuesta  = 'O'
+AND MATERIA.CODIGO_COORDINADOR = $P{codProfe}
+GROUP BY  VEVAL.anio]]>
+		</queryString>
+		<field name="VALOR" class="java.math.BigDecimal"/>
+		<field name="anio" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="detalleConsol" uuid="c1c6fedf-6810-49da-9eb0-dd22831695cc">
+		<parameter name="codEncuesta" class="java.math.BigDecimal">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="anio" class="java.math.BigDecimal">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[WITH PREGUNTA_CTE(CODIGO_PREGUNTA, CODIGO_ENCUESTA, PREGUNTA_PADRE, DESCRIPCION, TIPO) AS (
+SELECT  CODIGO_PREGUNTA, CODIGO_ENCUESTA, ISNULL(PREGUNTA_PADRE, CODIGO_PREGUNTA) , DESCRIPCION, TIPO
+FROM interfaseOcu.EVALUACION.PREGUNTA WITH (NOLOCK)
+WHERE CODIGO_ENCUESTA = $P{codEncuesta}
+AND PREGUNTA_PADRE IS NULL
+UNION ALL
+SELECT E.CODIGO_PREGUNTA, e.CODIGO_ENCUESTA, e.PREGUNTA_PADRE, e.DESCRIPCION, e.TIPO
+FROM  interfaseOcu.EVALUACION.PREGUNTA AS E WITH (NOLOCK) INNER JOIN PREGUNTA_CTE AS pcte
+ON  E.PREGUNTA_PADRE = pcte.CODIGO_PREGUNTA
+WHERE E.CODIGO_ENCUESTA = $P{codEncuesta})
+SELECT  RESPUESTA.CODIGO_ESP,PREGUNTA_CTE.PREGUNTA_PADRE,
+P.DESCRIPCION, CONVERT(DECIMAL(8, 2), AVG(RESPUESTA.VALOR)) AS PROMEDIO,PROGRAMA
+FROM  PREGUNTA_CTE  LEFT OUTER JOIN interfaseOcu.EVALUACION.RESPUESTA WITH (NOLOCK)
+ON PREGUNTA_CTE.CODIGO_PREGUNTA = RESPUESTA.CODIGO_PREGUNTA
+AND PREGUNTA_CTE.CODIGO_ENCUESTA = RESPUESTA.CODIGO_ENCUESTA INNER JOIN interfaseOcu.EVALUACION.PREGUNTA AS P WITH (NOLOCK)
+ON P.CODIGO_ENCUESTA = PREGUNTA_CTE.CODIGO_ENCUESTA
+AND P.CODIGO_PREGUNTA = PREGUNTA_CTE.PREGUNTA_PADRE INNER JOIN interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA MATERIA WITH (NOLOCK)
+ON MATERIA.ANIO = RESPUESTA.ANIO
+AND MATERIA.CODIGO_ESP = RESPUESTA.CODIGO_ESP
+WHERE RESPUESTA.ANIO = $P{anio}
+AND PREGUNTA_CTE.TIPO NOT IN (2, 5)
+GROUP BY PREGUNTA_CTE.PREGUNTA_PADRE, P.DESCRIPCION,RESPUESTA.CODIGO_ESP, PROGRAMA]]>
+		</queryString>
+		<field name="CODIGO_ESP" class="java.math.BigDecimal"/>
+		<field name="PREGUNTA_PADRE" class="java.math.BigDecimal"/>
+		<field name="DESCRIPCION" class="java.lang.String"/>
+		<field name="PROMEDIO" class="java.math.BigDecimal"/>
+		<field name="PROGRAMA" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="promedioxpregunta" uuid="cdbff549-0808-48ef-99a4-d191607b30a3">
+		<parameter name="codProfesor" class="java.lang.String"/>
+		<parameter name="anio" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT DISTINCT PREGUNTA.PREGUNTA_PADRE,
+CONVERT(DECIMAL(8, 2), AVG( VEVAL.VALOR)) AS VALOR,
+VEVAL.CODIGO_ENCUESTA
+FROM interfaseOcu.EVALUACION.VISTA_TABULACION_EVALDOCENTEANIO VEVAL WITH (NOLOCK) INNER JOIN interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA MATERIA WITH (NOLOCK)
+ON  MATERIA.ANIO = VEVAL.ANIO
+AND MATERIA.CODIGO_ESP = VEVAL.CODIGO_ESP inner join interfaseOcu.EVALUACION.pregunta WITH (NOLOCK)
+on VEVAL.CODIGO_PREGUNTA = pregunta.CODIGO_PREGUNTA
+and VEVAL.CODIGO_ENCUESTA = pregunta.CODIGO_ENCUESTA
+WHERE VEVAL.TIPO_encuesta  = 'O'
+AND MATERIA.CODIGO_COORDINADOR =  $P{codProfesor}
+AND MATERIA.ANIO = $P{anio}
+and pregunta.peso is not null
+GROUP BY PREGUNTA.PREGUNTA_PADRE, VEVAL.CODIGO_ENCUESTA]]>
+		</queryString>
+		<field name="PREGUNTA_PADRE" class="java.math.BigDecimal"/>
+		<field name="VALOR" class="java.math.BigDecimal"/>
+		<field name="CODIGO_ENCUESTA" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="preguntas" uuid="634f71da-81aa-4e3d-b287-519891bd26e2">
+		<parameter name="codEncuesta" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select distinct pregunta.CODIGO_ENCUESTA,  pregunta.CODIGO_PREGUNTA, pregunta.descripcion
+from interfaseOcu.EVALUACION.PREGUNTA WITH (NOLOCK)
+where PREGUNTA.CODIGO_ENCUESTA = $P{codEncuesta}
+AND pregunta.pregunta_padre is null
+and PREGUNTA.TIPO <> 5
+and CODIGO_PREGUNTA <>5]]>
+		</queryString>
+		<field name="CODIGO_ENCUESTA" class="java.math.BigDecimal"/>
+		<field name="CODIGO_PREGUNTA" class="java.math.BigDecimal"/>
+		<field name="descripcion" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="codCoordinador" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[DECLARE @MATERIA TABLE ( AREA VARCHAR(75), PROGRAMA VARCHAR(500),CODIGO_ESP VARCHAR(4), CODIGO_FACULTAD NUMERIC(7,0),  ANIO INT, CODIGO_NIVEACAD VARCHAR(3), CICLO VARCHAR(384))
+INSERT INTO @MATERIA(AREA, PROGRAMA ,CODIGO_ESP , CODIGO_FACULTAD ,  ANIO , CODIGO_NIVEACAD , CICLO )
+SELECT distinct  AREA, PROGRAMA ,CODIGO_ESP , CODIGO_FACULTAD ,  ANIO , CODIGO_NIVEACAD , CICLO
+FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA WITH (NOLOCK)
+where anio = $P{anio}
+SELECT DISTINCT CICLO_ACADEMICO.NOMBRE_CICLO, AREA  AS NOMBRE_FACULTAD, ENCCAL.ANIO, ENCCAL.CICLO,
+ENCCAL.CODIGO_ENCUESTA,
+ENCRE.CODIGO_ALUMNO
+FROM  interfaseOcu.dbo.CICLO_ACADEMICO WITH (NOLOCK) INNER JOIN interfaseOcu.EVALUACION.ENCUESTA_CALENDARIO ENCCAL WITH(NOLOCK)
+ON CICLO_ACADEMICO.ANIO = ENCCAL.ANIO  INNER JOIN @MATERIA MATE
+ON MATE.ANIO = ENCCAL.ANIO
+AND MATE.CICLO = ENCCAL.CICLO
+AND MATE.CODIGO_ESP = ENCCAL.CODIGO_ESP INNER JOIN interfaseOcu.EVALUACION.ENCUESTA_REALIZADA  ENCRE WITH (NOLOCK)
+ON ENCCAL.ANIO = ENCRE.ANIO
+AND ENCCAL.CICLO = ENCRE.CICLO
+AND ENCCAL.CODIGO_MATERIA = ENCRE.CODIGO_MATERIA
+AND ENCCAL.CODIGO_ENCUESTA = ENCRE.CODIGO_ENCUESTA
+AND ENCCAL.CODIGO_ESP = ENCRE.CODIGO_ESP
+AND ENCCAL.CODIGO_NIVEL = ENCRE.CODIGO_NIVEL
+WHERE  ENCCAL.TIPO_ENCUESTA = 'O'
+AND ENCCAL.CODIGO_MATERIA = - 1
+AND ENCCAL.CODIGO_PROFESOR = - 1
+AND ENCCAL.CODIGO_NIVEL = - 1
+AND ENCCAL.ANIO = $P{anio}
+AND ENCRE.TIPO_REGISTRO = 'C'
+AND ENCRE.CODIGO_ALUMNO = $P{codCoordinador}]]>
+	</queryString>
+	<field name="NOMBRE_CICLO" class="java.lang.String"/>
+	<field name="NOMBRE_FACULTAD" class="java.lang.String"/>
+	<field name="ANIO" class="java.math.BigDecimal"/>
+	<field name="CICLO" class="java.math.BigDecimal"/>
+	<field name="CODIGO_ENCUESTA" class="java.math.BigDecimal"/>
+	<field name="CODIGO_ALUMNO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="96" splitType="Stretch">
+			<textField>
+				<reportElement x="75" y="31" width="490" height="15" uuid="98955a52-4205-45e2-940a-a83993fcd38a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_CICLO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="75" y="16" width="490" height="15" uuid="8172eda8-7da8-4123-877c-5bc06bd0db95"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="46" width="490" height="15" uuid="158b40f1-4e24-4e5c-8db7-bbc02a73df5f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONSOLIDADO DE LA EVALUACIÓN DEL PROGRAMA ACADÉMICO POR EL COMITÉ DE POSGRADO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="1" width="73" height="55" uuid="6d535a99-53b1-4b33-a350-967f417b53fd"/>
+				<imageExpression><![CDATA["Logo-UASB-E-centr.gif"]]></imageExpression>
+			</image>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="507" y="61" width="58" height="11" uuid="01b0abd6-c40b-462e-9873-0010921afe93"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="61" width="47" height="11" uuid="27f5ad95-76e9-4d8f-ac8b-f620408ab539"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Impr:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="1" width="490" height="15" uuid="3344314b-df9f-4061-9012-fcabc64f4452"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE EVALUACION ACADÉMICA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="71" width="565" height="1" uuid="4ca4f66e-690e-4f48-afa3-64eb609ffb9e"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="2" y="72" width="101" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="a0e3426a-cdec-4e6b-af7f-87c0ae32e774"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[AREA ACADÉMICA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="103" y="72" width="462" height="11" uuid="f8de53a6-0b8b-4f29-bc3d-ef395398d8fc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_FACULTAD}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="94" width="565" height="1" uuid="3e7ecb97-f62c-4cee-b82b-19fea31ff78e"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="282" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="7" width="565" height="50" uuid="ec271cca-f821-478c-81e7-a01feb2b7555"/>
+				<crosstabDataset>
+					<dataset>
+						<datasetRun subDataset="detalleConsol" uuid="47701da3-11f3-44d0-a89b-1ffe36b459c9">
+							<datasetParameter name="codEncuesta">
+								<datasetParameterExpression><![CDATA[$F{CODIGO_ENCUESTA}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="anio">
+								<datasetParameterExpression><![CDATA[$F{ANIO}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="215" height="30" uuid="fd1e9e2a-c81b-4e2d-87f0-90aebf6b56b1"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font size="8" isBold="true"/>
+							</textElement>
+							<text><![CDATA[PROGRAMA]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="PROGRAMA" width="215" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{PROGRAMA}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="10" uuid="3a7b765b-6871-4601-b29e-5744c6612118"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font size="7" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{PROGRAMA}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="215" height="10" uuid="b6e6baa1-1127-4d52-8ca5-9aef1b2c6ceb"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font size="7" isBold="true"/>
+								</textElement>
+								<text><![CDATA[PROMEDIO GENERAL]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="DESCRIPCION" height="30" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{PREGUNTA_PADRE}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="15" uuid="980bd3ea-3dcc-41e7-9c8b-e0dcde2cc306"/>
+								<textElement verticalAlignment="Middle">
+									<font size="7" isBold="true"/>
+								</textElement>
+								<text><![CDATA[FASE]]></text>
+							</staticText>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" x="0" y="15" width="50" height="15" uuid="9f91d9e1-bf3c-4dfa-aaca-779232b25bff"/>
+								<textElement verticalAlignment="Middle">
+									<font size="7" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{DESCRIPCION}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="30" uuid="2ad165cf-7dc7-4984-9692-6e6ed0e34276"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7" isBold="true"/>
+								</textElement>
+								<text><![CDATA[PROMEDIO DEL PROGRAMA]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="PROMEDIOMeasure" class="java.math.BigDecimal" calculation="Average">
+					<measureExpression><![CDATA[$F{PROMEDIO}]]></measureExpression>
+				</measure>
+				<crosstabCell width="50" height="10">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" stretchType="RelativeToBandHeight" x="0" y="0" width="50" height="10" uuid="cf034964-aa87-4481-8f29-7ec3d074f64c"/>
+							<textElement verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{PROMEDIOMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="10" rowTotalGroup="PROGRAMA">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0.00">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="10" uuid="9b31c924-7bb6-4e89-9518-4983737bec7d"/>
+							<textElement verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{PROMEDIOMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" height="10" columnTotalGroup="DESCRIPCION">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" stretchType="RelativeToBandHeight" x="0" y="0" width="50" height="10" uuid="29e7f43c-d335-451a-89b5-55ba430f8dc7"/>
+							<textElement verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{PROMEDIOMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="10" rowTotalGroup="PROGRAMA" columnTotalGroup="DESCRIPCION">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0.00">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="10" uuid="47a9cb0e-b465-4964-98bc-339c962a9561"/>
+							<textElement verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{PROMEDIOMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<barChart>
+				<chart isShowLegend="false">
+					<reportElement positionType="Float" x="5" y="81" width="210" height="129" uuid="ae13b35d-c7d8-4dc7-95f2-ebf4997b872e"/>
+					<chartTitle>
+						<font size="8" isBold="true"/>
+						<titleExpression><![CDATA["Promedio del Programa por Fases"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="promedioxpregunta" uuid="069ada3a-c5ea-4637-badd-62258038eb5a">
+							<datasetParameter name="codProfesor">
+								<datasetParameterExpression><![CDATA[$F{CODIGO_ALUMNO}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="anio">
+								<datasetParameterExpression><![CDATA[$F{ANIO}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[""]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{PREGUNTA_PADRE}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{VALOR}]]></valueExpression>
+						<labelExpression><![CDATA[(new DecimalFormat ("#.00")).format($F{VALOR})]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+					<plot/>
+					<itemLabel>
+						<font size="5"/>
+					</itemLabel>
+					<categoryAxisFormat>
+						<axisFormat verticalTickLabels="true">
+							<labelFont>
+								<font size="5"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="5"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat verticalTickLabels="false">
+							<labelFont>
+								<font size="5"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="5"/>
+							</tickLabelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart isShowLegend="false">
+					<reportElement positionType="Float" x="343" y="81" width="210" height="129" uuid="dcfb2eb8-5ddc-4fa2-bc4d-f1bf0fe41134"/>
+					<chartTitle>
+						<font size="8" isBold="true"/>
+						<titleExpression><![CDATA["Promedio Histórico del Programa"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Comparativo" uuid="d35474a8-6785-46c6-a2c9-90c5c97b9007">
+							<datasetParameter name="codProfe">
+								<datasetParameterExpression><![CDATA[$F{CODIGO_ALUMNO}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[""]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{anio}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{VALOR}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+					<plot/>
+					<itemLabel>
+						<font size="5"/>
+					</itemLabel>
+					<categoryAxisFormat>
+						<axisFormat verticalTickLabels="true">
+							<labelFont>
+								<font size="5"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="5"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat verticalTickLabels="false">
+							<labelFont>
+								<font size="5"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="5"/>
+							</tickLabelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<staticText>
+				<reportElement positionType="Float" x="5" y="229" width="48" height="11" uuid="4618f977-e4c4-40d9-af5a-bc25e1ca66c8"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fases]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table 1" style="table 1" positionType="Float" x="5" y="240" width="560" height="12" uuid="ed225c81-d6c5-4759-a44c-99b06147df0d"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="preguntas" uuid="b0cd3e18-cfb2-4517-ba6e-325ee0b54552">
+						<datasetParameter name="codEncuesta">
+							<datasetParameterExpression><![CDATA[$F{CODIGO_ENCUESTA}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="21" uuid="8aef2807-ec79-4878-9c9f-d3d183c46aec">
+						<jr:detailCell style="table 1_TD" height="11" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="21" height="11" uuid="c0e2d4f6-cd0d-4f05-82d0-7cbe4163046b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CODIGO_PREGUNTA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="538" uuid="794fdac2-19ee-4ae5-97d4-91b0c87493d7">
+						<jr:detailCell style="table 1_TD" height="11" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="538" height="11" uuid="fd0a3b8e-57bc-4f63-8dcb-6b6feb60394d"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<line>
+				<reportElement positionType="Float" x="7" y="267" width="558" height="1" uuid="65892354-5e3e-47bd-9dfd-e2809a232783"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="8" y="268" width="557" height="11" uuid="e88585c3-657c-4236-a0da-57e01580c942"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Escala utilizada: 1. Insatisfacción 2. Poco satisfactorio 3. Mejorable 4. Satisfactorio 5. Muy Satisfactorio]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="4" y="1" width="389" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="65bc7a83-919f-4d40-ba4d-4f1766879f49"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[SISTEMA ACADEMICO v1.0]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="536" y="1" width="15" height="11" uuid="c4e64308-f71a-4b2d-8eda-7f96d918959f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="486" y="1" width="50" height="11" uuid="c4fb34d1-49c7-4364-bc94-5819b9ee619d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
