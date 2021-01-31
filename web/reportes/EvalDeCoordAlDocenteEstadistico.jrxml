@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeEstudAlDocenteEstadistico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9df6b033-100b-4d23-9e40-9f34be0ebb63">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeCoordAlDocenteEstadistico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9df6b033-100b-4d23-9e40-9f34be0ebb63">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="515"/>
+	<property name="ireport.y" value="189"/>
 	<property name="net.sf.jasperreports.style.evaluation.time.enabled" value="true"/>
 	<style name="stylepordet" isBlankWhenNull="true">
 		<conditionalStyle>
@@ -17,7 +17,7 @@
 	<style name="styleporPrograma">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Double($V{porcPrograma}.doubleValue() )>= new Double(0.7)]]></conditionExpression>
-			<style forecolor="#000080" isBlankWhenNull="true"/>
+			<style forecolor="#000080"/>
 		</conditionalStyle>
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Double($V{porcPrograma}.doubleValue() )< new Double(0.7)]]></conditionExpression>
@@ -45,107 +45,85 @@
 		</conditionalStyle>
 	</style>
 	<parameter name="anio" class="java.lang.String"/>
-	<parameter name="estado" class="java.lang.String">
-		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
-	</parameter>
+	<parameter name="estado" class="java.lang.String"/>
 	<parameter name="codArea" class="java.lang.String"/>
 	<parameter name="codTrim" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[DECLARE @MATEST TABLE  (ANIO NUMERIC(4,0), CODIGO_ESP NUMERIC(10,0), CODIGO_MATERIA NUMERIC(10,0), CODIGO_PROFESOR NUMERIC(10,0),CODIGO_NIVEL NUMERIC(10,0), NUMEST NUMERIC(10,0), CODIGO_PARALELO INT)
-DECLARE @MATERIA TABLE (CODIGO_PROFESOR NUMERIC(8,0), NOMBRE_PROFESOR VARCHAR(60), APELLIDO_PROFESOR VARCHAR(65), NOMBRE_MATERIA VARCHAR(200), AREA VARCHAR(75), CODIGO_NIVEL INT, PROGRAMA VARCHAR(500),
-CODIGO_ESP VARCHAR(4), CODIGO_MATERIA NUMERIC(9,0), ANIO INT,  TRIMESTRE VARCHAR(75), CICLO VARCHAR(384), NCREDITOS VARCHAR(384), NIVEL_ACADEMICO VARCHAR(75), CODIGO_NIVEACAD VARCHAR(3), CODIGO_FACULTAD NUMERIC(7,0),  CODIGO_PARALELO INT, NOMBRE_PARALELO VARCHAR(10))
-DECLARE @MATERIAFECHA TABLE (CODIGO_ESP NUMERIC(10,0), CODIGO_MATERIA NUMERIC(10,0),CODIGO_NIVEL NUMERIC(10,0), ANIO NUMERIC(4,0), FECHA_INICIAL DATETIME, FECHA_FINAL DATETIME, CODIGO_PARALELO INT, CODIGO_PROFESOR INT)
-INSERT INTO @MATEST(ANIO, CODIGO_ESP , CODIGO_MATERIA, CODIGO_PROFESOR,CODIGO_NIVEL, NUMEST, CODIGO_PARALELO)
-SELECT DISTINCT ANIO, CODIGO_ESP , CODIGO_MATERIA, CODIGO_PROFESOR,CODIGO_NIVEL, NUMEST, CODIGO_PARALELO
-FROM interfaseOcu.dbo.VISTA_NUMESTUDIANTE_MATERIA WITH (NOLOCK)
-WHERE ANIO =$P{anio}
+		<![CDATA[DECLARE @MATERIA TABLE (CODIGO_PROFESOR NUMERIC(8,0), NOMBRE_PROFESOR VARCHAR(60), APELLIDO_PROFESOR VARCHAR(65), NOMBRE_MATERIA VARCHAR(200), AREA VARCHAR(75), CODIGO_NIVEL INT, PROGRAMA VARCHAR(500),
+CODIGO_ESP VARCHAR(4), CODIGO_MATERIA NUMERIC(9,0), ANIO INT,  TRIMESTRE VARCHAR(75), CICLO VARCHAR(384), NCREDITOS VARCHAR(384), NIVEL_ACADEMICO VARCHAR(75), CODIGO_NIVEACAD VARCHAR(3), CODIGO_FACULTAD NUMERIC(7,0),
+APELLIDO_COORDINADOR VARCHAR (384), NOMBRE_COORDINADOR VARCHAR (384), CODIGO_COORDINADOR VARCHAR (384))
 INSERT INTO @MATERIA(CODIGO_PROFESOR,  NOMBRE_PROFESOR, APELLIDO_PROFESOR, NOMBRE_MATERIA, AREA, CODIGO_NIVEL, PROGRAMA,
-CODIGO_ESP,  CODIGO_MATERIA, ANIO,  TRIMESTRE, CICLO, NCREDITOS, NIVEL_ACADEMICO , CODIGO_NIVEACAD, CODIGO_FACULTAD, CODIGO_PARALELO , NOMBRE_PARALELO )
-SELECT DISTINCT CODIGO_PROFESOR,  NOMBRE_PROFESOR, APELLIDO_PROFESOR, NOMBRE_MATERIA, AREA, CODIGO_NIVEL, PROGRAMA,
-CODIGO_ESP,  CODIGO_MATERIA, ANIO,  TRIMESTRE, CICLO, NCREDITOS, NIVEL_ACADEMICO , CODIGO_NIVEACAD, CODIGO_FACULTAD, COD_PARALELO , NOMBRE_PARALELO
-FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA WITH (NOLOCK)
+CODIGO_ESP,  CODIGO_MATERIA, ANIO,  TRIMESTRE, CICLO, NCREDITOS, NIVEL_ACADEMICO , CODIGO_NIVEACAD, CODIGO_FACULTAD,APELLIDO_COORDINADOR , NOMBRE_COORDINADOR, CODIGO_COORDINADOR  )
+SELECT CODIGO_PROFESOR,  NOMBRE_PROFESOR, APELLIDO_PROFESOR, NOMBRE_MATERIA, AREA, CODIGO_NIVEL, PROGRAMA,
+CODIGO_ESP,  CODIGO_MATERIA, ANIO,  TRIMESTRE, CICLO, NCREDITOS, NIVEL_ACADEMICO , CODIGO_NIVEACAD, CODIGO_FACULTAD ,
+APELLIDO_COORDINADOR , NOMBRE_COORDINADOR, CODIGO_COORDINADOR
+FROM interfaseOcu.dbo.VISTA_COORDINADOR_PROGRAMA with (NOLOCK)
 WHERE ANIO = $P{anio}
-INSERT INTO @MATERIAFECHA(CODIGO_ESP, CODIGO_MATERIA,CODIGO_NIVEL , ANIO , FECHA_INICIAL , FECHA_FINAL, CODIGO_PARALELO , CODIGO_PROFESOR)
-SELECT DISTINCT CODIGO_ESP, CODIGO_MATERIA,CODIGO_NIVEL , ANIO , FECHA_INICIAL , FECHA_FINAL, COD_PARALELO , COD_PROFESOR
-FROM interfaseOcu.dbo.VISTA_MATERIA_FECHAS_PROFESOR WITH (NOLOCK)
-WHERE ANIO =$P{anio}
 select DISTINCT  ISNULL(ENCCAL.ANIO,MATERIA.ANIO ) AS ANIO,
 CONCAT (MATERIA.APELLIDO_PROFESOR, ' ',MATERIA.NOMBRE_PROFESOR) AS NOMBRE_PROFESOR,
 MATERIA.NOMBRE_MATERIA,
 ENCCAL.FECHA_FIN AS FINEVAL,
-ISNULL(MATEST.NUMEST,1) as totenc,
-ISNULL((SELECT COUNT(1) FROM interfaseOcu.EVALUACION.ENCUESTA_REALIZADA AS ENCRE WITH (NOLOCK) LEFT JOIN interfaseOcu.dbo.VISTA_ESTUDIANTES_BLOQUEADOS ESTBLO WITH (NOLOCK)
-ON ENCRE.ANIO= ESTBLO.ANIO
-AND ENCRE.CODIGO_ALUMNO = ESTBLO.CODIGO_ESTUDIANTE
-AND ENCRE.CODIGO_ESP = ESTBLO.CODIGO_ESP
-WHERE ESTBLO.CODIGO_ESTUDIANTE IS NULL
-AND  ENCRE.ANIO = MATERIA.ANIO
+(CASE WHEN(SELECT COUNT (DISTINCT concat(MAT1.ANIO,'-',MAT1.CODIGO_MATERIA,'-',MAT1.CODIGO_PROFESOR,'-',MAT1.codigo_nivel,'-',MAT1.codigo_esp, '-', MAT1.CODIGO_COORDINADOR))
+FROM @MATERIA MAT1
+WHERE MATERIA.ANIO = MAT1.ANIO
+AND MATERIA.CODIGO_ESP = MAT1.CODIGO_ESP
+AND MATERIA.CODIGO_MATERIA = MAT1.CODIGO_MATERIA
+AND MATERIA.CODIGO_NIVEL = MAT1.CODIGO_NIVEL
+AND MATERIA.CODIGO_PROFESOR = MAT1.CODIGO_PROFESOR
+AND MATERIA.CODIGO_COORDINADOR = MAT1.CODIGO_COORDINADOR)=0 THEN 1 ELSE (SELECT COUNT (DISTINCT concat(MAT1.ANIO,'-',MAT1.CODIGO_MATERIA,'-',MAT1.CODIGO_PROFESOR,'-',MAT1.codigo_nivel,'-',MAT1.codigo_esp, '-', MAT1.CODIGO_COORDINADOR))
+FROM @MATERIA MAT1
+WHERE MATERIA.ANIO = MAT1.ANIO
+AND MATERIA.CODIGO_ESP = MAT1.CODIGO_ESP
+AND MATERIA.CODIGO_MATERIA = MAT1.CODIGO_MATERIA
+AND MATERIA.CODIGO_NIVEL = MAT1.CODIGO_NIVEL
+AND MATERIA.CODIGO_PROFESOR = MAT1.CODIGO_PROFESOR
+AND MATERIA.CODIGO_COORDINADOR = MAT1.CODIGO_COORDINADOR) END)as totenc,
+ISNULL((SELECT COUNT(1) FROM interfaseOcu.EVALUACION.ENCUESTA_REALIZADA AS ENCRE WITH (NOLOCK)
+WHERE ENCRE.ANIO = MATERIA.ANIO
 AND ENCRE.CODIGO_ESP = MATERIA.CODIGO_ESP
 AND ENCRE.CODIGO_NIVEL = MATERIA.CODIGO_NIVEL
 AND ENCRE.CODIGO_MATERIA = MATERIA.CODIGO_MATERIA
 AND ENCRE.CODIGO_PROFESOR = MATERIA.CODIGO_PROFESOR
-and ENCRE.CODIGO_PARALELO = MATERIA.CODIGO_PARALELO
 and ENCRE.codigo_encuesta = ENCCAL.CODIGO_ENCUESTA),0 )AS TOTENCRE,
 ENCCAL.ESTADO_ENCUESTA,
 MATERIA.AREA,
 MATERIA.PROGRAMA,
+CONCAT(APELLIDO_COORDINADOR ,' ', NOMBRE_COORDINADOR) AS NOMBRE_COORDINADOR,
 MATERIA.NIVEL_ACADEMICO,
 MATERIA.TRIMESTRE,
-(case ENCCAL.estado_encuesta when 'A' then 'Abierta' when 'C' then 'Cerrada' end) estado,
-MATEFECHA.FECHA_INICIAL, MATEFECHA.FECHA_FINAL,
-MATERIA.CODIGO_NIVEACAD, CICLO_ACADEMICO.NOMBRE_CICLO, ENCCAL.CODIGO_NIVEL,
-MATERIA.CODIGO_PARALELO, MATERIA.NOMBRE_PARALELO
-FROM @MATERIA AS MATERIA
-LEFT OUTER JOIN interfaseOcu.EVALUACION.ENCUESTA_CALENDARIO AS ENCCAL WITH (NOLOCK)ON MATERIA.ANIO = ENCCAL.ANIO
+(case ENCCAL.estado_encuesta when 'A' then 'Abierta' when 'C' then 'Cerrada' end) AS estado,
+MATERIA.CODIGO_NIVEACAD, NOMBRE_CICLO
+from @MATERIA AS MATERIA LEFT OUTER JOIN interfaseOcu.EVALUACION.ENCUESTA_CALENDARIO AS ENCCAL
+ON MATERIA.ANIO = ENCCAL.ANIO
 AND MATERIA.CODIGO_ESP = ENCCAL.CODIGO_ESP
 AND MATERIA.CODIGO_MATERIA = ENCCAL.CODIGO_MATERIA
 AND MATERIA.CODIGO_NIVEL = ENCCAL.CODIGO_NIVEL
 AND MATERIA.CODIGO_PROFESOR = ENCCAL.CODIGO_PROFESOR
-AND MATERIA.CODIGO_PARALELO = ENCCAL.CODIGO_PARALELO
-INNER JOIN @MATEST AS MATEST ON MATERIA.ANIO  = MATEST.ANIO
-AND MATERIA.CODIGO_ESP = MATEST.CODIGO_ESP
-AND MATERIA.CODIGO_MATERIA = MATEST.CODIGO_MATERIA
-AND MATERIA.CODIGO_NIVEL = MATEST.CODIGO_NIVEL
-AND MATERIA.CODIGO_PROFESOR = MATEST.CODIGO_PROFESOR
-AND MATERIA.CODIGO_PARALELO = MATEST.CODIGO_PARALELO
-INNER JOIN @MATERIAFECHA AS MATEFECHA ON MATERIA.ANIO  = MATEFECHA.ANIO
-AND MATERIA.CODIGO_ESP = MATEFECHA.CODIGO_ESP
-AND MATERIA.CODIGO_MATERIA = MATEFECHA.CODIGO_MATERIA
-AND MATERIA.CODIGO_NIVEL = MATEFECHA.CODIGO_NIVEL
-AND MATERIA.CODIGO_PROFESOR = MATEFECHA.CODIGO_PROFESOR
-AND MATERIA.CODIGO_PARALELO = MATEFECHA.CODIGO_PARALELO
-INNER JOIN interfaseOcu.dbo.CICLO_ACADEMICO WITH (NOLOCK)ON MATERIA.ANIO = CICLO_ACADEMICO.ANIO
-WHERE MATERIA.ANIO = $P{anio}
-AND ENCCAL.TIPO_ENCUESTA = 'A'
-AND (case $P{codTrim}  when 'T' then '0' else MATERIA.CODIGO_NIVEL end ) = (CASE $P{codTrim} WHEN 'T' THEN '0' ELSE $P{codTrim} END )
-AND (case $P{estado}  when 'T' then '0' else ENCCAL.estado_encuesta end ) = (CASE $P{estado} WHEN 'T' THEN '0' ELSE $P{estado} END )
-AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= (CASE  WHEN $P{codArea} <>'T'THEN $P{codArea} ELSE '0' END)
-ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
+AND ENCCAL.TIPO_ENCUESTA = 'C' INNER JOIN interfaseOcu.dbo.CICLO_ACADEMICO with (nolock)
+ON MATERIA.ANIO = CICLO_ACADEMICO.ANIO
+WHERE MATERIA.ANIO =$P{anio}
+AND MATERIA.CODIGO_NIVEL =$P{codTrim}
+AND (case $P{estado} when 'T' then '0' else ENCCAL.estado_encuesta end ) = (case $P{estado} when 'T' then '0' else $P{estado} end )
+AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= (CASE  when $P{codArea} <>'T'THEN $P{codArea} ELSE '0' END)]]>
 	</queryString>
 	<field name="ANIO" class="java.math.BigDecimal"/>
 	<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
 	<field name="NOMBRE_MATERIA" class="java.lang.String"/>
 	<field name="FINEVAL" class="java.sql.Timestamp"/>
-	<field name="totenc" class="java.math.BigDecimal"/>
+	<field name="totenc" class="java.lang.Integer"/>
 	<field name="TOTENCRE" class="java.lang.Integer"/>
 	<field name="ESTADO_ENCUESTA" class="java.lang.String"/>
 	<field name="AREA" class="java.lang.String"/>
 	<field name="PROGRAMA" class="java.lang.String"/>
+	<field name="NOMBRE_COORDINADOR" class="java.lang.String"/>
 	<field name="NIVEL_ACADEMICO" class="java.lang.String"/>
 	<field name="TRIMESTRE" class="java.lang.String"/>
 	<field name="estado" class="java.lang.String"/>
-	<field name="FECHA_INICIAL" class="java.sql.Timestamp"/>
-	<field name="FECHA_FINAL" class="java.sql.Timestamp"/>
 	<field name="CODIGO_NIVEACAD" class="java.lang.String"/>
 	<field name="NOMBRE_CICLO" class="java.lang.String"/>
-	<field name="CODIGO_NIVEL" class="java.math.BigDecimal"/>
-	<field name="CODIGO_PARALELO" class="java.lang.Integer"/>
-	<field name="NOMBRE_PARALELO" class="java.lang.String"/>
-	<sortField name="ANIO"/>
 	<sortField name="AREA"/>
+	<sortField name="CODIGO_NIVEACAD" order="Descending"/>
 	<sortField name="PROGRAMA"/>
-	<sortField name="CODIGO_NIVEL"/>
 	<sortField name="NOMBRE_MATERIA"/>
 	<sortField name="NOMBRE_PROFESOR"/>
 	<variable name="porc" class="java.math.BigDecimal">
@@ -200,28 +178,28 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 				<textField>
 					<reportElement x="0" y="0" width="358" height="13" uuid="d2dde4a1-efc1-4e78-9db6-f8c9c3f083ba"/>
 					<textElement>
-						<font size="10" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="area" pattern="#,##0.00%" isBlankWhenNull="true">
 					<reportElement style="styleporArea" x="483" y="0" width="38" height="13" printWhenGroupChanges="programa" uuid="d023b8e8-043d-4115-8d28-8fac3131feed"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{porcArea}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="area">
 					<reportElement x="408" y="0" width="38" height="13" uuid="72d49d6e-f50c-4585-a3fb-fee7f9bb73a0"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENCRE_AREA1}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="area">
 					<reportElement x="445" y="0" width="38" height="13" uuid="ae320efd-7440-428b-869b-56b62389aa54"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENC_AREA1}]]></textFieldExpression>
 				</textField>
@@ -235,28 +213,28 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 				<textField>
 					<reportElement x="1" y="0" width="357" height="13" forecolor="#028401" uuid="a4e1adae-1a72-4872-a25f-7b3c1954acb6"/>
 					<textElement>
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NIVEL_ACADEMICO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="nivel_academico">
 					<reportElement x="408" y="0" width="38" height="13" uuid="9dca5c55-0af5-4859-adb0-73a3787ee0b1"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENCRE_NIVELACADEMICO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="nivel_academico">
 					<reportElement x="445" y="0" width="38" height="13" uuid="672490e3-4d5d-450d-b371-d8c575d52c57"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENC_NIVELACADEMICO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="nivel_academico" pattern="#,##0.00%" isBlankWhenNull="true">
 					<reportElement style="styleporcNivAcademico" x="483" y="0" width="38" height="13" uuid="cc0bc47e-c748-46a8-aeec-5247dffcfa00"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{porcNivelAcademico}]]></textFieldExpression>
 				</textField>
@@ -267,33 +245,33 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 		<groupExpression><![CDATA[$F{PROGRAMA}]]></groupExpression>
 		<groupHeader>
 			<band height="13">
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement x="3" y="0" width="355" height="13" forecolor="#000080" uuid="dfac730c-f0de-47c7-a17c-4173ea2dd481"/>
-					<textElement>
-						<font size="8" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{PROGRAMA}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="programa">
 					<reportElement x="408" y="0" width="38" height="13" uuid="62360130-e3f7-41e5-848f-42777a12cb8a"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENCRE_PROGRAMA1}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="programa">
 					<reportElement x="445" y="0" width="38" height="13" uuid="43f10295-b8c1-41f1-acc3-cefac6c6dd1e"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENC_PROGRAMA1}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="programa" pattern="#,##0.00%" isBlankWhenNull="true">
 					<reportElement style="styleporPrograma" x="483" y="0" width="38" height="13" uuid="baf9242e-9000-4b12-83fd-fe6ce876d006"/>
 					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
+						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{porcPrograma}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="3" y="0" width="355" height="13" forecolor="#000066" uuid="edd78cc9-fd9c-4915-9282-cca5975606f3"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PROGRAMA}+ "/COORD. : "+$F{NOMBRE_COORDINADOR}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -313,35 +291,35 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 			<staticText>
 				<reportElement x="77" y="30" width="475" height="15" uuid="69e93c77-15e7-42cb-a67e-4cdc76d63bbe"/>
 				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REPORTE ESTADÍSTICO DE EVALUACIONES DE LOS ESTUDIANTES AL DOCENTE]]></text>
+				<text><![CDATA[REPORTE ESTADÍSTICO DE EVALUACIONES DEL COORDINADOR AL DOCENTE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="77" y="16" width="475" height="15" uuid="f7c4b62d-622a-49c6-84e1-ab4f9ca47ecb"/>
 				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PROGRAMAS DE DOCTORADO, MAESTRÍA Y ESPECIALIZACIÓN SUPERIOR]]></text>
 			</staticText>
 			<textField pattern="dd-MMM-yyyy">
 				<reportElement x="505" y="58" width="46" height="11" uuid="29571e72-400d-40f6-adf8-ac8b01696836"/>
 				<textElement>
-					<font fontName="SansSerif" size="7" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="77" y="2" width="475" height="15" uuid="757fe6d6-421b-41ac-9694-79e469495731"/>
 				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SISTEMA DE EVALUACIÓN ACADÉMICA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="462" y="58" width="43" height="11" uuid="c32f6bce-c207-47cc-bf93-7b2a033004dd"/>
 				<textElement textAlignment="Right">
-					<font fontName="SansSerif" size="7" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Impr.]]></text>
 			</staticText>
@@ -350,7 +328,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}+ " / "+$F{TRIMESTRE}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="69" width="357" height="22" uuid="b32a75ea-9201-4a7d-a3c9-2e194af0b545"/>
@@ -362,7 +340,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[AREA]]></text>
 			</staticText>
@@ -376,7 +354,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fin Eval.]]></text>
 			</staticText>
@@ -390,7 +368,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Eval. Realizadas]]></text>
 			</staticText>
@@ -404,7 +382,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total .Eval. a Realizar]]></text>
 			</staticText>
@@ -418,7 +396,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Realizado]]></text>
 			</staticText>
@@ -432,7 +410,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estado]]></text>
 			</staticText>
@@ -444,54 +422,32 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="77" y="0" width="281" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NOMBRE_MATERIA}+"- Paralelo "+$F{NOMBRE_PARALELO}+" : "+$F{NOMBRE_PROFESOR}]]></textFieldExpression>
+				<reportElement x="3" y="0" width="355" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_MATERIA}+":"+$F{NOMBRE_PROFESOR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="358" y="0" width="50" height="11" uuid="435aed68-abf1-410f-95f6-483411d24760"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
 				<textFieldExpression><![CDATA[$F{FINEVAL}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="407" y="0" width="38" height="11" uuid="36df5e73-99f6-4b78-aa0d-7fc7a54676e5"/>
-				<textElement textAlignment="Right">
-					<font size="7"/>
-				</textElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TOTENCRE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="444" y="0" width="38" height="11" uuid="6ede2951-1c16-4c65-abf1-c0d8e24f199d"/>
-				<textElement textAlignment="Right">
-					<font size="7"/>
-				</textElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{totenc}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="520" y="0" width="33" height="11" uuid="0aa74c3f-d1bc-4d66-a757-13daf4b27a29"/>
-				<textElement textAlignment="Center">
-					<font size="7"/>
-				</textElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00%">
 				<reportElement style="stylepordet" x="482" y="0" width="38" height="11" uuid="fcd15b41-093d-4e34-9fa2-b08dddd8322b"/>
-				<textElement textAlignment="Right">
-					<font size="7"/>
-				</textElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{porc}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="0" y="0" width="77" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="ea860948-a08b-4d80-a3b5-6c95ce62be30"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -509,7 +465,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font fontName="SansSerif" size="7" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
 			</textField>
@@ -522,7 +478,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font fontName="SansSerif" size="7" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>

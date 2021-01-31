@@ -29,20 +29,21 @@
                              scrollable="true" 
                              scrollHeight="500"                            
                              rowIndexVar="rowIndex"                                              
-                             rowKey="#{segInfAnualRea[0]}#{segInfAnualRea[3]}"
+                             rowKey="#{segInfAnualRea[0]}#{segInfAnualRea[6]}"
                              selection="#{segIAAD.selectedinfAnualRea}"
                              selectionMode="single"
                              resizableColumns="true"                                             
-                             emptyMessage="No existen datossssss"
+                             emptyMessage="No existen datos"
                              styleClass="evalFormStyle"  
-                             widgetVar="widgetEEADA" >  
+                             widgetVar="widgetEEADA"
+                             >  
                     <f:facet name="header">
-                        <h:outputText  value="Seguimiento IAADnnn" style="font-weight: bold" />
+                        <h:outputText  value="Seguimiento IAAD" style="font-weight: bold" />
                         <div align="center">                            
-                                <h:outputText  value="Docentes: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
-                                <h:outputText  value="#{segIAAD.ltotdoc} " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
-                                <h:outputText  value=" Finalizados: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
-                                <h:outputText  value="#{segIAAD.ltotdocfin} " style="font-weight: bold; color: darkgreen; font-size: 9pt" />                            
+                            <h:outputText  value="Docentes: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
+                            <h:outputText  value="#{segIAAD.ltotdoc} " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
+                            <h:outputText  value=" Finalizados: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
+                            <h:outputText  value="#{segIAAD.ltotdocfin} " style="font-weight: bold; color: darkgreen; font-size: 9pt" />                            
                         </div>
                         <div align="center">                             
                             <h:outputText  value=" Ingresados: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
@@ -50,25 +51,30 @@
                             <h:outputText  value=" Faltantes: " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
                             <h:outputText  value="#{segIAAD.ltotdocfalt} " style="font-weight: bold; color: darkgreen; font-size: 9pt" /> 
                         </div>
+                        <div align="right">   
+                            <p:commandButton value="Limpiar Filtros" onclick="widgetEEADA.clearFilters();"/>
+                        </div>
                     </f:facet>
+
                     <p:column headerText="Profesor"  style="width: 20%" filterBy="#{segInfAnualRea[2]}" filterStyle="width: 98%" filterMatchMode="contains" >                        
                         <h:outputText value="#{segInfAnualRea[2]}" style="text-transform: uppercase; text-align: left" />                                            
                     </p:column> 
-                    <p:column headerText="Ärea Académica"  style="width: 20%" filterBy="#{segInfAnualRea[2]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
-                        <h:outputText value="#{segInfAnualRea[2]}" style="text-transform: uppercase; text-align: left" />                                            
+                    <p:column headerText="Ärea Académica"  style="width: 20%" filterBy="#{segInfAnualRea[3]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
+                        <h:outputText value="#{segInfAnualRea[3]}" style="text-transform: uppercase; text-align: left" />                                            
                     </p:column> 
-                    <p:column headerText="Escalafón"  style="width: 20%" filterBy="#{segInfAnualRea[2]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
-                        <h:outputText value="#{segInfAnualRea[2]}" style="text-transform: uppercase; text-align: left" />                                            
+                    <p:column headerText="Escalafón"  style="width: 20%" filterBy="#{segInfAnualRea[5]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
+                        <h:outputText value="#{segInfAnualRea[5]}" style="text-transform: uppercase; text-align: left" />                                            
                     </p:column> 
-                    <p:column headerText="Tipo de Dedicación"  style="width: 20%" filterBy="#{segInfAnualRea[2]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
-                        <h:outputText value="#{segInfAnualRea[2]}" style="text-transform: uppercase; text-align: left" />                                            
+                    <p:column headerText="Tipo de Dedicación"  style="width: 20%" filterBy="#{segInfAnualRea[4]}" filterStyle="width: 60%" filterMatchMode="contains" >                        
+
+                        <h:outputText value="#{segInfAnualRea[4]}" style="text-transform: uppercase; text-align: left" />                                            
                     </p:column> 
                     <p:column headerText="Estado IAAD" style="width: 15%; text-align: center">
-                        <h:outputText value="#{segInfAnualRea[6]}" style="text-transform: uppercase; color:#{segInfAnualRea[5]=='F' ?'limegreen' :segInfAnualRea[5]=='I'?'blue':'red'}"/>                                            
+                        <h:outputText value="#{segInfAnualRea[9]}" style="text-transform: uppercase; color:#{segInfAnualRea[8]=='F' ?'limegreen' :segInfAnualRea[5]=='I'?'blue':'red'}"/>                                            
                     </p:column> 
                     <p:column headerText="Reporte PDF"  style="text-align: center"  width="3%">  
                         <div align="center">
-                            <p:commandLink value="Reporte PDF" rendered="#{segInfAnualRea[5]=='F' ?true:segInfAnualRea[5]=='I'?false:false}"
+                            <p:commandLink value="Reporte PDF" rendered="#{segInfAnualRea[8]=='F' ?true:segInfAnualRea[8]=='I'?false:false}"
                                            title="Reporte" immediate="true"  styleClass="ui-icon ui-icon-search" 
                                            partialSubmit="true" action="#{segIAAD.verReporte('pdf')}" style="color:blue;"
                                            onstart="widgetEEADA.unselectAllRows();widgetEEADA.selectRow(#{rowIndex})"  

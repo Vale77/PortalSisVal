@@ -167,6 +167,9 @@ public class EvalEstudAlDocenteEstadisticoManagedBean extends BaseJSFManagedBean
         if (sestado == null) {
             sestado = "T";
         }
+         if (strimestre == null) {
+            strimestre = "T";
+        }
         
         paramrep = paramrep + "&estado=" + sestado
                 + "&codArea=" + sarea

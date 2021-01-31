@@ -71,7 +71,9 @@
                          rowKey="#{asig.asignaturaSyllabusPK.codigoProfesor}-#{asig.asignaturaSyllabusPK.codigoMateria}:#{asig.asignaturaSyllabusPK.codigoNivel};#{asig.asignaturaSyllabusPK.vacCodnum}=#{asig.asignaturaSyllabusPK.codParalelo}.#{asig.asignaturaSyllabusPK.codPrograma}"                           
                          emptyMessage="No existen asignaturas disponibles para esta área y programa"  sortBy="#{asig.programa} #{asig.asignaturaSyllabusPK.codigoNivel}" 
                          paginatorPosition="top" paginator="true" rows="12" 
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,100">
                 <p:column style="text-align: center;display: none" width="0%" >  
                     <f:facet name="header">
                         <h:outputText value="Area" />
@@ -98,18 +100,25 @@
                     </f:facet>                    
                     <h:outputText value="#{asig.asignaturaSyllabusPK.codigoNivel} T"/>
                 </p:column>     
-                <p:column  width="28%" style="text-transform: uppercase" filterBy="#{asig.nombreMateria}">  
+                <p:column   filterStyle="width:100px;" filterMatchMode="contains" style="text-transform: uppercase" filterBy="#{asig.nombreMateria}">  
                     <f:facet name="header">
                         <h:outputText value="Asignatura" />
                     </f:facet>        
                     <h:outputText value="#{asig.nombreMateria} - #{asig.identifMateria}"/>
                 </p:column>    
-                <p:column  style="text-align: center" width="5%">  
-                    <f:facet name="header">
-                        <h:outputText value="Paralelo" />
-                    </f:facet>                     
-                    <h:outputText value="#{asig.nombreParalelo}"/>
-                </p:column>  
+                <!--  <p:column  style="text-align: center" width="5%">  
+                        <f:facet name="header">
+                            <h:outputText value="Paralelo" />
+                        </f:facet>                     
+                        <h:outputText value="#{asig.nombreParalelo}"/>
+                    </p:column>  -->
+                <p:column headerText="Paralelo"  filterStyle="width:100px;" filterMatchMode="contains"
+                          sortBy="#{asig.nombreParalelo}" 
+                          filterBy="#{asig.nombreParalelo}" 
+                          style="text-align: center;">   
+                    <h:outputText value="#{asig.nombreParalelo}" />
+                </p:column> 
+
                 <p:column  width="20%" style="text-transform: uppercase" filterBy="#{asig.apellidoProfesor}">  
                     <f:facet name="header">
                         <h:outputText value="Docente" />

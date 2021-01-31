@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EvalDeCoordAlDocenteEstadistico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9df6b033-100b-4d23-9e40-9f34be0ebb63">
-	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="515"/>
-	<property name="ireport.y" value="189"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.style.evaluation.time.enabled" value="true"/>
 	<style name="stylepordet" isBlankWhenNull="true">
 		<conditionalStyle>
@@ -102,9 +102,10 @@ AND MATERIA.CODIGO_PROFESOR = ENCCAL.CODIGO_PROFESOR
 AND ENCCAL.TIPO_ENCUESTA = 'C' INNER JOIN interfaseOcu.dbo.CICLO_ACADEMICO with (nolock)
 ON MATERIA.ANIO = CICLO_ACADEMICO.ANIO
 WHERE MATERIA.ANIO =$P{anio}
-AND MATERIA.CODIGO_NIVEL =$P{codTrim}
+AND (case $P{codTrim}  when 'T' then '0' else MATERIA.CODIGO_NIVEL end ) = (CASE $P{codTrim} WHEN 'T' THEN '0' ELSE $P{codTrim} END )
 AND (case $P{estado} when 'T' then '0' else ENCCAL.estado_encuesta end ) = (case $P{estado} when 'T' then '0' else $P{estado} end )
-AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= (CASE  when $P{codArea} <>'T'THEN $P{codArea} ELSE '0' END)]]>
+AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= (CASE  when $P{codArea} <>'T'THEN $P{codArea} ELSE '0' END)
+ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 	</queryString>
 	<field name="ANIO" class="java.math.BigDecimal"/>
 	<field name="NOMBRE_PROFESOR" class="java.lang.String"/>
@@ -127,8 +128,7 @@ AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= 
 	<sortField name="NOMBRE_MATERIA"/>
 	<sortField name="NOMBRE_PROFESOR"/>
 	<variable name="porc" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[new Double( $F{TOTENCRE}.doubleValue() / $F{totenc}.doubleValue() )
-]]></variableExpression>
+		<variableExpression><![CDATA[new Double( $F{TOTENCRE}.doubleValue() / $F{totenc}.doubleValue() )]]></variableExpression>
 	</variable>
 	<variable name="TOTENCRE_PROGRAMA" class="java.lang.Integer" resetType="Group" resetGroup="programa" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTENCRE}]]></variableExpression>
@@ -268,7 +268,7 @@ AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= 
 					<textFieldExpression><![CDATA[$V{porcPrograma}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement x="3" y="0" width="355" height="13" forecolor="#000066" uuid="edd78cc9-fd9c-4915-9282-cca5975606f3"/>
+					<reportElement x="1" y="0" width="357" height="13" forecolor="#000066" uuid="edd78cc9-fd9c-4915-9282-cca5975606f3"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -329,7 +329,7 @@ AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= 
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}+ " / "+$F{TRIMESTRE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="69" width="357" height="22" uuid="b32a75ea-9201-4a7d-a3c9-2e194af0b545"/>
@@ -423,7 +423,7 @@ AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= 
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="3" y="0" width="355" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
+				<reportElement x="119" y="0" width="239" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -464,13 +464,20 @@ AND (CASE when $P{codArea} <>'T'  then  MATERIA.CODIGO_FACULTAD ELSE '0' END )= 
 				</textElement>
 				<textFieldExpression><![CDATA[$V{porc}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="3" y="0" width="116" height="11" uuid="0b790de7-3d82-48fa-9564-680d2d3f5222"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="12" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField" positionType="Float" x="488" y="1" width="45" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="70f23739-920d-4241-88fe-619ddff785b6"/>
 				<box>

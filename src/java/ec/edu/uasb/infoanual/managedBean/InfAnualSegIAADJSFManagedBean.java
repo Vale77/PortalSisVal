@@ -229,7 +229,32 @@ public class InfAnualSegIAADJSFManagedBean extends BaseJSFManagedBean implements
         Vector v = new Vector();
         listInfAnualRealizado.clear();
         StringBuilder sql = new StringBuilder();
+        
         sql.append("DECLARE @PROFESOR TABLE (CODIGO_PROFESOR NUMERIC(7,0), CED_PAS_PROFESOR VARCHAR(15),nombre_profesor VARCHAR(32), apellido_profesor VARCHAR(35), "
+                + "	cod_profesor_acadant NUMERIC(10,0), area VARCHAR(75), NOM_dedicacion VARCHAR(75), NOM_TIPOCONTRATO VARCHAR(75), dedicacion VARCHAR(1), cod_tipocontrato INT, ANIO_INICONTRATO INT, ANIO_FINCONTRATO INT ) "
+                + "	INSERT  INTO @PROFESOR(CODIGO_PROFESOR,CED_PAS_PROFESOR,nombre_profesor, apellido_profesor,area, NOM_dedicacion, NOM_TIPOCONTRATO, cod_profesor_acadant, dedicacion, cod_tipocontrato,  ANIO_INICONTRATO, ANIO_FINCONTRATO) "
+                + "	SELECT CODIGO_PROFESOR,CED_PAS_PROFESOR,nombre_profesor, apellido_profesor,area, NOM_dedicacion, NOM_TIPOCONTRATO, cod_profesor_acadant, dedicacion, "
+                + "  cod_tipocontrato, ANIO_INICONTRATO, ANIO_FINCONTRATO "
+                + "	FROM interfaseOcu.dbo.PROFESOR "
+                + "SELECT PRF.CODIGO_PROFESOR,PRF.cod_profesor_acadant,PRF.APELLIDO_PROFESOR+' '+PRF.NOMBRE_PROFESOR NOMBRE, area, NOM_dedicacion, NOM_TIPOCONTRATO,"
+                + "IARE.IAE_ANIO, IARE.IAE_FECHA, IARE.IAE_ESTADO_IAAD,"
+                + "(CASE IARE.IAE_ESTADO_IAAD WHEN 'I' THEN 'INGRESADO' WHEN 'F' THEN 'FINALIZADO' END ), "
+                + " (SELECT COUNT(1) FROM GESTIONACADEMICA.INFANUAL_CALENDARIO ENCCAL " 
+                + "INNER JOIN @PROFESOR PROF ON ENCCAL.IAC_ANIO= IARE.IAE_ANIO " 
+                +" AND PROF.dedicacion= ENCCAL.IAC_TIPO_DOCENTE " 
+                +" AND PROF.COD_TIPOCONTRATO= ENCCAL.IAC_TIPO_CONTRATO "
+                +" AND ENCCAL.IAC_ANIO BETWEEN ANIO_INICONTRATO AND ANIO_FINCONTRATO "
+                +" AND CODIGO_PROFESOR NOT IN (4401,4658,44666)) TOTAL_DOCENTES, "
+                +" (SELECT COUNT(1) FROM GESTIONACADEMICA.INFANUAL_REALIZADO ENCRE "
+                +" WHERE ENCRE.IAE_ANIO = IARE.IAE_ANIO "
+                +" AND ENCRE.IAE_ESTADO_IAAD= 'F') TOTAL_FINALIZADO, "
+                +" (SELECT COUNT(1) FROM GESTIONACADEMICA.INFANUAL_REALIZADO ENCRE "
+                +" WHERE ENCRE.IAE_ANIO = IARE.IAE_ANIO "
+                +" AND ENCRE.IAE_ESTADO_IAAD= 'I') TOTAL_INGRESADO "
+                + "FROM GESTIONACADEMICA.INFANUAL_REALIZADO IARE "
+                + "INNER JOIN @PROFESOR PRF ON  PRF.CODIGO_PROFESOR = IARE.IAE_CODIGO_PROFESOR "
+                + "WHERE IARE.IAE_ANIO= ").append(smciclo).append(" ORDER BY NOMBRE") ;    
+       /* sql.append("DECLARE @PROFESOR TABLE (CODIGO_PROFESOR NUMERIC(7,0), CED_PAS_PROFESOR VARCHAR(15),nombre_profesor VARCHAR(32), apellido_profesor VARCHAR(35), "
                 + "	cod_profesor_acadant NUMERIC(10,0), dedicacion VARCHAR(1), cod_tipocontrato INT, ANIO_INICONTRATO INT, ANIO_FINCONTRATO INT ) "
                 + "	INSERT  INTO @PROFESOR(CODIGO_PROFESOR,CED_PAS_PROFESOR,nombre_profesor, apellido_profesor, cod_profesor_acadant, dedicacion, cod_tipocontrato,  ANIO_INICONTRATO, ANIO_FINCONTRATO) "
                 + "	SELECT CODIGO_PROFESOR,CED_PAS_PROFESOR,nombre_profesor, apellido_profesor, cod_profesor_acadant, dedicacion, "
@@ -252,26 +277,29 @@ public class InfAnualSegIAADJSFManagedBean extends BaseJSFManagedBean implements
                 +" AND ENCRE.IAE_ESTADO_IAAD= 'I') TOTAL_INGRESADO "
                 + "FROM GESTIONACADEMICA.INFANUAL_REALIZADO IARE "
                 + "INNER JOIN @PROFESOR PRF ON  PRF.CODIGO_PROFESOR = IARE.IAE_CODIGO_PROFESOR "
-                + "WHERE IARE.IAE_ANIO= ").append(smciclo).append(" ORDER BY NOMBRE") ;        
+                + "WHERE IARE.IAE_ANIO= ").append(smciclo).append(" ORDER BY NOMBRE") ;     */   
         v = (Vector) consultaFacade.ejecutaSqlList(sql.toString());
         if (v.size() > 0) {
             for (int i = 0; i < v.size(); i++) {
                 Object[] object = (Object[]) v.get(i);
                 String[] asign;
-                asign = new String[10];
+                asign = new String[13];
                 asign[0] = (object[0] == null ? null : object[0].toString());
                 asign[1] = (object[1] == null ? null : object[1].toString());
                 asign[2] = (object[2] == null ? null : object[2].toString());
                 asign[3] = (object[3] == null ? null : object[3].toString());
-                asign[4] = (object[4] == null ? null : formato.format(object[4]));
+                asign[4] = (object[4] == null ? null : object[4].toString());
                 asign[5] = (object[5] == null ? null : object[5].toString());
-                asign[6] = (object[6] == null ? null : object[6].toString());
+                asign[6] = (object[6] == null ? null : formato.format(object[6]));
                 asign[7] = (object[7] == null ? null : object[7].toString());
-                ltotdoc=(object[7] == null ? null : object[7].toString());          
                 asign[8] = (object[8] == null ? null : object[8].toString());
-                ltotdocfin= (object[8] == null ? null : object[8].toString());
                 asign[9] = (object[9] == null ? null : object[9].toString());
-                ltotdocing= (object[9] == null ? null : object[9].toString());
+                asign[10] = (object[10] == null ? null : object[10].toString());
+                ltotdoc=(object[10] == null ? null : object[10].toString());          
+                asign[11] = (object[11] == null ? null : object[11].toString());
+                ltotdocfin= (object[11] == null ? null : object[11].toString());
+                asign[12] = (object[12] == null ? null : object[12].toString());
+                ltotdocing= (object[12] == null ? null : object[12].toString());
                 listInfAnualRealizado.add(i, asign);
             }
         }

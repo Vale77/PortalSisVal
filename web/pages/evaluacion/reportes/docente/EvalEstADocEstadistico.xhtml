@@ -22,7 +22,7 @@
                 <h:panelGrid columns="1" id="gtrimestre" >
                     <p:selectOneMenu value="#{EvalEstudAlDocEstadistico.strimestre}" id="itrimestre"
                                      required="true" requiredMessage="Trimestre: se requiere un valor">
-                        <f:selectItem  itemLabel="Escoja uno.." itemValue="" />
+                        <f:selectItem  itemLabel="Todas" itemValue="T" />
                         <f:selectItems  value="#{EvalEstudAlDocEstadistico.listtrimestre}" var="ltrimestre" itemLabel="#{ltrimestre[1]}" itemValue="#{ltrimestre[0]}"/>                               
                         <p:ajax update="gtrimestre" />
                     </p:selectOneMenu>

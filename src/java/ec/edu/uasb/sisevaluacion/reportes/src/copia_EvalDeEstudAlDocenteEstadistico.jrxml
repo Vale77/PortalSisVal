@@ -197,13 +197,6 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 		<groupExpression><![CDATA[$F{AREA}]]></groupExpression>
 		<groupHeader>
 			<band height="13">
-				<textField>
-					<reportElement x="0" y="0" width="358" height="13" uuid="d2dde4a1-efc1-4e78-9db6-f8c9c3f083ba"/>
-					<textElement>
-						<font size="10" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="area" pattern="#,##0.00%" isBlankWhenNull="true">
 					<reportElement style="styleporArea" x="483" y="0" width="38" height="13" printWhenGroupChanges="programa" uuid="d023b8e8-043d-4115-8d28-8fac3131feed"/>
 					<textElement textAlignment="Right">
@@ -224,6 +217,15 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TOTENC_AREA1}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="24">
+				<textField>
+					<reportElement x="3" y="0" width="358" height="13" uuid="d2dde4a1-efc1-4e78-9db6-f8c9c3f083ba"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{AREA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -350,7 +352,7 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CICLO ACADÉMICO: "+$F{NOMBRE_CICLO}+ " / "+$F{TRIMESTRE}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="69" width="357" height="22" uuid="b32a75ea-9201-4a7d-a3c9-2e194af0b545"/>
@@ -442,9 +444,9 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="11" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="77" y="0" width="281" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
+				<reportElement x="109" y="0" width="249" height="11" uuid="6dc42171-452b-4bfa-b681-c5d21c287d4d"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -485,12 +487,8 @@ ORDER BY TRIMESTRE, AREA,NIVEL_ACADEMICO, PROGRAMA]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{porc}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="0" y="0" width="77" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="ea860948-a08b-4d80-a3b5-6c95ce62be30"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="14" uuid="603172ca-1d0e-4aa5-a8b1-586f775a3a01"/>
 				<textFieldExpression><![CDATA[$F{TRIMESTRE}]]></textFieldExpression>
 			</textField>
 		</band>

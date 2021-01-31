@@ -155,6 +155,9 @@ public class EvalCordADocenteEstadisticoManagedBean extends BaseJSFManagedBean i
         if (sestado == null) {
             sestado = "T";
         }
+        if (strimestre == null) {
+            strimestre = "T";
+        }
         paramrep = paramrep + "&estado=" + sestado
                 + "&codArea=" + sarea
                 + "&codTrim=" + strimestre;
